@@ -1,0 +1,44 @@
+.home-page {
+  height: 100%;
+  position: relative;
+
+  .center-content {
+    position: absolute;
+    top: 50%;
+    left: 00;
+    right: 0;
+    padding: 1rem;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #fff;
+
+    .main-logo {
+      width: 80px;
+      height: 119px;
+    }
+
+    h1 {
+      margin-top: 3rem;
+      color: #fff;
+      font-size: 2.125rem;
+      line-height: 1.125em;
+      letter-spacing: 0.07em;
+      font-weight: bolder;
+    }
+
+    p {
+      margin-bottom: 5rem;
+      font-weight: lighter;
+    }
+
+    // override .ant-btn
+    .ant-btn {
+      font-size: 0.875rem;
+
+      &:hover, &:focus, &:active, &.active {
+        color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+}

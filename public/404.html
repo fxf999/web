@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page Not Found (404)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Open+Sans:300,400" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      color: #fff;
+      height: 100%;
+      line-height: 1.4;
+    }
+
+    .container {
+      height: 100%;
+      width: 100%;
+      display: table;
+      background-image: linear-gradient(0deg, #FA7F92 0%, #FC6F6F 99%);
+    }
+
+    .logo {
+      height: 10vh;
+    }
+
+    .text-box {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .heading-primary-main {
+      font-size: 2.4em;
+      font-weight: 400;
+      font-family: 'Comfortaa', cursive;
+    }
+
+    .heading-primary-sub {
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 768px) {
+      .heading-primary-main {
+        font-size: 1.5em;
+      }
+      .heading-primary-sub {
+        font-size: 1em;
+      }
+    }
+
+    .btn {
+      margin-top: 50px;
+      font-weight: 400;
+    }
+
+    .btn:link,
+    .btn:visited {
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 15px 40px;
+      display: inline-block;
+      border-radius: 100px;
+      transition: all .2s;
+      position: relative;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,.2);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    }
+
+    .btn-white {
+      background-color: #fff;
+      color: #777;
+
+    }
+
+    .btn::after {
+      content: "";
+      display: inline-block;
+      height: 100%;
+      width: 100%;
+      border-radius: 100px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      transition: all .4s;
+    }
+
+    .btn-white::after {
+      background-color: #fff;
+    }
+
+    .btn:hover::after {
+      transform: scaleX(1.4) scaleY(1.6);
+      opacity: 0;
+    }
+
+    .btn-animated {
+      animation: moveInBottom .5s ease-out .75s;
+      animation-fill-mode: backwards;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="text-box">
+        <div class="heading-primary">
+          <img src="logo-main-white@2x.png" alt="Logo" class="logo">
+          <h1 class="heading-primary-main">The page you were looking for doesn't exist.</h1>
+          <p class="heading-primary-sub">You may have mistyped the address or the page may have moved.</p>
+        </div>
+        <a href="https://steemhunt.com/" class="btn btn-white btn-animated">Take Me Home</a>
+    </div>
+  </div>
+</body>
+</html>

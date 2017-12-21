@@ -1,0 +1,87 @@
+html, body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Comfortaa', cursive;
+  font-weight: 700;
+}
+
+button {
+  font-weight: 300;
+}
+
+html, body, .root, .app-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.pull-right {
+  float: right;
+}
+
+.top-margin {
+  margin-top: 0.5em !important;
+}
+
+.text-small {
+  font-size: 0.8125em !important;
+  color: $text_grey !important;
+  line-height: 1.5;
+}
+
+.round-border {
+  border-radius: 999999px !important;
+}
+
+.primary-gradient {
+  background: $primary !important; /* For browsers that do not support gradients */
+  background: linear-gradient($primary, #fa7f92) !important;
+}
+
+.inversed-color {
+  background-color: #fff !important;
+  color: $primary !important;
+}
+
+.padded-button {
+  padding: 0.875em 2.25em !important;
+  height: auto !important;
+  font-weight: 300 !important;
+}
+
+.split-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .panel-left, .panel-right {
+    width: 50%;
+    height: 100%;
+    float: left;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .panel-left {
+    box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px 0 rgba(0,0,0,0.20);
+  }
+
+  .panel-right {
+    padding-top: $header_height;
+  }
+}

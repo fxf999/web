@@ -1,0 +1,1 @@
+export const toCustomISOString = (date) => date.toISOString().split('.')[0];

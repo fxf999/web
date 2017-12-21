@@ -1,0 +1,10 @@
+.post-form {
+  padding: 0 80px; }
+  .post-form .delete-button {
+    cursor: pointer; }
+  .post-form .dropbox {
+    height: 150px;
+    line-height: 1.5; }
+  .post-form .ant-upload-list-item {
+    margin-top: 8px; }
+
