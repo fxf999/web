@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect';
 import { Button, Carousel, Icon, Timeline, Tag } from 'antd';
 
 import { selectDraft } from './selectors';
-import './PostView.css';
 
 class PostView extends Component {
   static propTypes = {

@@ -11,7 +11,6 @@ import { updatePreview } from './actions/updatePreview';
 import { initialState } from './actions';
 
 import { splitTags } from 'utils/sanitizer';
-import './PostForm.css';
 
 const FormItem = Form.Item;
 let currentBeneficiaryId = 0;

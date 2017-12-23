@@ -11,8 +11,6 @@ import { setCategoryTag } from 'features/App/actions/setCategoryTag';
 import InfiniteList from 'components/InfiniteList';
 import ContentItem from 'components/ContentItem';
 
-import './PostList.css';
-
 class PostList extends Component {
   static propTypes = {
     category: PropTypes.string.isRequired,
