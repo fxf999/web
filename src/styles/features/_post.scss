@@ -11,6 +11,15 @@
   .ant-upload-list-item {
     margin-top: 8px;
   }
+
+  // override to gravity zoom, center crop
+  .ant-upload-list-item-info > span {
+    width: 100%;
+    height: 100%;
+  }
+  .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img {
+    object-fit: cover;
+  }
 }
 
 .post-list {
@@ -70,9 +79,17 @@
         height: 228px;
         background: #d8d8d8;
         overflow: hidden;
+
         .anticon {
           font-size: 3.125rem;
           line-height: 228px;
+        }
+
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover; // gravity-zoom
         }
       }
     } // .carousel

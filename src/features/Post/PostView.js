@@ -14,6 +14,12 @@ class PostView extends Component {
 
   render() {
     const { post } = this.props;
+    const images = post.images.map((image, index) => {
+      return (
+        <div><img src={image.link} key={index} alt={image.name} /></div>
+      );
+    });
+    const autoplay = images.length > 1 ? true : false;
 
     return (
       <div className="post-view">
@@ -25,10 +31,14 @@ class PostView extends Component {
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
-          <Carousel className="carousel" autoplay>
-            <div><Icon type="camera-o" /></div>
-            <div><Icon type="video-camera" /></div>
-          </Carousel>
+          { post.images.length > 0 ? (
+            <Carousel className="carousel" autoplay={autoplay}>{images}</Carousel>
+          ) : (
+            <Carousel className="carousel" autoplay>
+              <div><Icon type="camera-o" /></div>
+              <div><Icon type="video-camera" /></div>
+            </Carousel>
+          )}
 
           <div className="timeline-container">
             <ul className="left">
@@ -51,10 +61,10 @@ class PostView extends Component {
           </div>
 
           <div className="tags">
-            <Tag><a href="https://steemit.com/trending/steemdev" target="_blank">steemdev</a></Tag>
-            <Tag><a href="https://steemit.com/trending/steem" target="_blank">steem</a></Tag>
-            <Tag><a href="https://steemit.com/trending/dev" target="_blank">dev</a></Tag>
-            <Tag><a href="https://steemit.com/trending/crypto" target="_blank">crypto</a></Tag>
+            <Tag><a href="https://steemit.com/trending/steemdev" target="_blank" rel="noopener noreferrer">steemdev</a></Tag>
+            <Tag><a href="https://steemit.com/trending/steem" target="_blank" rel="noopener noreferrer">steem</a></Tag>
+            <Tag><a href="https://steemit.com/trending/dev" target="_blank" rel="noopener noreferrer">dev</a></Tag>
+            <Tag><a href="https://steemit.com/trending/crypto" target="_blank" rel="noopener noreferrer">crypto</a></Tag>
           </div>
         </div>
       </div>

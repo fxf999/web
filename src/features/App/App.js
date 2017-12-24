@@ -7,8 +7,9 @@ import { Helmet } from 'react-helmet';
 
 import { selectAppProps } from './selectors';
 import { getAppConfigBegin } from './actions/getAppConfig';
-import 'custom.css';
 import { RoutesLeft, RoutesRight } from 'Routes';
+
+import 'custom.css';
 
 class App extends Component {
 

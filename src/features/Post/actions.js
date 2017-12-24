@@ -15,7 +15,7 @@ export const initialState = {
     title: 'Title',
     tagline: 'Short Description',
     tags: ['steemdev', 'steem', 'dev', 'crypto'],
-    images: {},
+    images: [],
     beneficiaries: {},
   },
   posts: {},

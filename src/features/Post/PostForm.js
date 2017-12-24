@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectIsPublishing } from './selectors';
-import update from 'immutability-helper';
 
-import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload } from 'antd';
+import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Modal } from 'antd';
 
 import { publishContentBegin } from './actions/publishContent';
 import { updatePreview } from './actions/updatePreview';
@@ -23,6 +22,9 @@ class PostForm extends Component {
     super(props);
 
     this.state = {
+      previewImageVisible: false,
+      previewImage: '',
+      fileList: [],
       beneficiariesValid: true,
       shouldRecalculate: false,
       draft: {},
@@ -99,28 +101,45 @@ class PostForm extends Component {
     });
   }
 
-  normFile = (e) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  }
-
   componentDidUpdate() {
     if (this.state.shouldRecalculate) {
       this.onBeneficiariesChanged();
     }
   }
 
+  // MARK: - Handle uploads
+
+  handleImagePreviewCancel = () => this.setState({ previewVisible: false })
+  handleImagePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
   // MARK: - Handle live updates
+
   updateField = (field, value) => {
-    this.state.draft[field] = value;
-    this.props.updatePreview(this.state.draft);
+    this.setState({ draft: { [field]:  value }}, () => this.props.updatePreview(this.state.draft));
   }
   handleTitleChange = (e) => this.updateField('title', e.target.value || initialState.draft.title)
   handleTaglineChange = (e) => this.updateField('tagline', e.target.value || initialState.draft.tagline)
-
+  handleImageChange = ({ fileList }) => {
+    const images = fileList.map(f => f.response && f.response.data &&
+      {
+        name: f.name,
+        link: f.response.data.link,
+        width: f.response.data.width,
+        height: f.response.data.height,
+        type: f.response.data.type,
+        id: f.response.data.id,
+        deletehash: f.response.data.deletehash,
+      }
+    );
+    console.log(images);
+    this.setState({ fileList });
+    this.updateField('images', images.filter(x => !!x));
+  }
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -230,7 +249,7 @@ class PostForm extends Component {
             <Input
               name="post[tagline]"
               placeholder="A social media where everyone gets paid for participation"
-              maxlength={60}
+              maxLength="60"
               onChange={this.handleTaglineChange}
             />
           )}
@@ -242,8 +261,6 @@ class PostForm extends Component {
         >
           <div className="dropbox">
             {getFieldDecorator('images', {
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
               rules: [{ required: true, message: 'You must upload at least one image' }],
             })(
               <Upload.Dragger name="image"
@@ -253,7 +270,11 @@ class PostForm extends Component {
                   'Cache-Control': null,
                   'X-Requested-With': null
                 }}
-                listType="picture-card">
+                listType="picture-card"
+                fileList={this.state.fileList}
+                onPreview={this.handleImagePreview}
+                onChange={this.handleImageChange}
+              >
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
                 </p>
@@ -261,6 +282,9 @@ class PostForm extends Component {
               </Upload.Dragger>
             )}
           </div>
+          <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleImagePreviewCancel}>
+            <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+          </Modal>
         </FormItem>
 
         <FormItem
