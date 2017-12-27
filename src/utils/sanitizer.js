@@ -1,6 +1,6 @@
 const DEFAULT_TAG = 'steemhunt';
 
-export const splitTags = (string) => {
+export const splitTags = function(string) {
   return string
     .toLowerCase()
     .split(/[,\s]+/)

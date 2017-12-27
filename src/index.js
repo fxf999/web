@@ -14,6 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 import steemconnect from 'sc2-sdk';
 import steem from 'steem';
+
 steem.api.setOptions({ url: process.env.REACT_APP_STEEM_API_URL });
 
 steemconnect.init({
@@ -25,6 +26,8 @@ steemconnect.setAccessToken(getToken());
 
 injectTapEventPlugin();
 
+console.log(process.env);
+window.API_ROOT = process.env.REACT_APP_API_ROOT;
 
 ReactDOM.render(
   <Provider store={store}>

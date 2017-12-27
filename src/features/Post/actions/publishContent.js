@@ -53,7 +53,7 @@ export function publishContentReducer(state, action) {
 function* publishContent({ content }) {
   try {
     const myAccount = yield select(selectMyAccount());
-    const { title, tags, editorRaw, reward } = content;
+    const { title, tags, editorRaw } = content;
     const author = myAccount.name;
     const parentPermlink = tags.length ? tags[0] : 'general';
     const permlink = yield createPermlink(title, author, parentPermlink, tags[0]);
@@ -61,7 +61,7 @@ function* publishContent({ content }) {
       app: 'steemhunt',
     };
 
-    // LISTING IMAGES AND LINKS
+    // Listing images and links
     const images = [];
     const links = [];
     Object.values(editorRaw.entityMap).forEach(entity => {
@@ -72,7 +72,6 @@ function* publishContent({ content }) {
         links.push(entity.data.url);
       }
     });
-
     if (tags.length) { metadata.tags = tags; }
     if (links.length) { metadata.links = links; }
     if (images.length) { metadata.image = images; }
@@ -92,24 +91,26 @@ function* publishContent({ content }) {
     ];
     operations.push(commentOp);
 
-    const commentOptionsConfig = {
-      author,
-      permlink,
-      allow_votes: true,
-      allow_curation_rewards: true,
-    };
 
-    if (reward === '0') {
-      commentOptionsConfig.max_accepted_payout = '0.000 SBD';
-      commentOptionsConfig.percent_steem_dollars = 10000;
-    } else if (reward === '100') {
-      commentOptionsConfig.max_accepted_payout = '1000000.000 SBD';
-      commentOptionsConfig.percent_steem_dollars = 0;
-    }
+    // SP / SBD is always 50:50
 
-    if (reward !== '50') {
-      operations.push(['comment_options', commentOptionsConfig]);
-    }
+    // const commentOptionsConfig = {
+    //   author,
+    //   permlink,
+    //   allow_votes: true,
+    //   allow_curation_rewards: true,
+    // };
+    // const { reward } = content;
+    // if (reward === '0') {
+    //   commentOptionsConfig.max_accepted_payout = '0.000 SBD';
+    //   commentOptionsConfig.percent_steem_dollars = 10000;
+    // } else if (reward === '100') {
+    //   commentOptionsConfig.max_accepted_payout = '1000000.000 SBD';
+    //   commentOptionsConfig.percent_steem_dollars = 0;
+    // }
+    // if (reward !== '50') {
+    //   operations.push(['comment_options', commentOptionsConfig]);
+    // }
 
     yield steemconnect.broadcast(operations);
     yield put(publishContentSuccess());

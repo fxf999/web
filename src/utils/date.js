@@ -1,1 +1,3 @@
-export const toCustomISOString = (date) => date.toISOString().split('.')[0];
+export const toCustomISOString = function(date) {
+  return date.toISOString().split('.')[0];
+}

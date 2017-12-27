@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectIsPublishing } from './selectors';
@@ -10,13 +11,17 @@ import { updatePreview } from './actions/updatePreview';
 import { initialState } from './actions';
 
 import { splitTags } from 'utils/sanitizer';
+import api from 'utils/api';
 
 const FormItem = Form.Item;
 let currentBeneficiaryId = 0;
 
 class PostForm extends Component {
-
-  // TODO: Refactor Beneficiaries component
+  static propTypes = {
+    updatePreview: PropTypes.func.isRequired,
+    publishContent: PropTypes.func.isRequired,
+    isPublishing: PropTypes.bool.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -31,6 +36,18 @@ class PostForm extends Component {
     };
     this.beneficiaryRewardsInput = {};
   }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  }
+
+  // MARK: - Beneficiaries
+  // TODO: Refactor into a component
 
   onBeneficiariesChanged = () => {
     // TODO: FIXME: HACK:
@@ -81,6 +98,14 @@ class PostForm extends Component {
     this.setState({ shouldRecalculate: true });
   }
 
+  componentDidUpdate() {
+    if (this.state.shouldRecalculate) {
+      this.onBeneficiariesChanged();
+    }
+  }
+
+  // MARK: - Custom Validators
+
   checkTags = (_, value, callback) => {
     const form = this.props.form;
     const tags = splitTags(form.getFieldValue('tags'));
@@ -92,19 +117,22 @@ class PostForm extends Component {
     }
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  }
-
-  componentDidUpdate() {
-    if (this.state.shouldRecalculate) {
-      this.onBeneficiariesChanged();
+  checkUrl = (_, value, callback) => {
+    if (value.length === 0) {
+      return callback();
     }
+
+    api.get('/posts/exists.json', { url: value }).then((res) => {
+      if (res.result === 'OK') {
+        callback();
+      } else if (res.result === 'ALREADY_EXISTS') { // TODO: Go to the product page link
+        callback('The product link already exists.');
+      } else {
+        callback('The input is not valid URL.');
+      }
+    }).catch(msg => {
+      callback('Service is temporarily unavailbe, Please try again later.');
+    });
   }
 
   // MARK: - Handle uploads
@@ -218,7 +246,11 @@ class PostForm extends Component {
           label="Product Link"
         >
           {getFieldDecorator('url', {
-            rules: [{ required: true, message: 'Product link cannot be empty', whitespace: true }],
+            validateTrigger: ['onBlur'],
+            rules: [
+              { required: true, message: 'Product link cannot be empty', whitespace: true },
+              { validator: this.checkUrl },
+            ],
           })(
             <Input name="post[url]" placeholder="https://steemit.com" />
           )}
