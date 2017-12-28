@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { selectIsPublishing } from './selectors';
 
 import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Modal } from 'antd';
+
+import { selectIsPublishing } from './selectors';
+import { selectMe } from 'features/User/selectors';
 
 import { publishContentBegin } from './actions/publishContent';
 import { updatePreview } from './actions/updatePreview';
@@ -18,6 +20,7 @@ let currentBeneficiaryId = 0;
 
 class PostForm extends Component {
   static propTypes = {
+    me: PropTypes.string.isRequired,
     updatePreview: PropTypes.func.isRequired,
     publishContent: PropTypes.func.isRequired,
     isPublishing: PropTypes.bool.isRequired,
@@ -31,10 +34,10 @@ class PostForm extends Component {
       previewImage: '',
       fileList: [],
       beneficiariesValid: true,
-      shouldRecalculate: false,
+      shouldRecalculateBeneficiary: false,
       draft: {},
     };
-    this.beneficiaryRewardsInput = {};
+    this.beneficiaryInput = {};
   }
 
   handleSubmit = (e) => {
@@ -52,22 +55,31 @@ class PostForm extends Component {
   onBeneficiariesChanged = () => {
     // TODO: FIXME: HACK:
     // value is one step behind because maybe the inputNumberRef doesn't set synchronously
+    console.log('changed');
     setTimeout(() => {
       const { form } = this.props;
       const beneficiaryIds = form.getFieldValue('beneficiaryIds');
 
-      const beneficiarySum = beneficiaryIds.reduce((sum, k) => {
-        return sum + this.beneficiaryRewardsInput[k].inputNumberRef.getCurrentValidValue();
-      }, 0);
+      let weightSum = 0;
+      let beneficiaries = [];
+      console.log(beneficiaryIds, this.beneficiaryInput);
+      for (const i of beneficiaryIds) {
+        const account = this.beneficiaryInput[i]['accountInput'].input.value;
+        const weight = this.beneficiaryInput[i]['weightInput'].inputNumberRef.getCurrentValidValue();
+        beneficiaries.push({ account: account, weight: weight * 100 });
+        weightSum += weight;
+      }
+      console.log(beneficiaries);
+      this.updateField('beneficiaries', beneficiaries);
 
-      if (beneficiarySum > 90 || beneficiarySum <= 0) {
+      if (weightSum > 90 || weightSum <= 0) {
         this.setState({ beneficiariesValid: false });
       } else {
         this.setState({ beneficiariesValid: true });
       }
     }, 50);
 
-    this.setState({ shouldRecalculate: false });
+    this.setState({ shouldRecalculateBeneficiary: false });
   }
 
   removeBeneficiary = (k) => {
@@ -80,7 +92,7 @@ class PostForm extends Component {
       beneficiaryIds: beneficiaryIds.filter(key => key !== k),
     });
 
-    this.setState({ shouldRecalculate: true });
+    this.setState({ shouldRecalculateBeneficiary: true });
   }
 
   addBeneficiary = () => {
@@ -95,12 +107,18 @@ class PostForm extends Component {
       beneficiaryIds: nextIds,
     });
 
-    this.setState({ shouldRecalculate: true });
+    this.setState({ shouldRecalculateBeneficiary: true });
   }
 
   componentDidUpdate() {
-    if (this.state.shouldRecalculate) {
+    if (this.state.shouldRecalculateBeneficiary) {
       this.onBeneficiariesChanged();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.me !== nextProps.me) {
+      this.updateField('hunter', nextProps.me);
     }
   }
 
@@ -113,6 +131,7 @@ class PostForm extends Component {
     if (tags.length > 4) {
       callback('Please use only 4 tags');
     } else {
+      this.handleTagsChange(tags);
       callback();
     }
   }
@@ -168,9 +187,10 @@ class PostForm extends Component {
     this.setState({ fileList });
     this.updateField('images', images.filter(x => !!x));
   }
+  handleTagsChange = (tags) => this.updateField('tags', tags)
 
   render() {
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const { getFieldDecorator, getFieldValue, getFieldProps } = this.props.form;
     const formItemLayout = {
       labelCol: {
         lg: { span: 24 },
@@ -190,6 +210,8 @@ class PostForm extends Component {
     getFieldDecorator('beneficiaryIds', { initialValue: [] });
     const beneficiaryIds = getFieldValue('beneficiaryIds');
     const beneficiaries = beneficiaryIds.map((k, index) => {
+      this.beneficiaryInput[k] = { accountInput: null, weightInput: null };
+
       return (
         <FormItem
           {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
@@ -206,26 +228,24 @@ class PostForm extends Component {
         >
           <Row gutter={8}>
             <Col span={14}>
-              {getFieldDecorator(`beneficiaries-${k}`, {
-                validateTrigger: ['onChange', 'onBlur'],
-                rules: [{
-                  required: true,
-                  whitespace: true,
-                  message: "Please input Steem account of the contributor or delete this field.",
-                }],
-              })(
-                <Input addonBefore="@" placeholder="steemhunt" className="beneficiaries" />
-              )}
+              <Input
+                addonBefore="@"
+                placeholder="steemhunt"
+                className="beneficiaries"
+                ref={el => { this.beneficiaryInput[k]['accountInput'] = el; }}
+                onChange={this.onBeneficiariesChanged}
+                maxLength="16"
+              />
             </Col>
             <Col span={10}>
               <InputNumber
-                ref={(el) => {this.beneficiaryRewardsInput[k] = el }}
                 defaultValue={20}
                 min={1}
                 max={90}
                 formatter={value => `${value}%`}
                 parser={value => value.replace('%', '')}
                 onChange={this.onBeneficiariesChanged}
+                ref={el => { this.beneficiaryInput[k]['weightInput'] = el; }}
               />
               <Icon
                 className="delete-button"
@@ -327,7 +347,10 @@ class PostForm extends Component {
             validateTrigger: ['onChange', 'onBlur'],
             rules: [{ validator: this.checkTags }],
           })(
-            <Input name="post[tags]" placeholder="Up to 4 tags, separated by a space" />
+            <Input
+              name="post[tags]"
+              placeholder="Up to 4 tags, separated by a space"
+            />
           )}
         </FormItem>
 
@@ -357,6 +380,7 @@ class PostForm extends Component {
 const WrappedPostForm = Form.create()(PostForm);
 
 const mapStateToProps = (state, props) => createStructuredSelector({
+  me: selectMe(),
   isPublishing: selectIsPublishing(),
 });
 

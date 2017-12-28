@@ -20,6 +20,16 @@ class PostView extends Component {
       );
     });
     const autoplay = images.length > 1 ? true : false;
+    const tags = post.tags.map((tag, index) => {
+      return (
+        <Tag key={index}><a href={`https://steemit.com/trending/${tag}`} target="_blank" rel="noopener noreferrer">{tag}</a></Tag>
+      );
+    });
+    const beneficiaries = post.beneficiaries.map((b, index) => {
+      return (
+        <Timeline.Item key={index}>@{b.account}({b.weight / 100}%)</Timeline.Item>
+      );
+    })
 
     return (
       <div className="post-view">
@@ -47,9 +57,8 @@ class PostView extends Component {
             </ul>
 
             <Timeline>
-              <Timeline.Item>@steemhunt</Timeline.Item>
-              <Timeline.Item>@tabris</Timeline.Item>
-              <Timeline.Item>@project7</Timeline.Item>
+              <Timeline.Item>@{post.hunter}</Timeline.Item>
+              {beneficiaries}
             </Timeline>
           </div>
 
@@ -61,10 +70,7 @@ class PostView extends Component {
           </div>
 
           <div className="tags">
-            <Tag><a href="https://steemit.com/trending/steemdev" target="_blank" rel="noopener noreferrer">steemdev</a></Tag>
-            <Tag><a href="https://steemit.com/trending/steem" target="_blank" rel="noopener noreferrer">steem</a></Tag>
-            <Tag><a href="https://steemit.com/trending/dev" target="_blank" rel="noopener noreferrer">dev</a></Tag>
-            <Tag><a href="https://steemit.com/trending/crypto" target="_blank" rel="noopener noreferrer">crypto</a></Tag>
+            {tags}
           </div>
         </div>
       </div>

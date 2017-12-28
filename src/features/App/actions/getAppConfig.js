@@ -6,7 +6,6 @@ const GET_APP_CONFIG_BEGIN = 'GET_APP_CONFIG_BEGIN';
 export const GET_APP_CONFIG_SUCCESS = 'GET_APP_CONFIG_SUCCESS';
 const GET_APP_CONFIG_FAILURE = 'GET_APP_CONFIG_FAILURE';
 const SET_APP_PROPS = 'SET_APP_PROPS';
-const SET_APP_TRENDING_TAGS = 'SET_APP_TRENDING_TAGS';
 const SET_APP_DOLLAR_RATE = 'SET_APP_DOLLAR_RATE';
 
 /*--------- ACTIONS ---------*/
@@ -26,10 +25,6 @@ function setAppProps(props, rewardFund, votingValueCalculator) {
   return { type: SET_APP_PROPS, props, rewardFund, votingValueCalculator };
 }
 
-function setAppTrendingTags(tags) {
-  return { type: SET_APP_TRENDING_TAGS, tags };
-}
-
 function setAppDollarRate(rate) {
   return { type: SET_APP_DOLLAR_RATE, rate };
 }
@@ -43,12 +38,6 @@ export function getAppConfigReducer(state, action) {
         props: action.props,
         rewardFund: action.rewardFund,
         votingValueCalculator: action.votingValueCalculator,
-      }
-    }
-    case SET_APP_TRENDING_TAGS: {
-      return {
-        ...state,
-        trendingTags: action.tags,
       }
     }
     case SET_APP_DOLLAR_RATE: {
@@ -73,7 +62,6 @@ function* getAppConfig() {
 
     yield all([
       put(setAppProps(steemhunt.props, rewardFund)),
-      put(setAppTrendingTags(steemhunt.tag_idx.trending.filter(tag => tag !== ''))),
       put(setAppDollarRate(rate)),
     ]);
 

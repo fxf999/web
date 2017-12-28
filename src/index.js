@@ -26,7 +26,6 @@ steemconnect.setAccessToken(getToken());
 
 injectTapEventPlugin();
 
-console.log(process.env);
 window.API_ROOT = process.env.REACT_APP_API_ROOT;
 
 ReactDOM.render(
