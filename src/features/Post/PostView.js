@@ -9,7 +9,18 @@ import { selectDraft } from './selectors';
 
 class PostView extends Component {
   static propTypes = {
-    post: PropTypes.object,
+    post: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      tagline: PropTypes.string.isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+      images: PropTypes.arrayOf(PropTypes.string).isRequired,
+      hunter: PropTypes.string.isRequired,
+      beneficiaries: PropTypes.arrayOf(PropTypes.shape({
+        account: PropTypes.string.isRequired,
+        weight: PropTypes.number.isRequired,
+      })).isRequired
+    }).isRequired
   };
 
   render() {
@@ -27,7 +38,7 @@ class PostView extends Component {
     });
     const beneficiaries = post.beneficiaries.map((b, index) => {
       return (
-        <Timeline.Item key={index}>@{b.account}({b.weight / 100}%)</Timeline.Item>
+        <Timeline.Item key={index}>@{b.account} ({b.weight / 100}%)</Timeline.Item>
       );
     })
 

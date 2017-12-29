@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import update from 'immutability-helper';
 
 import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Modal } from 'antd';
 
@@ -19,6 +20,8 @@ const FormItem = Form.Item;
 let currentBeneficiaryId = 0;
 
 class PostForm extends Component {
+  // TODO: Save draft into localstorage
+
   static propTypes = {
     me: PropTypes.string.isRequired,
     updatePreview: PropTypes.func.isRequired,
@@ -42,11 +45,8 @@ class PostForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+
+    this.props.publishContent(this.state.draft);
   }
 
   // MARK: - Beneficiaries
@@ -143,6 +143,7 @@ class PostForm extends Component {
 
     api.get('/posts/exists.json', { url: value }).then((res) => {
       if (res.result === 'OK') {
+        this.updateField('url', value);
         callback();
       } else if (res.result === 'ALREADY_EXISTS') { // TODO: Go to the product page link
         callback('The product link already exists.');
@@ -167,7 +168,8 @@ class PostForm extends Component {
   // MARK: - Handle live updates
 
   updateField = (field, value) => {
-    this.setState({ draft: { [field]:  value }}, () => this.props.updatePreview(this.state.draft));
+    this.setState({ draft: update(this.state.draft, { $merge: { [field]: value } }) }, () => this.props.updatePreview(this.state.draft));
+    console.log(this.state.draft);
   }
   handleTitleChange = (e) => this.updateField('title', e.target.value || initialState.draft.title)
   handleTaglineChange = (e) => this.updateField('tagline', e.target.value || initialState.draft.tagline)
@@ -272,7 +274,7 @@ class PostForm extends Component {
               { validator: this.checkUrl },
             ],
           })(
-            <Input name="post[url]" placeholder="https://steemit.com" />
+            <Input placeholder="https://steemit.com" />
           )}
         </FormItem>
 
@@ -284,7 +286,6 @@ class PostForm extends Component {
             rules: [{ required: true, message: 'Name cannot be empty', whitespace: true }],
           })(
             <Input
-              name="post[title]"
               placeholder="Steemit"
               onChange={this.handleTitleChange} />
           )}
@@ -299,7 +300,6 @@ class PostForm extends Component {
             rules: [ { required: true, message: 'Short description cannot be empty', whitespace: true } ],
           })(
             <Input
-              name="post[tagline]"
               placeholder="A social media where everyone gets paid for participation"
               maxLength="60"
               onChange={this.handleTaglineChange}
@@ -348,7 +348,6 @@ class PostForm extends Component {
             rules: [{ validator: this.checkTags }],
           })(
             <Input
-              name="post[tags]"
               placeholder="Up to 4 tags, separated by a space"
             />
           )}
@@ -386,7 +385,7 @@ const mapStateToProps = (state, props) => createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   updatePreview: post => dispatch(updatePreview(post)),
-  publishContent: content => dispatch(publishContentBegin(content)),
+  publishContent: post => dispatch(publishContentBegin(post)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedPostForm);
