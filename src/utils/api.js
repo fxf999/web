@@ -2,16 +2,24 @@ import 'whatwg-fetch';
 
 const API_ROOT = process.env.REACT_APP_API_ROOT;
 
-function parseJSON(response) {
-  return response.json();
-}
-
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
+function checkStatus(res) {
+  if (res.status >= 200 && res.status < 300 || res.status === 422) {
+    return res;
   }
 
-  throw response.statusText;
+  throw res.statusText + '. Please try again later.';
+}
+
+function parseJSON(res) {
+  return res.json();
+}
+
+function checkError(json) {
+  if (json.error) {
+    throw json.error;
+  }
+
+  return json
 }
 
 function getQueryString(params) {
@@ -37,7 +45,8 @@ function request(method, path, params) {
 
   return fetch(url, { method, headers, body })
     .then(checkStatus)
-    .then(parseJSON);
+    .then(parseJSON)
+    .then(checkError);
 }
 
 export default {

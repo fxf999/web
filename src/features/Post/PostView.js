@@ -52,7 +52,7 @@ class PostView extends Component {
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
-          { post.images.length > 0 ? (
+          {post.images.length > 0 ? (
             <Carousel className="carousel" autoplay={autoplay}>{images}</Carousel>
           ) : (
             <Carousel className="carousel" autoplay>
@@ -63,12 +63,12 @@ class PostView extends Component {
 
           <div className="timeline-container">
             <ul className="left">
-              <li>Hunter</li>
-              <li>Makers</li>
+              {post.hunter && <li>Hunter</li>}
+              {beneficiaries.length > 0 && <li>Makers</li>}
             </ul>
 
             <Timeline>
-              <Timeline.Item>@{post.hunter}</Timeline.Item>
+              {post.hunter && <Timeline.Item>@{post.hunter}</Timeline.Item>}
               {beneficiaries}
             </Timeline>
           </div>

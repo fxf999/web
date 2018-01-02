@@ -55,21 +55,18 @@ class PostForm extends Component {
   onBeneficiariesChanged = () => {
     // TODO: FIXME: HACK:
     // value is one step behind because maybe the inputNumberRef doesn't set synchronously
-    console.log('changed');
     setTimeout(() => {
       const { form } = this.props;
       const beneficiaryIds = form.getFieldValue('beneficiaryIds');
 
       let weightSum = 0;
       let beneficiaries = [];
-      console.log(beneficiaryIds, this.beneficiaryInput);
       for (const i of beneficiaryIds) {
         const account = this.beneficiaryInput[i]['accountInput'].input.value;
         const weight = this.beneficiaryInput[i]['weightInput'].inputNumberRef.getCurrentValidValue();
         beneficiaries.push({ account: account, weight: weight * 100 });
         weightSum += weight;
       }
-      console.log(beneficiaries);
       this.updateField('beneficiaries', beneficiaries);
 
       if (weightSum > 90 || weightSum <= 0) {
@@ -169,7 +166,6 @@ class PostForm extends Component {
 
   updateField = (field, value) => {
     this.setState({ draft: update(this.state.draft, { $merge: { [field]: value } }) }, () => this.props.updatePreview(this.state.draft));
-    console.log(this.state.draft);
   }
   handleTitleChange = (e) => this.updateField('title', e.target.value || initialState.draft.title)
   handleTaglineChange = (e) => this.updateField('tagline', e.target.value || initialState.draft.tagline)
@@ -185,7 +181,6 @@ class PostForm extends Component {
         deletehash: f.response.data.deletehash,
       }
     );
-    console.log(images);
     this.setState({ fileList });
     this.updateField('images', images.filter(x => !!x));
   }

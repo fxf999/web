@@ -127,10 +127,12 @@ function* publishContent({ post }) {
   console.log('1------', post);
   api.post('/posts.json', { post: post }).then((res) => {
     console.log('res------', res);
-  }).catch(msg => {
-    console.log('err------',msg);
 
-    // TODO: show error message
+    // TODO: Publish on Blockchain begin
+
+
+  }).catch(msg => {
+    notification['error']({ message: 'ERROR', description: msg });
   });
 }
 
