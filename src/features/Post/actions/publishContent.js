@@ -53,12 +53,12 @@ export function publishContentReducer(state, action) {
 }
 
 function getBody(post, permlink) {
-  const screenshots = post.images.map(i => `![${i.name}](${i.link})\n`).join('');
+  const screenshots = post.images.map(i => `![${i.name}](${i.link})\n\n`).join('');
 
   let contributors = '';
   if (post.beneficiaries && post.beneficiaries.length > 0) {
     contributors = 'Makers and Contributors:\n' +
-      post.beneficiaries.map(b => `- ${b.account} (${b.weight})\n`).join('');
+      post.beneficiaries.map(b => `- @${b.account} (${b.weight})\n`).join('');
   }
   return `# ${post.title}\n` +
     `${post.tagline}\n` +
@@ -70,7 +70,7 @@ function getBody(post, permlink) {
     `${post.url}\n` +
     `\n---\n` +
     `## Contributors\n` +
-    `Hunter: ${post.username}\n` +
+    `Hunter: @${post.username}\n` +
     `${contributors}` +
     `\n---\n` +
     `*This is a test article from Steemhunt project*\n` +
