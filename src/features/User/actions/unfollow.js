@@ -68,7 +68,7 @@ function* unfollow({ accountName }) {
     yield put(unfollowInit(me, accountName));
     yield steemconnect.unfollow(me, accountName);
     yield put(unfollowSuccess(me, accountName));
-    yield put(notification['success']({ message: `You are not following ${accountName} anymore.` }));
+    yield notification['success']({ message: `You are not following ${accountName} anymore.` });
   } catch (e) {
     yield put(unfollowFailure(e.message));
   }

@@ -71,7 +71,7 @@ function* follow({ accountName }) {
     yield put(followInit(me, accountName));
     yield steemconnect.follow(me, accountName);
     yield put(followSuccess(me, accountName));
-    yield put(notification['success']({ message: `You are now following ${accountName}.` }));
+    yield notification['success']({ message: `You are now following ${accountName}.` });
   } catch (e) {
     console.log(e.error_description);
     yield put(followFailure(e.message));

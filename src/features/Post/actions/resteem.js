@@ -81,10 +81,10 @@ function* resteem({ post }) {
     const me = yield select(selectMe());
     yield steemconnect.reblog(me, post.author, post.permlink);
     yield put(resteemSuccess(me, post));
-    yield put(notification['success']({ message: 'Content was successfully resteemed.' }));
+    yield notification['success']({ message: 'Content was successfully resteemed.' });
   } catch (e) {
     if (e.error_description.indexOf('already reblog') >= 0) {
-      yield put(notification['error']({ message: 'You already resteemed the content.' }));
+      yield notification['error']({ message: 'You already resteemed the content.' });
     }
     yield put(resteemFailure(post, e.message));
   }

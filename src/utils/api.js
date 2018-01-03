@@ -7,7 +7,7 @@ function checkStatus(res) {
     return res;
   }
 
-  throw res.statusText + '. Please try again later.';
+  throw new Error(res.statusText + '. Please try again later.');
 }
 
 function parseJSON(res) {
@@ -16,7 +16,7 @@ function parseJSON(res) {
 
 function checkError(json) {
   if (json.error) {
-    throw json.error;
+    throw new Error(json.error);
   }
 
   return json

@@ -16,7 +16,7 @@ export const initialState = {
     tagline: 'Short Description',
     tags: [],
     images: [],
-    hunter: null,
+    username: null,
     beneficiaries: [],
   },
   posts: {},

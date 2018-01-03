@@ -115,7 +115,7 @@ class PostForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.me !== nextProps.me) {
-      this.updateField('hunter', nextProps.me);
+      this.updateField('username', nextProps.me);
     }
   }
 

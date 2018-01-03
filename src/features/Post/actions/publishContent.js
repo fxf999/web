@@ -1,6 +1,5 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
-import draftToHtml from 'draftjs-to-html';
 import steemconnect from 'sc2-sdk';
 import { createPermlink } from 'utils/helpers/steemitHelpers';
 import { selectMyAccount } from 'features/User/selectors';
@@ -11,6 +10,10 @@ import api from 'utils/api';
 
 
 /*--------- CONSTANTS ---------*/
+const MAIN_CATEGORY = 'steemhunt'
+const APP_NAME = 'steemhunt'
+const DEFAULT_BENEFICIARY = { account: 'steemhunt', weight: 1000 }
+
 const PUBLISH_CONTENT_BEGIN = 'PUBLISH_CONTENT_BEGIN';
 const PUBLISH_CONTENT_SUCCESS = 'PUBLISH_CONTENT_SUCCESS';
 const PUBLISH_CONTENT_FAILURE = 'PUBLISH_CONTENT_FAILURE';
@@ -49,91 +52,96 @@ export function publishContentReducer(state, action) {
   }
 }
 
-// function* publishOnBlockchain(post) {
-//   try {
-//     const myAccount = yield select(selectMyAccount());
-//     const { title, tags, editorRaw } = post;
-//     const author = myAccount.name;
-//     const parentPermlink = tags.length ? tags[0] : 'general';
-//     const permlink = yield createPermlink(title, author, parentPermlink, tags[0]);
-//     const metadata = {
-//       app: 'steemhunt',
-//     };
+function getBody(post, permlink) {
+  const screenshots = post.images.map(i => `![${i.name}](${i.link})\n`).join('');
 
-//     // Listing images and links
-//     const images = [];
-//     const links = [];
-//     Object.values(editorRaw.entityMap).forEach(entity => {
-//       if (entity.type === 'IMAGE') {
-//         images.push(entity.data.src);
-//       }
-//       if (entity.type === 'LINK') {
-//         links.push(entity.data.url);
-//       }
-//     });
-//     if (tags.length) { metadata.tags = tags; }
-//     if (links.length) { metadata.links = links; }
-//     if (images.length) { metadata.image = images; }
-
-//     const operations = [];
-//     const commentOp = [
-//       'comment',
-//       {
-//         parent_author: '',
-//         parent_permlink: parentPermlink,
-//         author,
-//         permlink,
-//         title,
-//         body: draftToHtml(editorRaw),
-//         json_metadata: JSON.stringify(metadata),
-//       },
-//     ];
-//     operations.push(commentOp);
-
-
-//     // SP / SBD is always 50:50
-
-//     // const commentOptionsConfig = {
-//     //   author,
-//     //   permlink,
-//     //   allow_votes: true,
-//     //   allow_curation_rewards: true,
-//     // };
-//     // const { reward } = post;
-//     // if (reward === '0') {
-//     //   commentOptionsConfig.max_accepted_payout = '0.000 SBD';
-//     //   commentOptionsConfig.percent_steem_dollars = 10000;
-//     // } else if (reward === '100') {
-//     //   commentOptionsConfig.max_accepted_payout = '1000000.000 SBD';
-//     //   commentOptionsConfig.percent_steem_dollars = 0;
-//     // }
-//     // if (reward !== '50') {
-//     //   operations.push(['comment_options', commentOptionsConfig]);
-//     // }
-
-//     yield steemconnect.broadcast(operations);
-//     yield put(publishContentSuccess());
-//     yield put(notification['success']({ message: 'Congratulations! Your post has been successfully published!' }));
-//   } catch (e) {
-//     yield put(publishContentFailure(e.message));
-//   }
-// }
+  let contributors = '';
+  if (post.beneficiaries && post.beneficiaries.length > 0) {
+    contributors = 'Makers and Contributors:\n' +
+      post.beneficiaries.map(b => `- ${b.account} (${b.weight})\n`).join('');
+  }
+  return `# ${post.title}\n` +
+    `${post.tagline}\n` +
+    `\n---\n` +
+    `## Screenshots\n` +
+    `${screenshots}\n` +
+    `\n---\n` +
+    `## Link\n` +
+    `${post.url}\n` +
+    `\n---\n` +
+    `## Contributors\n` +
+    `Hunter: ${post.username}\n` +
+    `${contributors}` +
+    `\n---\n` +
+    `*This is a test article from Steemhunt project*\n` +
+    `*Posted on [Steemhunt.com](https://steemhunt.com/${post.username}/${permlink}) - Steem Fueled Product Hunt*\n`;
+}
 
 /*--------- SAGAS ---------*/
-/**
- * @param post: { title: string, tags: array, editorRaw }
- */
 function* publishContent({ post }) {
   console.log('1------', post);
-  api.post('/posts.json', { post: post }).then((res) => {
-    console.log('res------', res);
 
-    // TODO: Publish on Blockchain begin
+  try {
+    const title = `${post.title} - ${post.tagline}`;
+    const permlink = yield createPermlink(title, post.username, '', '');
 
+    post.permlink = permlink;
 
-  }).catch(msg => {
-    notification['error']({ message: 'ERROR', description: msg });
-  });
+    const res = yield api.post('/posts.json', { post: post });
+    console.log('2------', res);
+
+    const myAccount = yield select(selectMyAccount());
+    if (myAccount.name !== post.username) {
+      yield put(publishContentFailure('UNAUTHORIZED'));
+      return;
+    }
+
+    // Inject 'steemhunt' as a main category for every post
+    const tags = [MAIN_CATEGORY].concat(post.tags);
+
+    // Prepare data
+    const metadata = {
+      tags: tags,
+      image: post.images.map(i => i.link),
+      links: [ post.url ],
+      app: APP_NAME,
+    };
+
+    var operations = [
+      ['comment',
+        {
+          parent_author: '',
+          parent_permlink: tags[0],
+          author: post.username,
+          permlink,
+          title,
+          body: getBody(post, permlink),
+          json_metadata: JSON.stringify(metadata),
+        },
+      ],
+      ['comment_options', {
+        author: post.username,
+        permlink,
+        max_accepted_payout: '1000000.000 SBD',
+        percent_steem_dollars: 10000,
+        allow_votes: true,
+        allow_curation_rewards: true,
+        extensions: [
+          [0, {
+            beneficiaries: [DEFAULT_BENEFICIARY].concat(post.beneficiaries || [])
+          }]
+        ]
+      }]
+    ];
+    console.log('3-------------', operations);
+
+    yield steemconnect.broadcast(operations);
+    yield put(publishContentSuccess());
+    yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
+  } catch (e) {
+    yield notification['error']({ message: e.message });
+    yield put(publishContentFailure(e.message));
+  }
 }
 
 export default function* publishContentManager() {

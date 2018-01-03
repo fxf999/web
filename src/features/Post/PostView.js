@@ -14,8 +14,8 @@ class PostView extends Component {
       title: PropTypes.string.isRequired,
       tagline: PropTypes.string.isRequired,
       tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-      images: PropTypes.arrayOf(PropTypes.string).isRequired,
-      hunter: PropTypes.string.isRequired,
+      images: PropTypes.arrayOf(PropTypes.object).isRequired,
+      username: PropTypes.string,
       beneficiaries: PropTypes.arrayOf(PropTypes.shape({
         account: PropTypes.string.isRequired,
         weight: PropTypes.number.isRequired,
@@ -27,7 +27,7 @@ class PostView extends Component {
     const { post } = this.props;
     const images = post.images.map((image, index) => {
       return (
-        <div><img src={image.link} key={index} alt={image.name} /></div>
+        <div key={index}><img src={image.link} alt={image.name} /></div>
       );
     });
     const autoplay = images.length > 1 ? true : false;
@@ -63,12 +63,12 @@ class PostView extends Component {
 
           <div className="timeline-container">
             <ul className="left">
-              {post.hunter && <li>Hunter</li>}
+              {post.username && <li>Hunter</li>}
               {beneficiaries.length > 0 && <li>Makers</li>}
             </ul>
 
             <Timeline>
-              {post.hunter && <Timeline.Item>@{post.hunter}</Timeline.Item>}
+              {post.username && <Timeline.Item>@{post.username}</Timeline.Item>}
               {beneficiaries}
             </Timeline>
           </div>
