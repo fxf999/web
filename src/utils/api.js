@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 const API_ROOT = process.env.REACT_APP_API_ROOT;
 
 function checkStatus(res) {
-  if (res.status >= 200 && res.status < 300 || res.status === 422) {
+  if ((res.status >= 200 && res.status < 300) || res.status === 422) {
     return res;
   }
 

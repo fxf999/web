@@ -187,7 +187,7 @@ class PostForm extends Component {
   handleTagsChange = (tags) => this.updateField('tags', tags)
 
   render() {
-    const { getFieldDecorator, getFieldValue, getFieldProps } = this.props.form;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: {
         lg: { span: 24 },

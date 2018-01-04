@@ -17,7 +17,6 @@ const DEFAULT_BENEFICIARY = { account: 'steemhunt', weight: 1000 }
 const PUBLISH_CONTENT_BEGIN = 'PUBLISH_CONTENT_BEGIN';
 const PUBLISH_CONTENT_SUCCESS = 'PUBLISH_CONTENT_SUCCESS';
 const PUBLISH_CONTENT_FAILURE = 'PUBLISH_CONTENT_FAILURE';
-const PUBLISH_ON_BLOCKCHAIN_FAILURE = 'PUBLISH_ON_BLOCKCHAIN_FAILURE';
 
 /*--------- ACTIONS ---------*/
 
@@ -73,8 +72,12 @@ function getBody(post, permlink) {
     `Hunter: @${post.username}\n` +
     `${contributors}` +
     `\n---\n` +
-    `*This is a test article from Steemhunt project*\n` +
-    `*Posted on [Steemhunt.com](https://steemhunt.com/${post.username}/${permlink}) - Steem Fueled Product Hunt*\n`;
+    `<center>` +
+    `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\ㅜ` +
+    `*This is a test article from Steemhunt project*`
+    `Posted on Steemhunt, a Steem-fueled Product Hunt\n`
+    `[View on Steemhunt.com](https://steemhunt.com/${post.username}/${permlink})\n`
+    `</center>`;
 }
 
 /*--------- SAGAS ---------*/
@@ -135,7 +138,7 @@ function* publishContent({ post }) {
     ];
     console.log('3-------------', operations);
 
-    yield steemconnect.broadcast(operations);
+    // yield steemconnect.broadcast(operations);
     yield put(publishContentSuccess());
     yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
   } catch (e) {
