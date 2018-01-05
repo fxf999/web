@@ -73,10 +73,10 @@ function getBody(post, permlink) {
     `${contributors}` +
     `\n---\n` +
     `<center>` +
-    `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\ㅜ` +
-    `*This is a test article from Steemhunt project*`
-    `Posted on Steemhunt, a Steem-fueled Product Hunt\n`
-    `[View on Steemhunt.com](https://steemhunt.com/${post.username}/${permlink})\n`
+    `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\n` +
+    `*This is a test article from Steemhunt project*` +
+    `Posted on Steemhunt, a Steem-fueled Product Hunt\n` +
+    `[View on Steemhunt.com](https://steemhunt.com/${post.username}/${permlink})\n` +
     `</center>`;
 }
 
@@ -138,7 +138,7 @@ function* publishContent({ post }) {
     ];
     console.log('3-------------', operations);
 
-    // yield steemconnect.broadcast(operations);
+    yield steemconnect.broadcast(operations);
     yield put(publishContentSuccess());
     yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
   } catch (e) {

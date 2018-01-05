@@ -5,7 +5,7 @@
   "dependencies": {
     "antd": "^3.1.0",
     "bs58": "^4.0.1",
-    "embedjs": "0.0.4",
+    "embedjs": "^0.0.10",
     "emojione": "^3.1.2",
     "history": "^4.6.3",
     "immutability-helper": "^2.6.2",
@@ -22,7 +22,6 @@
     "react-intl": "^2.4.0",
     "react-loadable": "^4.0.5",
     "react-markdown": "^2.5.1",
-    "react-progressive-image": "^0.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
     "react-scripts": "^1.0.17",

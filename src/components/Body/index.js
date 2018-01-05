@@ -23,12 +23,6 @@ export function getHtml(body, jsonMetadata = {}, returnType = 'Object') {
 
   body = body.replace(/<!--([\s\S]+?)(-->|$)/g, '(html comment removed: $1)');
 
-  /*body.replace(imageRegex, (img) => {
-    if (filter(jsonMetadata.image, i => i.indexOf(img) !== -1).length === 0) {
-      jsonMetadata.image.push(img);
-    }
-  });*/
-
   const htmlReadyOptions = { mutate: true, resolveIframe: returnType === 'text' };
   body = remarkable.render(body);
   body = htmlReady(body, htmlReadyOptions).html;
@@ -37,16 +31,6 @@ export function getHtml(body, jsonMetadata = {}, returnType = 'Object') {
   if (returnType === 'text') {
     return body;
   }
-
-  /*body = body.replace(/<img src="([\s\S]+?)" ([\s\S]+?)(>|$)/g, (img, src) => {
-    console.log('img', img);
-    console.log('src', src);
-    return (
-      <ProgressiveImage src={src} placeholder="tiny-image.jpg">
-        {(src) => <img src={src} />}
-      </ProgressiveImage>
-    );
-  });*/
 
   const sections = [];
   let idx = 0;
