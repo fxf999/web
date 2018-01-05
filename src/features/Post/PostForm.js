@@ -10,7 +10,7 @@ import { selectIsPublishing } from './selectors';
 import { selectMe } from 'features/User/selectors';
 
 import { publishContentBegin } from './actions/publishContent';
-import { updatePreview } from './actions/updatePreview';
+import { updateDraft } from './actions/updateDraft';
 import { initialState } from './actions';
 
 import { splitTags } from 'utils/sanitizer';
@@ -24,7 +24,7 @@ class PostForm extends Component {
 
   static propTypes = {
     me: PropTypes.string.isRequired,
-    updatePreview: PropTypes.func.isRequired,
+    updateDraft: PropTypes.func.isRequired,
     publishContent: PropTypes.func.isRequired,
     isPublishing: PropTypes.bool.isRequired,
   };
@@ -38,7 +38,6 @@ class PostForm extends Component {
       fileList: [],
       beneficiariesValid: true,
       shouldRecalculateBeneficiary: false,
-      draft: {},
     };
     this.beneficiaryInput = {};
   }
@@ -46,7 +45,7 @@ class PostForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    this.props.publishContent(this.state.draft);
+    this.props.publishContent();
   }
 
   // MARK: - Beneficiaries
@@ -67,7 +66,7 @@ class PostForm extends Component {
         beneficiaries.push({ account: account, weight: weight * 100 });
         weightSum += weight;
       }
-      this.updateField('beneficiaries', beneficiaries);
+      this.props.updateDraft('beneficiaries', beneficiaries);
 
       if (weightSum > 90 || weightSum <= 0) {
         this.setState({ beneficiariesValid: false });
@@ -115,7 +114,7 @@ class PostForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.me !== nextProps.me) {
-      this.updateField('username', nextProps.me);
+      this.props.updateDraft('username', nextProps.me);
     }
   }
 
@@ -140,7 +139,7 @@ class PostForm extends Component {
 
     api.get('/posts/exists.json', { url: value }).then((res) => {
       if (res.result === 'OK') {
-        this.updateField('url', value);
+        this.props.updateDraft('url', value);
         callback();
       } else if (res.result === 'ALREADY_EXISTS') { // TODO: Go to the product page link
         callback('The product link already exists.');
@@ -164,11 +163,8 @@ class PostForm extends Component {
 
   // MARK: - Handle live updates
 
-  updateField = (field, value) => {
-    this.setState({ draft: update(this.state.draft, { $merge: { [field]: value } }) }, () => this.props.updatePreview(this.state.draft));
-  }
-  handleTitleChange = (e) => this.updateField('title', e.target.value || initialState.draft.title)
-  handleTaglineChange = (e) => this.updateField('tagline', e.target.value || initialState.draft.tagline)
+  handleTitleChange = (e) => this.props.updateDraft('title', e.target.value || initialState.draft.title)
+  handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline)
   handleImageChange = ({ fileList }) => {
     const images = fileList.map(f => f.response && f.response.data &&
       {
@@ -182,9 +178,9 @@ class PostForm extends Component {
       }
     );
     this.setState({ fileList });
-    this.updateField('images', images.filter(x => !!x));
+    this.props.updateDraft('images', images.filter(x => !!x));
   }
-  handleTagsChange = (tags) => this.updateField('tags', tags)
+  handleTagsChange = (tags) => this.props.updateDraft('tags', tags)
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -379,8 +375,8 @@ const mapStateToProps = (state, props) => createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updatePreview: post => dispatch(updatePreview(post)),
-  publishContent: post => dispatch(publishContentBegin(post)),
+  updateDraft: (field, value) => dispatch(updateDraft(field, value)),
+  publishContent: () => dispatch(publishContentBegin()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedPostForm);

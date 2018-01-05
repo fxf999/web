@@ -5,7 +5,7 @@ import combine from 'utils/combine';
 import getPostsBy, { getPostsByReducer } from './actions/getPostsBy';
 import getOnePost, { getOnePostReducer } from './actions/getOnePost';
 import publishContent, { publishContentReducer } from './actions/publishContent';
-import { updatePreviewReducer } from './actions/updatePreview';
+import { updateDraftReducer } from './actions/updateDraft';
 import resteem, { resteemReducer } from './actions/resteem';
 import postsReducer from './reducer';
 
@@ -33,7 +33,7 @@ export const initialState = {
 
 export const reducer = (state = initialState, action) => combine(
   [
-    updatePreviewReducer,
+    updateDraftReducer,
     getPostsByReducer,
     getOnePostReducer,
     publishContentReducer,
