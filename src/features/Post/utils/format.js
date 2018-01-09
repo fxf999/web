@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 import { formatter } from 'steem';
 
 const IMG_SERVICE_RESIZER = 'https://steemitimages.com/256x512/';

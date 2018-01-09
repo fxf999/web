@@ -18,10 +18,18 @@ export const selectPosts = () => createSelector(
   state => state.posts,
 );
 
-export const selectCategories = () => createSelector(
+export const selectIsLoading = () => createSelector(
   selectPostDomain(),
-  state => state.categories,
+  state => state.isLoading,
 );
+
+export const selectHasMore = () => createSelector(
+  selectPostDomain(),
+  state => state.hasMore,
+);
+
+
+
 
 export const selectCurrentPostId = () => createSelector(
   selectPostDomain(),

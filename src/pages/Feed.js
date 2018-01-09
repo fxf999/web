@@ -1,3 +1,5 @@
+// TODO: Deprecate
+
 import React from 'react';
 import PostList from 'features/Post/PostList';
 import { Helmet } from 'react-helmet';

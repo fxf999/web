@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 import steem from 'steem';
 
 const steemAPI = steem.api;

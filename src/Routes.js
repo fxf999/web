@@ -15,8 +15,6 @@ import PostView from './features/Post/PostView';
 const Home = asyncComponent(() => import('./pages/Home'));
 const HuntedList = asyncComponent(() => import('./pages/HuntedList'));
 const Feed = asyncComponent(() => import('./pages/Feed'));
-const CategoryPostList = asyncComponent(() => import('./pages/CategoryPostList'));
-const SubCategoryPostList = asyncComponent(() => import('./pages/SubCategoryPostList'));
 const PostRead = asyncComponent(() => import('./features/Post/PostRead'));
 const Profile = asyncComponent(() => import('./features/User/Profile'));
 
@@ -28,6 +26,9 @@ class Left extends Component {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/post" exact component={PostView} />
+          <Route path="/@:username" component={Profile} />
+          <Route path="/@:username/:permlink" exact component={PostView} />
+          <Route path="/:tag" exact component={Home} />
         </Switch>
       </div>
     );
@@ -70,16 +71,13 @@ class Right extends Component {
   render() {
     return (
       <div className="panel-right" ref={(ref) => this.container = ref}>
-        {this.props.location.search && <Redirect to="/" />}
         <Header scrollTop={this.state.scrollTop}/>
         <Switch>
           <Route path="/" exact component={HuntedList} />
           <Route path="/post" exact component={PostForm} />
-          <Route path="/@:accountName/feed" exact component={Feed} />
-          <Route path="/@:accountName" component={Profile} />
-          <Route path="/:category" exact component={CategoryPostList} />
-          <Route path="/:topic/@:author/:permlink" exact component={PostRead} />
-          <Route path="/:category/:tag" exact component={SubCategoryPostList} />
+          <Route path="/@:username" component={HuntedList} />
+          <Route path="/@:username/:permlink" exact component={HuntedList} />
+          <Route path="/:tag" exact component={HuntedList} />
         </Switch>
       </div>
     );
