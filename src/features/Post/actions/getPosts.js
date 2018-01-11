@@ -27,14 +27,15 @@ export function getPostsReducer(state, action) {
   switch (action.type) {
     case GET_POSTS_BEGIN: {
       return update(state, {
-        isLoading: {$set: true},
+        isLoading: { $set: true },
       });
     }
     case GET_POSTS_SUCCESS: {
       const { daysAgo, posts } = action;
 
       return update(state, {
-        posts: { [daysAgo]: { $set: posts } }
+        posts: { [daysAgo]: { $set: posts } },
+        isLoading: { $set: false },
       });
     }
     default:

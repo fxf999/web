@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 
-import React, { Component } from 'react';
-import { List, Button, Spin } from 'antd';
+import { Spin } from 'antd';
 
 import { selectPosts, selectIsLoading } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import getPostKey from './utils/postKey';
+import Post from './components/Post';
 
 class PostList extends Component {
   static propTypes = {
@@ -27,27 +28,19 @@ class PostList extends Component {
   }
 
   render() {
-    const { daysAgo, posts, isLoading } = this.props;
-    const listData = posts[daysAgo];
+    const { daysAgo, isLoading } = this.props;
+    const posts = (this.props.posts[daysAgo] || []).map((post, index) => {
+      return (
+        <Post key={post.id} rank={index} post={post} />
+      );
+    });
 
     return (
-      <List
-        itemLayout="vertical"
-        size="large"
-        dataSource={listData}
-        renderItem={post => (
-          <List.Item
-            key={post.id}
-            extra={<img width={272} alt="logo" src={post.images[0].link} />}
-          >
-            <List.Item.Meta
-              title={<a href={getPostKey(post)}>{post.title}</a>}
-              description={post.tagline}
-            />
-            {post.tagline}
-          </List.Item>
-        )}
-      />
+      <Spin size="large" spinning={isLoading}>
+        <div class="post-list">
+          {posts}
+        </div>
+      </Spin>
     );
   }
 }
