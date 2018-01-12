@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 import remarkableStripper from './RemarkableStripper';
 import sanitize from 'sanitize-html';
 import { htmlDecode } from './Html';

@@ -4,19 +4,23 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 
-import { Button, Slider } from 'antd';
+import { Button, Slider, Popover } from 'antd';
 
 import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
 import { voteBegin } from './actions/vote';
 import { hasVoted } from 'utils/helpers/steemitHelpers';
+import { formatAmount } from "utils/helpers/steemitHelpers";
 
 class VoteButton extends Component {
   static propTypes = {
-    content: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired,
+    type: PropTypes.string.isRequired,
+
+    appProps: PropTypes.object,
     myAccount: PropTypes.object.isRequired,
     isConnected: PropTypes.bool.isRequired,
-    type: PropTypes.string.isRequired,
+
     vote: PropTypes.func.isRequired,
   };
 
@@ -24,36 +28,17 @@ class VoteButton extends Component {
     super();
     this.state = {
       voteWeight: 100,
-      sliderIsOpen: false,
-      over: false,
     }
   }
 
-  closeSlider = () => {
-    this.setState({ sliderIsOpen: false, over: false });
-  };
-
-  handleVoteWeight = (event, value) => {
+  onChangeVotingWeight = value => {
     this.setState({ voteWeight: value });
   };
 
-  openSlider = () => {
-    this.setState({ sliderIsOpen: true });
-  };
-
-  overIn = () => {
-    this.setState({ over: true });
-  };
-
-  overOut = () => {
-    this.setState({ over: false });
-  };
-
   vote = weight => {
-    const { isConnected, content, vote, type } = this.props;
+    const { isConnected, post, vote, type } = this.props;
     if (isConnected) {
-      this.setState({ sliderIsOpen: false });
-      vote(content, weight, { type });
+      vote(post, weight, { type });
     } else {
       console.log('Not logged');
     }
@@ -80,52 +65,45 @@ class VoteButton extends Component {
   };
 
   render() {
-    const { myAccount, isConnected, content } = this.props;
-    const { voteWeight, sliderIsOpen, over } = this.state;
-    const contentUpvoted = hasVoted(content, myAccount.name);
+    const { myAccount, isConnected, post } = this.props;
+    const { voteWeight } = this.state;
+    const postUpvoted = hasVoted(post, myAccount.name);
+
+    const content = isConnected ? (
+      <div className="vote-box">
+        <Slider
+          min={0}
+          max={100}
+          step={1}
+          value={voteWeight}
+          onChange={this.onChangeVotingWeight}
+        />
+        <div className="weight">
+          {voteWeight}%
+          ({numeral(this.votingValueCalculator(voteWeight)).format('$0,0.00')})
+        </div>
+        <Button
+          type="primary"
+          onClick={() => this.vote(voteWeight * 100)}
+          disabled={voteWeight === 0}>
+          Vote
+        </Button>
+      </div>
+    ) : '';
 
     return (
-      <div>
-        {isConnected && (
-          <div className={`Vote ${contentUpvoted ? 'active' : ''}`} onMouseEnter={this.overIn}
-               onMouseLeave={this.overOut}>
-            <Button
-              shape="circle"
-              icon="up-circle"
-              disabled={!isConnected}
-              onClick={!contentUpvoted ? this.openSlider : () => this.vote(0)}
-              style={{
-                color: contentUpvoted || over ? '#fff' : '#ccc'
-              }}
-            />
-            {sliderIsOpen && (
-              <div className="CardBox">
-                <div className="Slider">
-                  <Slider
-                    sliderStyle={{ marginBottom: 24 }}
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={voteWeight}
-                    onChange={this.handleVoteWeight}
-                  />
-                  <div className="Weight">{voteWeight}%
-                    ({numeral(this.votingValueCalculator(voteWeight)).format('$0,0.00')})
-                  </div>
-                </div>
-
-                <Button
-                  type="primary"
-                  onClick={() => this.vote(voteWeight * 100)}
-                  disabled={voteWeight === 0}>
-                  Vote
-                </Button>
-
-                <Button onClick={this.closeSlider}>Close</Button>
-              </div>
-            )}
-          </div>
-        )}
+      <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
+        <Popover content={content} trigger="click" placement="left">
+          <Button
+            type="primary"
+            shape="circle"
+            icon="up"
+            disabled={!isConnected}
+            onClick={!postUpvoted ? this.openSlider : () => this.vote(0)}
+            ghost
+          />
+        </Popover>
+        <div className="payout-value">{formatAmount(post.payout_value)}</div>
       </div>
     )
   }
@@ -140,7 +118,7 @@ const mapStateToProps = (state, props) => createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  vote: (content, weight, params) => dispatch(voteBegin(content, weight, props.type, params)),
+  vote: (post, weight, params) => dispatch(voteBegin(post, weight, props.type, params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VoteButton);

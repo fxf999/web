@@ -1,0 +1,28 @@
+.vote-button {
+  color: $primary;
+  text-align: center;
+  margin-top: 15px;
+
+  button {
+    margin-bottom: 2px;
+  }
+
+  .payout-value {
+    font-size: 0.875rem;
+  }
+}
+
+.vote-box {
+  width: 240px;
+  overflow: hidden;
+  padding: 0 10px;
+
+  .weight {
+    float: left;
+    margin-top: 5px;
+  }
+
+  button {
+    float: right;
+  }
+}

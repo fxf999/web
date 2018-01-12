@@ -15,8 +15,8 @@ const Post = ({ rank, post }) => {
         <div className="tagline">{post.tagline}</div>
         <div className="stats"><b>{post.active_votes.length}</b> votes and <b>{post.comment_count}</b> comments</div>
       </div>
-      <div className="votes">
-        <VoteButton content={post} type="post" />
+      <div className="vote-section">
+        <VoteButton post={post} type="post" />
       </div>
     </div>
   )

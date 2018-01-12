@@ -8,7 +8,6 @@ import steemconnect from 'sc2-sdk';
 import { Icon, Button } from 'antd';
 
 import { selectMe, selectMyAccount } from 'features/User/selectors';
-import { selectCurrentCategory, selectCurrentTag } from './selectors';
 import { logoutBegin } from 'features/User/actions/logout';
 
 import logo from 'assets/images/logo-nav-pink@2x.png'
@@ -17,11 +16,8 @@ import AvatarSteemit from 'components/AvatarSteemit';
 class Header extends Component {
   static propTypes = {
     me: PropTypes.string.isRequired,
-    currentCategory: PropTypes.string.isRequired,
-    currentTag: PropTypes.string,
     myAccount: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
-    scrollTop: PropTypes.number.isRequired,
   };
 
   constructor() {
@@ -66,11 +62,9 @@ class Header extends Component {
   };
 
   render() {
-    const { me, myAccount, scrollTop } = this.props;
-    let padding = 70 - (scrollTop / 2);
-    padding = padding < 10 ? 10 : padding;
+    const { me, myAccount } = this.props;
     return (
-      <header style={{ paddingTop: padding + 'px' }}>
+      <header>
         <Link to="/">
           <img src={logo} alt="logo" className="nav-logo"/>
         </Link>
@@ -94,8 +88,6 @@ class Header extends Component {
 const mapStateToProps = createStructuredSelector({
   me: selectMe(),
   myAccount: selectMyAccount(),
-  currentCategory: selectCurrentCategory(),
-  currentTag: selectCurrentTag(),
 });
 
 const mapDispatchToProps = (dispatch, props) => ({

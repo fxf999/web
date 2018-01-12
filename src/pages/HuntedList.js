@@ -3,6 +3,6 @@ import PostList from 'features/Post/PostList';
 
 export default function HuntedList(props) {
   return (
-    <PostList daysAgo="1" />
+    <PostList daysAgo={2} />
   );
 }

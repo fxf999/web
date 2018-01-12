@@ -22,14 +22,10 @@
   }
 }
 
-.post-list {
-  padding: 0 80px 0 0;
-}
-
 .post {
   overflow: hidden;
   border-bottom: 1px solid #e8e8e8;
-  padding: 10px 0;
+  padding: 10px 80px 10px 0;
 
   &:first-child {
     border-top: 1px solid #e8e8e8;
@@ -62,11 +58,14 @@
 
     .tagline, .stats {
       font-size: 0.875rem;
-      color: $text_dark;
+    }
+
+    .stats {
+      color: $text_grey;
     }
   }
 
-  .votes {
+  .vote-section {
     float: right;
     text-align: right;
   }

@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 // TODO(p0o): use a selector for these
 export const getFeedFromState = (sortBy, category = 'all', state) => {
   switch (sortBy) {

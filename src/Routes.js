@@ -14,8 +14,6 @@ import PostView from './features/Post/PostView';
 
 const Home = asyncComponent(() => import('./pages/Home'));
 const HuntedList = asyncComponent(() => import('./pages/HuntedList'));
-const Feed = asyncComponent(() => import('./pages/Feed'));
-const PostRead = asyncComponent(() => import('./features/Post/PostRead'));
 const Profile = asyncComponent(() => import('./features/User/Profile'));
 
 class Left extends Component {

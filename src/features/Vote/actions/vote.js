@@ -11,42 +11,42 @@ export const VOTE_FAILURE = 'VOTE_FAILURE';
 export const UPDATE_PAYOUT = 'UPDATE_PAYOUT';
 
 /*--------- ACTIONS ---------*/
-export function voteBegin(content, weight, contentType, params = {}) {
-  return { type: VOTE_BEGIN, content, weight, contentType, params };
+export function voteBegin(post, weight, contentType, params = {}) {
+  return { type: VOTE_BEGIN, post, weight, contentType, params };
 }
 
-function voteOptimistic(content, accountName, weight, params) {
-  return { type: VOTE_OPTIMISTIC, content, accountName, weight, params };
+function voteOptimistic(post, accountName, weight, params) {
+  return { type: VOTE_OPTIMISTIC, post, accountName, weight, params };
 }
 
-export function voteSuccess(content, contentType) {
-  return { type: VOTE_SUCCESS, content, contentType };
+export function voteSuccess(post, contentType) {
+  return { type: VOTE_SUCCESS, post, contentType };
 }
 
-export function voteFailure(content, accountName, params, message) {
-  return { type: VOTE_FAILURE, content, accountName, params, message };
+export function voteFailure(post, accountName, params, message) {
+  return { type: VOTE_FAILURE, post, accountName, params, message };
 }
 
-export function updatePayout(content, contentType) {
-  return { type: UPDATE_PAYOUT, content, contentType };
+export function updatePayout(post, contentType) {
+  return { type: UPDATE_PAYOUT, post, contentType };
 }
 
 /*--------- SAGAS ---------*/
-function* vote({ content, weight, contentType, params }) {
+function* vote({ post, weight, contentType, params }) {
   const accountName = yield select(selectMe());
-  yield put(voteOptimistic(content, accountName, weight, params));
+  yield put(voteOptimistic(post, accountName, weight, params));
 
   try {
-    yield steemconnect.vote(accountName, content.author, content.permlink, weight);
-    yield put(voteSuccess(content, contentType));
+    yield steemconnect.vote(accountName, post.author, post.permlink, weight);
+    yield put(voteSuccess(post, contentType));
 
     // UPDATE PAYOUT
-    const { author, permlink } = content;
+    const { author, permlink } = post;
     const updatedContent = yield steem.api.getContentAsync(author, permlink);
     yield put(updatePayout(updatedContent, contentType));
 
   } catch(e) {
-    yield put(voteFailure(content, accountName, params, e.message));
+    yield put(voteFailure(post, accountName, params, e.message));
   }
 }
 

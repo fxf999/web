@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import isEmpty from 'lodash/isEmpty';
 
 import { Spin } from 'antd';
 
 import { selectPosts, selectIsLoading } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
-import getPostKey from './utils/postKey';
+import { daysAgoToString } from 'utils/date';
 import Post from './components/Post';
 
 class PostList extends Component {
@@ -37,7 +36,8 @@ class PostList extends Component {
 
     return (
       <Spin size="large" spinning={isLoading}>
-        <div class="post-list">
+        <h3>{daysAgoToString(daysAgo)}</h3>
+        <div className="post-list">
           {posts}
         </div>
       </Spin>
