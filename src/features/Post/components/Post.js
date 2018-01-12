@@ -2,22 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import getPostKey from '../utils/postKey';
 import VoteButton from 'features/Vote/VoteButton';
 
 const Post = ({ rank, post }) => {
-  const thumbnailStyle = {
-    backgroundImage: `url(${post.images[0].link})`
-  }
   return (
     <div className="post">
       <div className="rank">{rank}</div>
-      <div className="thumbnail" style={thumbnailStyle}></div>
+      <img src={post.images[0].link} alt={post.title} className="thumbnail" />
       <div className="summary">
-        <div className="title">{post.title}</div>
+        <div className="title"><Link to={getPostKey(post)}>{post.title}</Link></div>
         <div className="tagline">{post.tagline}</div>
-        <div className="stats">{post.vote_count} votes and {post.comment_count} comments</div>
+        <div className="stats"><b>{post.active_votes.length}</b> votes and <b>{post.comment_count}</b> comments</div>
       </div>
-      <div className="vote-button">
+      <div className="votes">
         <VoteButton content={post} type="post" />
       </div>
     </div>

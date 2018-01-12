@@ -26,6 +26,52 @@
   padding: 0 80px 0 0;
 }
 
+.post {
+  overflow: hidden;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 10px 0;
+
+  &:first-child {
+    border-top: 1px solid #e8e8e8;
+  }
+
+  .rank, .thumbnail, .summary {
+    float: left;
+  }
+  .rank {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 0.875rem;
+    color: $primary;
+    text-align: center;
+  }
+
+  .thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .summary {
+    margin-left: 20px;
+
+    .title {
+      font-size: 1.125rem;
+    }
+
+    .tagline, .stats {
+      font-size: 0.875rem;
+      color: $text_dark;
+    }
+  }
+
+  .votes {
+    float: right;
+    text-align: right;
+  }
+}
+
 .post-view {
   .top-container {
     padding: 30px 0 70px 0;

@@ -31,7 +31,7 @@ class PostList extends Component {
     const { daysAgo, isLoading } = this.props;
     const posts = (this.props.posts[daysAgo] || []).map((post, index) => {
       return (
-        <Post key={post.id} rank={index} post={post} />
+        <Post key={post.id} rank={index + 1} post={post} />
       );
     });
 
