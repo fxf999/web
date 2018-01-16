@@ -9,8 +9,9 @@ import { getToken } from './utils/token';
 import { getMeBegin } from './features/User/actions/getMe';
 import { selectMe } from './features/User/selectors';
 import Header from './features/App/Header';
+import Post from './features/Post/Post';
 import PostForm from './features/Post/PostForm';
-import PostView from './features/Post/PostView';
+import Draft from './features/Post/Draft';
 
 const Home = asyncComponent(() => import('./pages/Home'));
 const HuntedList = asyncComponent(() => import('./pages/HuntedList'));
@@ -23,9 +24,9 @@ class Left extends Component {
         {this.props.location.search && <Redirect to="/" />}
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/post" exact component={PostView} />
+          <Route path="/@:username/:permlink" exact component={Post} />
+          <Route path="/post" exact component={Draft} />
           <Route path="/@:username" component={Profile} />
-          <Route path="/@:username/:permlink" exact component={PostView} />
           <Route path="/:tag" exact component={Home} />
         </Switch>
       </div>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import getPostKey from '../utils/postKey';
 import VoteButton from 'features/Vote/VoteButton';
 
-const Post = ({ rank, post }) => {
+const PostItem = ({ rank, post }) => {
   return (
     <div className="post">
       <div className="rank">{rank}</div>
@@ -22,9 +22,9 @@ const Post = ({ rank, post }) => {
   )
 };
 
-Post.propTypes = {
+PostItem.propTypes = {
   rank: PropTypes.number.isRequired,
   post: PropTypes.object.isRequired,
 };
 
-export default Post;
+export default PostItem;

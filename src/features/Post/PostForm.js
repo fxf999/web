@@ -277,6 +277,7 @@ class PostForm extends Component {
           })(
             <Input
               placeholder="Steemit"
+              maxLength="30"
               onChange={this.handleTitleChange} />
           )}
         </FormItem>
@@ -368,7 +369,7 @@ class PostForm extends Component {
 
 const WrappedPostForm = Form.create()(PostForm);
 
-const mapStateToProps = (state, props) => createStructuredSelector({
+const mapStateToProps = () => createStructuredSelector({
   me: selectMe(),
   isPublishing: selectIsPublishing(),
 });

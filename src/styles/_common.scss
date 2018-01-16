@@ -88,3 +88,10 @@ html, body, .root, .app-container {
     z-index: 0;
   }
 }
+
+.center-loading {
+  font-size: 40px;
+  display: block;
+  margin: 40px auto;
+  color: $primary;
+}

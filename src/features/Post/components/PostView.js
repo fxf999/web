@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import { Button, Carousel, Icon, Timeline, Tag } from 'antd';
 
-import { selectDraft } from './selectors';
-
-class PostView extends Component {
+export default class PostView extends Component {
   static propTypes = {
     post: PropTypes.shape({
       url: PropTypes.string.isRequired,
@@ -20,10 +16,13 @@ class PostView extends Component {
         account: PropTypes.string.isRequired,
         weight: PropTypes.number.isRequired,
       })).isRequired
-    }).isRequired
+    }).isRequired,
+    username: PropTypes.string,
+    permlink: PropTypes.string,
   };
 
   render() {
+    console.log('render ----------', this.props);
     const { post } = this.props;
     const images = post.images.map((image, index) => {
       return (
@@ -88,9 +87,3 @@ class PostView extends Component {
     )
   }
 }
-
-const mapStateToProps = () => createStructuredSelector({
-  post: selectDraft()
-});
-
-export default connect(mapStateToProps)(PostView);

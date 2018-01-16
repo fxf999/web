@@ -1,5 +1,3 @@
-// TODO: DEPRECATED
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
@@ -23,11 +21,11 @@ import {
 } from 'features/Comment/selectors';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
-import { getOnePostBegin, setCurrentPostId } from './actions/getOnePost';
-import PostTags from './components/PostTags';
+import { getPostBegin, setCurrentPostId } from './actions/getPost';
+import PostView from './components/PostView';
 import PostFooter from './components/PostFooter';
 
-class PostRead extends Component {
+class Post extends Component {
   static defaultProps = {
     location: {
       state: undefined,
@@ -40,7 +38,7 @@ class PostRead extends Component {
         postId: PropTypes.number,
       }),
     }).isRequired,
-    getOnePost: PropTypes.func.isRequired,
+    getPost: PropTypes.func.isRequired,
     setCurrentPostId: PropTypes.func.isRequired,
     getCommentsFromPost: PropTypes.func.isRequired,
     isConnected: PropTypes.bool.isRequired,
@@ -60,7 +58,7 @@ class PostRead extends Component {
 
   componentDidMount() {
     const { match: { params : { author, permlink }} } = this.props;
-    this.props.getOnePost(author, permlink);
+    this.props.getPost(author, permlink);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,7 +71,7 @@ class PostRead extends Component {
     const nextAuthor = nextProps.match.params.author;
     const nextPermlink = nextProps.match.params.permlink;
     if (author !== nextAuthor || permlink !== nextPermlink) {
-      this.props.getOnePost(nextAuthor, nextPermlink);
+      this.props.getPost(nextAuthor, nextPermlink);
     }
   }
 
@@ -96,34 +94,18 @@ class PostRead extends Component {
       listCommentsDisplayed = listComments.slice(0, nbCommentsDisplayed);
     }
     return (
-      <div className="single_post_container clearfix">
+      <article>
         {!isEmpty(post) && (
-          <div className="PostDetail">
+          <div className="post-cointainer">
             <Helmet>
               <title>{post.title}</title>
             </Helmet>
-            <div className="PostDetail__content">
-              <article className="article">
-                <div className="article__post">
-                  <h1>{post.title}</h1>
-                  <div className="article__post__author">
-                    <AvatarSteemit name={post.author} />
-                    <Author name={post.author} reputation={post.author_reputation} />
-                    <span>in</span>
-                    <Link className="article__post__author__link" to="#">{post.category}</Link>
-                  </div>
-                  <div className="article__content">
-                    <Body post={post} jsonMetadata={post.json_metadata} />
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div className="PostDetail__large">
-              {post.json_metadata.tags ? <PostTags post={post} /> : <div />}
-              <PostFooter post={post} />
-            </div>
+
+            <PostView post={post} />
+            <PostFooter post={post} />
+
             {!isConnected && (
-              <div className="PostDetail__signup">
+              <div className="post-signup">
                 <p>Authors get paid when people like you upvote their post.</p>
                 <p>Join our amazing community to comment and reward others.</p>
                 <Link to="/signup">
@@ -136,7 +118,7 @@ class PostRead extends Component {
                 </Link>
               </div>
             )}
-            <div className={`PostDetail__large ${isConnected ? 'border_top' : ''}`}>
+            <div className="comments">
               <InfiniteList
                 list={listCommentsDisplayed}
                 hasMore={listComments && listComments.length > nbCommentsDisplayed}
@@ -153,7 +135,7 @@ class PostRead extends Component {
             </div>
           </div>
         )}
-      </div>
+      </article>
     );
   }
 }
@@ -168,9 +150,9 @@ const mapStateToProps = () => createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getOnePost: (author, permlink) => dispatch(getOnePostBegin(author, permlink)),
+  getPost: (author, permlink) => dispatch(getPostBegin(author, permlink)),
   setCurrentPostId: id => dispatch(setCurrentPostId(id)),
   getCommentsFromPost: (category, author, permlink) => dispatch(getCommentsFromPostBegin(category, author, permlink)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostRead);
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

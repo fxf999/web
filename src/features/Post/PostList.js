@@ -8,7 +8,7 @@ import { Spin } from 'antd';
 import { selectPosts, selectIsLoading } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
-import Post from './components/Post';
+import PostItem from './components/PostItem';
 import { formatAmount } from "utils/helpers/steemitHelpers";
 
 class PostList extends Component {
@@ -24,6 +24,7 @@ class PostList extends Component {
   }
 
   componentDidMount() {
+    console.log('------------------>>>>>>>>mount<<<<<<<<------------', this.props.daysAgo)
     this.props.getPosts(this.props.daysAgo);
   }
 
@@ -33,7 +34,7 @@ class PostList extends Component {
     const posts = (this.props.posts[daysAgo] || []).map((post, index) => {
       dailyTotalReward += post.payout_value;
       return (
-        <Post key={post.id} rank={index + 1} post={post} />
+        <PostItem key={post.id} rank={index + 1} post={post} />
       );
     });
     return (
@@ -50,7 +51,7 @@ class PostList extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => createStructuredSelector({
+const mapStateToProps = () => createStructuredSelector({
   posts: selectPosts(),
   isLoading: selectIsLoading(),
 });

@@ -37,12 +37,12 @@ function* vote({ post, weight, contentType, params }) {
   yield put(voteOptimistic(post, accountName, weight, params));
 
   try {
-    yield steemconnect.vote(accountName, post.author, post.permlink, weight);
+    yield steemconnect.vote(accountName, post.username, post.permlink, weight);
     yield put(voteSuccess(post, contentType));
 
     // UPDATE PAYOUT
-    const { author, permlink } = post;
-    const updatedContent = yield steem.api.getContentAsync(author, permlink);
+    const { username, permlink } = post;
+    const updatedContent = yield steem.api.getContentAsync(username, permlink);
     yield put(updatePayout(updatedContent, contentType));
 
   } catch(e) {

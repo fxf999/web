@@ -4,7 +4,7 @@ import { Icon } from 'antd';
 
 const CircularProgress = props => {
   return (
-    <Icon type="loading" spin="true" style={{ fontsize: (props.size || 60) }} />
+    <Icon type="loading" spin="true" className="center-loading" style={{ fontSize: (props.size || 40) }} />
   )
 };
 

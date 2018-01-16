@@ -3,7 +3,7 @@ import combine from 'utils/combine';
  * EXPORTING REDUCERS and SAGAS
  */
 import getPosts, { getPostsReducer } from './actions/getPosts';
-import getOnePost, { getOnePostReducer } from './actions/getOnePost';
+import getPost, { getPostReducer } from './actions/getPost';
 import publishContent, { publishContentReducer } from './actions/publishContent';
 import { updateDraftReducer } from './actions/updateDraft';
 import resteem, { resteemReducer } from './actions/resteem';
@@ -28,7 +28,7 @@ export const reducer = (state = initialState, action) => combine(
   [
     updateDraftReducer,
     getPostsReducer,
-    getOnePostReducer,
+    getPostReducer,
     publishContentReducer,
     postsReducer,
     resteemReducer,
@@ -40,7 +40,7 @@ export const reducer = (state = initialState, action) => combine(
 // All sagas to be loaded
 export default [
   getPosts,
-  getOnePost,
+  getPost,
   publishContent,
   resteem,
 ];

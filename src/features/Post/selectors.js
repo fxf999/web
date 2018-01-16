@@ -18,6 +18,8 @@ export const selectPosts = () => createSelector(
   state => state.posts,
 );
 
+
+
 export const selectIsLoading = () => createSelector(
   selectPostDomain(),
   state => state.isLoading,
@@ -27,7 +29,6 @@ export const selectHasMore = () => createSelector(
   selectPostDomain(),
   state => state.hasMore,
 );
-
 
 
 

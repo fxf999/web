@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
 import isEmpty from 'lodash/isEmpty';
 
-import CircularProgress from 'components/CircularProgress';
+import { Spin } from 'antd';
 
 export default class InfiniteList extends PureComponent {
   static defaultProps = {
@@ -39,20 +39,19 @@ export default class InfiniteList extends PureComponent {
   render() {
     const { list, hasMore, isLoading, itemMappingCb } = this.props;
     const items = list.map(itemMappingCb);
-    return (
-      <div>
-        {isEmpty(list) && isLoading && <CircularProgress />}
-        {list.length > 0 && (
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={this.loadMore}
-            hasMore={hasMore}
-            loader={<CircularProgress />}
-          >
-            {items}
-          </InfiniteScroll>
-        )}
-      </div>
-    );
+
+    if (list.length > 0) {
+      return (
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadMore}
+          hasMore={hasMore}
+          loader={<Spin className="center-loading"/>}
+          useWindow={false}
+        >
+          {items}
+        </InfiniteScroll>
+      );
+    }
   }
 }
