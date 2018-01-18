@@ -37,21 +37,23 @@ export default class InfiniteList extends PureComponent {
   };
 
   render() {
-    const { list, hasMore, isLoading, itemMappingCb } = this.props;
+    const { list, hasMore, itemMappingCb } = this.props;
     const items = list.map(itemMappingCb);
 
-    if (list.length > 0) {
-      return (
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={this.loadMore}
-          hasMore={hasMore}
-          loader={<Spin className="center-loading"/>}
-          useWindow={false}
-        >
-          {items}
-        </InfiniteScroll>
-      );
+    if (list.length === 0) {
+      return null;
     }
+
+    return (
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={this.loadMore}
+        hasMore={hasMore}
+        loader={<Spin className="center-loading" key={0} />}
+        useWindow={false}
+      >
+        {items}
+      </InfiniteScroll>
+    );
   }
 }

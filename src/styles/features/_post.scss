@@ -23,6 +23,8 @@
 }
 
 .post-list {
+  margin-bottom: 4.375rem;
+
   .heading {
     padding-left: 80px;
 
@@ -35,6 +37,7 @@
     p {
       color: $text_dark;
       font-size: 0.875rem;
+      margin-bottom: 2.5rem;
     }
   }
 }

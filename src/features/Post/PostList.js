@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { Spin } from 'antd';
-
-import { selectPosts, selectIsLoading } from './selectors';
+import { selectPosts } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
 import PostItem from './components/PostItem';
@@ -16,7 +14,6 @@ class PostList extends Component {
     daysAgo: PropTypes.number.isRequired,
     getPosts: PropTypes.func.isRequired,
     posts: PropTypes.object.isRequired,
-    isLoading: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -24,12 +21,11 @@ class PostList extends Component {
   }
 
   componentDidMount() {
-    console.log('------------------>>>>>>>>mount<<<<<<<<------------', this.props.daysAgo)
     this.props.getPosts(this.props.daysAgo);
   }
 
   render() {
-    const { daysAgo, isLoading } = this.props;
+    const { daysAgo } = this.props;
     let dailyTotalReward = 0;
     const posts = (this.props.posts[daysAgo] || []).map((post, index) => {
       dailyTotalReward += post.payout_value;
@@ -37,23 +33,25 @@ class PostList extends Component {
         <PostItem key={post.id} rank={index + 1} post={post} />
       );
     });
+    if (posts.length === 0) {
+      return null;
+    }
     return (
-      <Spin size="large" spinning={isLoading}>
-        <div className="post-list">
-          <div className="heading">
-            <h3>{daysAgoToString(daysAgo)}</h3>
-            <p><b>{posts.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
-          </div>
+      <div className="post-list">
+        <div className="heading">
+          <h3>{daysAgoToString(daysAgo)}</h3>
+          <p><b>{posts.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
+        </div>
+        <div className="daily-posts">
           {posts}
         </div>
-      </Spin>
+      </div>
     );
   }
 }
 
 const mapStateToProps = () => createStructuredSelector({
   posts: selectPosts(),
-  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = dispatch => ({
