@@ -8,9 +8,8 @@ import { Helmet } from 'react-helmet';
 
 import { Button } from 'antd';
 
-import Body from 'components/Body';
-import AvatarSteemit from 'components/AvatarSteemit';
-import Author from 'components/Author';
+// import AvatarSteemit from 'components/AvatarSteemit';
+// import Author from 'components/Author';
 import InfiniteList from 'components/InfiniteList';
 import CommentItem from 'features/Comment/CommentItem';
 import { getCommentsFromPostBegin } from 'features/Comment/actions/getCommentsFromPost';

@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 
 const Author = ({ name, reputation }) => {
   return (
-    <div className="Author">
-      <Link to={`/@${name}`}>
-        <span className="Author__name">{name}</span>
-      </Link>
-      {reputation && <span className="Author__reputation" title="Reputation">{reputation}</span>}
+    <div className="author">
+      <Link to={`/@${name}`}>{name}</Link>
+      {reputation && ({reputation})}
     </div>
   )
 };
