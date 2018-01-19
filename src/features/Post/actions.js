@@ -21,6 +21,7 @@ export const initialState = {
   },
   posts: {},
   isPublishing: false,
+  currentPost: null,
 };
 
 export const reducer = (state = initialState, action) => combine(

@@ -20,7 +20,7 @@ import {
 } from 'features/Comment/selectors';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
-import { getPostBegin, setCurrentPostId } from './actions/getPost';
+import { getPostBegin, setCurrentPost } from './actions/getPost';
 import PostView from './components/PostView';
 import PostFooter from './components/PostFooter';
 
@@ -38,7 +38,7 @@ class Post extends Component {
       }),
     }).isRequired,
     getPost: PropTypes.func.isRequired,
-    setCurrentPostId: PropTypes.func.isRequired,
+    setCurrentPost: PropTypes.func.isRequired,
     getCommentsFromPost: PropTypes.func.isRequired,
     isConnected: PropTypes.bool.isRequired,
     post: PropTypes.object,
@@ -56,26 +56,26 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { match: { params : { author, permlink }} } = this.props;
-    this.props.getPost(author, permlink);
+    const { match: { params : { username, permlink }} } = this.props;
+    this.props.getPost(username, permlink);
   }
 
   componentWillReceiveProps(nextProps) {
     if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
-      const { match: { params : { topic, author, permlink }}} = nextProps;
-      this.props.getCommentsFromPost(topic, author, permlink);
+      const { match: { params : { topic, username, permlink }}} = nextProps;
+      // this.props.getCommentsFromPost(topic, username, permlink);
     }
 
-    const { match: { params : { author, permlink }} } = this.props;
-    const nextAuthor = nextProps.match.params.author;
+    const { match: { params : { username, permlink }} } = this.props;
+    const nextAuthor = nextProps.match.params.username;
     const nextPermlink = nextProps.match.params.permlink;
-    if (author !== nextAuthor || permlink !== nextPermlink) {
+    if (username !== nextAuthor || permlink !== nextPermlink) {
       this.props.getPost(nextAuthor, nextPermlink);
     }
   }
 
   componentWillUnmount() {
-    this.props.setCurrentPostId(undefined);
+    this.props.setCurrentPost(undefined);
   }
 
   addMoreComments = () => {
@@ -92,6 +92,7 @@ class Post extends Component {
       listComments = currentComments.list;
       listCommentsDisplayed = listComments.slice(0, nbCommentsDisplayed);
     }
+
     return (
       <article>
         {!isEmpty(post) && (
@@ -101,7 +102,7 @@ class Post extends Component {
             </Helmet>
 
             <PostView post={post} />
-            <PostFooter post={post} />
+            {/* <PostFooter post={post} /> */}
 
             {!isConnected && (
               <div className="post-signup">
@@ -149,9 +150,9 @@ const mapStateToProps = () => createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getPost: (author, permlink) => dispatch(getPostBegin(author, permlink)),
-  setCurrentPostId: id => dispatch(setCurrentPostId(id)),
-  getCommentsFromPost: (category, author, permlink) => dispatch(getCommentsFromPostBegin(category, author, permlink)),
+  getPost: (username, permlink) => dispatch(getPostBegin(username, permlink)),
+  setCurrentPost: post => dispatch(setCurrentPost(post)),
+  getCommentsFromPost: (category, username, permlink) => dispatch(getCommentsFromPostBegin(category, username, permlink)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

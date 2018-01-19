@@ -18,32 +18,54 @@ export const selectPosts = () => createSelector(
   state => state.posts,
 );
 
-export const selectHasMore = () => createSelector(
-  selectPostDomain(),
-  state => state.hasMore,
-);
-
-
-
-export const selectCurrentPostId = () => createSelector(
-  selectPostDomain(),
-  posts => posts.currentPostId,
-);
-
-export const selectPostByPermlink = (author, permlink) => createSelector(
-  selectPosts(),
-  posts => posts[`${author}/${permlink}`] || {},
-);
-
 export const selectCurrentPost = () => createSelector(
-  [selectPosts(), selectCurrentPostId()],
-  (posts, id) => posts[id],
+  selectPostDomain(),
+  post => post.currentPost,
 );
+
+export const selectPostByPermlink = (username, permlink) => createSelector(
+  selectPosts(),
+  posts => {
+    console.log(posts);
+
+    for (const day in posts) {
+      for (const i in posts[day]) {
+        const post = posts[day][i];
+        if (post.username === username && post.permlink === permlink) {
+          return post;
+        }
+      }
+    }
+
+    return null;
+  },
+);
+
+// export const selectCurrentPost = () => createSelector(
+//   [selectPosts(), selectCurrentPostId()],
+//   (posts, id) => {
+//     console.log(posts);
+
+//     if (isEmpty(posts)) {
+//       return null;
+//     }
+
+//     for (const [day, dailyPosts] of posts) {
+//       for (const post of dailyPosts) {
+//         if (post.id === id) {
+//           return post;
+//         }
+//       }
+//     }
+//     return null;
+//   },
+// );
 
 export const selectCurrentComments = () => createSelector(
-  [selectCurrentPostId(), selectCommentsDomain()],
-  (currentPostId, commentsDomain) => {
-    return currentPostId ? commentsDomain.commentsFromPost[currentPostId] : {};
+  [selectCurrentPost(), selectCommentsDomain()],
+  (currentPost, commentsDomain) => {
+    return null;
+    // return currentPostId ? commentsDomain.commentsFromPost[currentPostId] : {};
   }
 );
 

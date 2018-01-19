@@ -31,7 +31,7 @@ function getQueryString(params) {
 function request(method, path, params) {
   var qs = '';
   var body;
-  var headers = params.headers || {
+  var headers = (params && params.headers) || {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };

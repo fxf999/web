@@ -15,7 +15,7 @@ export default class PostView extends Component {
       beneficiaries: PropTypes.arrayOf(PropTypes.shape({
         account: PropTypes.string.isRequired,
         weight: PropTypes.number.isRequired,
-      })).isRequired
+      })),
     }).isRequired,
     username: PropTypes.string,
     permlink: PropTypes.string,
@@ -35,7 +35,7 @@ export default class PostView extends Component {
         <Tag key={index}><a href={`https://steemit.com/trending/${tag}`} target="_blank" rel="noopener noreferrer">{tag}</a></Tag>
       );
     });
-    const beneficiaries = post.beneficiaries.map((b, index) => {
+    const beneficiaries = post.beneficiaries && post.beneficiaries.map((b, index) => {
       return (
         <Timeline.Item key={index}>@{b.account} ({b.weight / 100}%)</Timeline.Item>
       );
@@ -63,7 +63,7 @@ export default class PostView extends Component {
           <div className="timeline-container">
             <ul className="left">
               {post.username && <li>Hunter</li>}
-              {beneficiaries.length > 0 && <li>Makers</li>}
+              {beneficiaries && beneficiaries.length > 0 && <li>Makers</li>}
             </ul>
 
             <Timeline>
