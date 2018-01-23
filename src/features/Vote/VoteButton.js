@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 
-import { Button, Slider, Popover } from 'antd';
+import { Icon, Button, Slider, Popover } from 'antd';
 
 import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
@@ -16,6 +16,7 @@ class VoteButton extends Component {
   static propTypes = {
     post: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
+    layout: PropTypes.string.isRequired,
 
     appProps: PropTypes.object,
     myAccount: PropTypes.object.isRequired,
@@ -29,6 +30,10 @@ class VoteButton extends Component {
     this.state = {
       voteWeight: 100,
     }
+  }
+
+  openSignin = () => {
+    console.log('TODO: Open sign in pop up');
   }
 
   onChangeVotingWeight = value => {
@@ -65,7 +70,7 @@ class VoteButton extends Component {
   };
 
   render() {
-    const { myAccount, isConnected, post } = this.props;
+    const { myAccount, isConnected, post, layout } = this.props;
     const { voteWeight } = this.state;
     const postUpvoted = hasVoted(post, myAccount.name);
 
@@ -91,21 +96,36 @@ class VoteButton extends Component {
       </div>
     ) : '';
 
-    return (
-      <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
-        <Popover content={content} trigger="click" placement="left">
+    if (layout === 'list') {
+      return (
+        <div className="vote-button">
+          <Popover content={content} trigger="click" placement="left">
+            <Button
+              type="primary"
+              shape="circle"
+              icon="up"
+              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+              ghost={postUpvoted ? false : true}
+            />
+          </Popover>
+          <div className="payout-value">{formatAmount(post.payout_value)}</div>
+        </div>
+      )
+    } else { // detail-page
+      return (
+        <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Button
             type="primary"
-            shape="circle"
-            icon="up"
-            disabled={!isConnected}
-            onClick={!postUpvoted ? this.openSlider : () => this.vote(0)}
-            ghost
-          />
-        </Popover>
-        <div className="payout-value">{formatAmount(post.payout_value)}</div>
-      </div>
-    )
+            onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+            ghost={postUpvoted ? false : true}
+          >
+            <Icon type="up" />
+            UPVOTE
+            <div className="payout-value">{formatAmount(post.payout_value)}</div>
+          </Button>
+        </div>
+      )
+    }
   }
 }
 

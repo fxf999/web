@@ -188,21 +188,8 @@
     .vote-container {
       padding-bottom: 60px;
 
-      .vote-button {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-
-        i {
-          display: block;
-          margin-bottom: 0.714em;
-          margin-top: -0.714em;
-        }
-        span { /* override */
-          margin-left: 0;
-        }
-      }
-    } // .vote-container
+      // .vote-button -> _vote.scss
+    }
 
     .tags {
       padding-bottom: 60px;

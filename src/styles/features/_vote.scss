@@ -1,14 +1,35 @@
-.vote-button {
-  color: $primary;
-  text-align: center;
-  margin-top: 15px;
+.post-list {
+  .vote-button {
+    color: $primary;
+    text-align: center;
+    margin-top: 15px;
 
-  button {
-    margin-bottom: 2px;
+    button {
+      margin-bottom: 2px;
+    }
+
+    .payout-value {
+      font-size: 0.875rem;
+    }
   }
+}
 
-  .payout-value {
-    font-size: 0.875rem;
+.post-view {
+  .vote-button {
+    button {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+
+      i {
+        display: block;
+        margin-bottom: 0.714em;
+        margin-top: -0.714em;
+      }
+      span { /* override */
+        margin-left: 0;
+      }
+    }
   }
 }
 

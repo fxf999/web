@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Button, Carousel, Icon, Timeline, Tag } from 'antd';
 
+import VoteButton from 'features/Vote/VoteButton';
+
 export default class PostView extends Component {
   static propTypes = {
     post: PropTypes.shape({
@@ -73,10 +75,7 @@ export default class PostView extends Component {
           </div>
 
           <div className="vote-container">
-            <Button type="primary" className="vote-button">
-              <Icon type="up" />
-              UPVOTE
-            </Button>
+            <VoteButton post={post} type="post" layout="detail-page" />
           </div>
 
           <div className="tags">

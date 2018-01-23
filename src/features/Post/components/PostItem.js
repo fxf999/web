@@ -16,7 +16,7 @@ const PostItem = ({ rank, post }) => {
         <div className="stats"><b>{post.active_votes.length}</b> votes and <b>{post.comment_count}</b> comments</div>
       </div>
       <div className="vote-section">
-        <VoteButton post={post} type="post" />
+        <VoteButton post={post} type="post" layout="list" />
       </div>
     </div>
   )
