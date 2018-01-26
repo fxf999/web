@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
+import steemconnect from 'sc2-sdk';
 import { Button } from 'antd';
 
 // import AvatarSteemit from 'components/AvatarSteemit';
@@ -93,49 +92,47 @@ class Post extends Component {
       listCommentsDisplayed = listComments.slice(0, nbCommentsDisplayed);
     }
 
+    if (isEmpty(post)) {
+      return null;
+    }
+
     return (
-      <article>
-        {!isEmpty(post) && (
-          <div className="post-cointainer">
-            <Helmet>
-              <title>{post.title}</title>
-            </Helmet>
+      <div className="post-container">
+        <Helmet>
+          <title>{post.title}</title>
+        </Helmet>
 
-            <PostView post={post} />
-            {/* <PostFooter post={post} /> */}
+        <PostView post={post} />
+        {/* <PostFooter post={post} /> */}
 
-            {!isConnected && (
-              <div className="post-signup">
-                <p>Authors get paid when people like you upvote their post.</p>
-                <p>Join our amazing community to comment and reward others.</p>
-                <Link to="/signup">
-                  <Button
-                    type="primary"
-                    style={{ background: "#368dd2" }}
-                  >
-                    Sign up now to receive FREE STEEM
-                  </Button>
-                </Link>
-              </div>
-            )}
-            <div className="comments">
-              <InfiniteList
-                list={listCommentsDisplayed}
-                hasMore={listComments && listComments.length > nbCommentsDisplayed}
-                isLoading={commentsIsLoading}
-                loadMoreCb={this.addMoreComments}
-                itemMappingCb={commentId =>
-                  <CommentItem
-                    key={commentId}
-                    comment={commentsData[commentId]}
-                    commentsData={commentsData}
-                    commentsChild={commentsChild}
-                  />}
-              />
-            </div>
+        {!isConnected && (
+          <div className="post-signup">
+            <p>You need a Steem account to join the discussion</p>
+            <Button type="primary" href="https://steemit.com/pick_account" target="_blank">
+              Sign up now
+            </Button>
+            <a href={steemconnect.getLoginURL()} className="signin-link">Already have a Steem account?</a>
           </div>
         )}
-      </article>
+
+        // TODO FIX COMMENT
+
+        <div className="comments">
+          <InfiniteList
+            list={listCommentsDisplayed}
+            hasMore={listComments && listComments.length > nbCommentsDisplayed}
+            isLoading={commentsIsLoading}
+            loadMoreCb={this.addMoreComments}
+            itemMappingCb={commentId =>
+              <CommentItem
+                key={commentId}
+                comment={commentsData[commentId]}
+                commentsData={commentsData}
+                commentsChild={commentsChild}
+              />}
+          />
+        </div>
+      </div>
     );
   }
 }

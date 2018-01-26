@@ -40,54 +40,67 @@
       margin-bottom: 2.5rem;
     }
   }
-}
 
-.post {
-  overflow: hidden;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 10px 80px 10px 0;
+  .post {
+    overflow: hidden;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 10px 80px 10px 0;
 
-  &:first-child {
-    border-top: 1px solid #e8e8e8;
-  }
-
-  .rank, .thumbnail, .summary {
-    float: left;
-  }
-  .rank {
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    font-size: 0.875rem;
-    color: $primary;
-    text-align: center;
-  }
-
-  .thumbnail {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-  }
-
-  .summary {
-    margin-left: 20px;
-
-    .title {
-      font-size: 1.125rem;
+    &:first-child {
+      border-top: 1px solid #e8e8e8;
     }
 
-    .tagline, .stats {
+    .rank, .thumbnail, .summary {
+      float: left;
+    }
+    .rank {
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
       font-size: 0.875rem;
+      color: $primary;
+      text-align: center;
     }
 
-    .stats {
-      color: $text_grey;
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+
+    .summary {
+      margin-left: 20px;
+
+      .title {
+        font-size: 1.125rem;
+      }
+
+      .tagline, .stats {
+        font-size: 0.875rem;
+      }
+
+      .stats {
+        color: $text_grey;
+      }
+    }
+
+    .vote-section {
+      float: right;
+      text-align: right;
     }
   }
+} // .post-list
 
-  .vote-section {
-    float: right;
-    text-align: right;
+.post-container {
+  .post-signup {
+    text-align: center;
+    margin-bottom: 70px;
+
+    .signin-link {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      display: block;
+    }
   }
 }
 
