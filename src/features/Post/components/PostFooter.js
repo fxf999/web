@@ -53,7 +53,7 @@ export default class PostFooter extends PureComponent {
               <FormattedRelative value={`${post.created}Z`} />
             </span>
               <span>by</span>
-              <Author name={post.author} reputation={post.author_reputation} />
+              <Author name={post.author} />
             </div>
             <ContentPayoutAndVotes type="post" content={post} />
           </div>

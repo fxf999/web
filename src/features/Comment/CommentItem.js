@@ -29,6 +29,11 @@ class CommentItem extends PureComponent {
   render() {
     const { comment, commentsChild, commentsData, sortOrder } = this.props;
     const { showReplyForm } = this.state;
+
+    if (!comment) {
+      return null;
+    }
+
     return (
       <div className="CommentComponent">
         <div className="CommentItem">
@@ -39,8 +44,7 @@ class CommentItem extends PureComponent {
           </div>
           <div className="CommentComponent__detail">
             <div className="CommentComponent__head">
-              <Author name={comment.author}
-                      reputation={comment.author_reputation} />
+              <Author name={comment.author} />
               <span className="timestamp">
                 <FormattedRelative value={`${comment.created}Z`} />
               </span>

@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
 import steemconnect from 'sc2-sdk';
-import { Button } from 'antd';
+
+import { Spin, Button } from 'antd';
 
 // import AvatarSteemit from 'components/AvatarSteemit';
 // import Author from 'components/Author';
-import InfiniteList from 'components/InfiniteList';
 import CommentItem from 'features/Comment/CommentItem';
 import { getCommentsFromPostBegin } from 'features/Comment/actions/getCommentsFromPost';
 import {
@@ -24,18 +24,7 @@ import PostView from './components/PostView';
 import PostFooter from './components/PostFooter';
 
 class Post extends Component {
-  static defaultProps = {
-    location: {
-      state: undefined,
-    }
-  };
-
   static propTypes = {
-    location: PropTypes.shape({
-      state: PropTypes.shape({
-        postId: PropTypes.number,
-      }),
-    }).isRequired,
     getPost: PropTypes.func.isRequired,
     setCurrentPost: PropTypes.func.isRequired,
     getCommentsFromPost: PropTypes.func.isRequired,
@@ -47,16 +36,11 @@ class Post extends Component {
     commentsIsLoading: PropTypes.bool.isRequired,
   };
 
-  constructor() {
-    super();
-    this.state = {
-      nbCommentsDisplayed: 10,
-    };
-  }
-
   componentDidMount() {
     const { match: { params : { username, permlink }} } = this.props;
     this.props.getPost(username, permlink);
+
+    this.props.getCommentsFromPost('steemhunt', username, permlink);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,23 +61,26 @@ class Post extends Component {
     this.props.setCurrentPost(undefined);
   }
 
-  addMoreComments = () => {
-    this.setState({
-      nbCommentsDisplayed: this.state.nbCommentsDisplayed + 10,
-    });
-  };
-
   render() {
     const { post, currentComments, commentsData, commentsChild, commentsIsLoading, isConnected } = this.props;
-    const { nbCommentsDisplayed } = this.state;
-    let listComments, listCommentsDisplayed = [];
-    if (!isEmpty(currentComments)) {
-      listComments = currentComments.list;
-      listCommentsDisplayed = listComments.slice(0, nbCommentsDisplayed);
-    }
 
     if (isEmpty(post)) {
       return null;
+    }
+
+    console.log('=====================------', currentComments);
+    let comments = [];
+    if (!isEmpty(currentComments)) {
+      comments = currentComments.list.map(commentId => {
+        return (
+          <CommentItem
+            key={commentId}
+            comment={commentsData[commentId]}
+            commentsData={commentsData}
+            commentsChild={commentsChild}
+          />
+        )
+      });
     }
 
     return (
@@ -118,19 +105,9 @@ class Post extends Component {
         // TODO FIX COMMENT
 
         <div className="comments">
-          <InfiniteList
-            list={listCommentsDisplayed}
-            hasMore={listComments && listComments.length > nbCommentsDisplayed}
-            isLoading={commentsIsLoading}
-            loadMoreCb={this.addMoreComments}
-            itemMappingCb={commentId =>
-              <CommentItem
-                key={commentId}
-                comment={commentsData[commentId]}
-                commentsData={commentsData}
-                commentsChild={commentsChild}
-              />}
-          />
+          <Spin spinning={commentsIsLoading}>
+            {comments}
+          </Spin>
         </div>
       </div>
     );

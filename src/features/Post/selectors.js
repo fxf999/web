@@ -64,8 +64,8 @@ export const selectPostByPermlink = (username, permlink) => createSelector(
 export const selectCurrentComments = () => createSelector(
   [selectCurrentPost(), selectCommentsDomain()],
   (currentPost, commentsDomain) => {
-    return null;
-    // return currentPostId ? commentsDomain.commentsFromPost[currentPostId] : {};
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', currentPost);
+    return currentPost ? commentsDomain.commentsFromPost[`${currentPost.username}/${currentPost.permlink}`] : {};
   }
 );
 

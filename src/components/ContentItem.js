@@ -49,7 +49,7 @@ function ContentItem(props) {
         </Link>
         <div className="post_card__block post_card__block--info">
           <div className="details">
-            <VoteButton content={content} type={type} />
+            <VoteButton post={content} type={type} />
             <div className="price">
               {content.isUpdating && <CircularProgress size={20} style={{ marginRight: 10 }} />}
               {formatAmount(payout)}
@@ -66,7 +66,7 @@ function ContentItem(props) {
           <div className="info">
             <div className="author">
               <span>by </span>
-              <Author name={content.author} reputation={content.author_reputation} />
+              <Author name={content.author} />
             </div>
             <div className="datetime">
               <FormattedRelative value={`${content.created}Z`} /> in <Link to={`/${currentCategory}/${content.category}`}>{content.category}</Link>

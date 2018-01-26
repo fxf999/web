@@ -10,8 +10,8 @@ export const GET_COMMENTS_FROM_POST_SUCCESS = 'GET_COMMENTS_FROM_POST_SUCCESS';
 const GET_COMMENTS_FROM_POST_FAILURE = 'GET_COMMENTS_FROM_POST_FAILURE';
 
 /*--------- ACTIONS ---------*/
-export function getCommentsFromPostBegin(category, author, permlink) {
-  return { type: GET_COMMENTS_FROM_POST_BEGIN, category, author, permlink };
+export function getCommentsFromPostBegin(category, username, permlink) {
+  return { type: GET_COMMENTS_FROM_POST_BEGIN, category, username, permlink };
 }
 
 export function getCommentsFromPostSuccess(postId, state) {
@@ -41,16 +41,21 @@ export function getCommentsFromPostReducer(state, action) {
         }
       });
     }
+    case GET_COMMENTS_FROM_POST_FAILURE: {
+      return update(state, {
+        isLoading: {$set: false},
+      });
+    }
     default:
       return state;
   }
 }
 
 /*--------- SAGAS ---------*/
-function* getCommentsFromPost({ category, author, permlink }) {
+function* getCommentsFromPost({ category, username, permlink }) {
   try {
-    const state = yield steem.api.getStateAsync(`/${category}/@${author}/${permlink}`);
-    yield put(getCommentsFromPostSuccess(`${author}/${permlink}`, state));
+    const state = yield steem.api.getStateAsync(`/${category}/@${username}/${permlink}`);
+    yield put(getCommentsFromPostSuccess(`${username}/${permlink}`, state));
   } catch(e) {
     yield put(getCommentsFromPostFailure(e.message));
   }

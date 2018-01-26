@@ -55,7 +55,7 @@ export default class ContentPayoutAndVotes extends PureComponent {
     return (
       <div className="Voting">
         <div className="Voting__button">
-          <VoteButton content={content} type={type} />
+          <VoteButton post={content} type={type} />
         </div>
         <div className="Voting__money">
           {content.isUpdating && <CircularProgress size={20} style={{ marginRight: 10 }} />}
