@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
 import steemconnect from 'sc2-sdk';
 
-import { Spin, Button } from 'antd';
+import { List, Spin, Button } from 'antd';
 
 // import AvatarSteemit from 'components/AvatarSteemit';
 // import Author from 'components/Author';
@@ -69,19 +69,19 @@ class Post extends Component {
     }
 
     console.log('=====================------', currentComments);
-    let comments = [];
-    if (!isEmpty(currentComments)) {
-      comments = currentComments.list.map(commentId => {
-        return (
-          <CommentItem
-            key={commentId}
-            comment={commentsData[commentId]}
-            commentsData={commentsData}
-            commentsChild={commentsChild}
-          />
-        )
-      });
-    }
+    // let comments = [];
+    // if (!isEmpty(currentComments)) {
+    //   comments = currentComments.list.map(commentId => {
+    //     return (
+    //       <CommentItem
+    //         key={commentId}
+    //         comment={commentsData[commentId]}
+    //         commentsData={commentsData}
+    //         commentsChild={commentsChild}
+    //       />
+    //     )
+    //   });
+    // }
 
     return (
       <div className="post-container">
@@ -102,13 +102,22 @@ class Post extends Component {
           </div>
         )}
 
-        // TODO FIX COMMENT
-
-        <div className="comments">
-          <Spin spinning={commentsIsLoading}>
-            {comments}
-          </Spin>
-        </div>
+        {currentComments && (
+          <List
+            className="comments"
+            loading={commentsIsLoading}
+            itemLayout="vertical"
+            dataSource={currentComments.list}
+            renderItem={commentId => (
+              <CommentItem
+                key={commentId}
+                comment={commentsData[commentId]}
+                commentsData={commentsData}
+                commentsChild={commentsChild}
+              />
+            )}
+          />
+        )}
       </div>
     );
   }

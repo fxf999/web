@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FormattedRelative } from 'react-intl';
 import Body from 'components/Body';
+
+import { List, Avatar, Button, Spin } from 'antd';
+
 import { sortCommentsFromSteem } from 'utils/helpers/stateHelpers';
 import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import AvatarSteemit from 'components/AvatarSteemit';
@@ -35,50 +38,43 @@ class CommentItem extends PureComponent {
     }
 
     return (
-      <div className="CommentComponent">
-        <div className="CommentItem">
-          <div className="CommentComponent__avatar">
-            <Link to={`/@${comment.author}`}>
-              <AvatarSteemit name={comment.author} />
-            </Link>
-          </div>
-          <div className="CommentComponent__detail">
-            <div className="CommentComponent__head">
+      <List.Item
+        actions={[
+          <ContentPayoutAndVotes type="comment" content={comment} />,
+          <a>vote</a>,
+          <a onClick={this.switchReplyForm}>reply</a>
+        ]}>
+        <List.Item.Meta
+          avatar={<Avatar src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${comment.author}?s=120`} />}
+          title={
+            <div className="comment-title">
               <Author name={comment.author} />
-              <span className="timestamp">
-                <FormattedRelative value={`${comment.created}Z`} />
-              </span>
+              <span className="separator">&middot;</span>
+              <span className="date"><FormattedRelative value={`${comment.created}Z`} /></span>
             </div>
-            <div className="CommentComponent__body">
-              <div className="CommentComponent__content">
-                <Body post={comment} />
-              </div>
+          }
+          description={
+            <div class="comment-body">
+              <Body post={comment} />
+              {showReplyForm && (
+                <CommentReplyForm content={comment} closeForm={this.closeReplyForm} />
+              )}
+
+              {commentsChild[comment.id] && sortCommentsFromSteem(
+                commentsChild[comment.id],
+                commentsData,
+                sortOrder
+              ).map(commentId =>
+                <CommentItem
+                  {...this.props}
+                  key={commentId}
+                  comment={commentsData[commentId]}
+                />
+              )}
             </div>
-            <div className="CommentComponent__footer">
-              <ContentPayoutAndVotes type="comment" content={comment} />
-              <ReplyButton onClick={this.switchReplyForm} />
-            </div>
-          </div>
-        </div>
-        <div className="Comment__child">
-          {showReplyForm && (
-            <div className="CommentComponent">
-              <CommentReplyForm content={comment} closeForm={this.closeReplyForm} />
-            </div>
-          )}
-          {commentsChild[comment.id] && sortCommentsFromSteem(
-            commentsChild[comment.id],
-            commentsData,
-            sortOrder
-          ).map(commentId =>
-            <CommentItem
-              {...this.props}
-              key={commentId}
-              comment={commentsData[commentId]}
-            />
-          )}
-        </div>
-      </div>
+          }
+        />
+      </List.Item>
     );
   }
 }
