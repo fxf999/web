@@ -11,6 +11,7 @@ import AvatarSteemit from 'components/AvatarSteemit';
 import Author from 'components/Author';
 import ReplyButton from 'components/ReplyButton';
 import CommentReplyForm from './CommentReplyForm';
+import VoteButton from 'features/Vote/VoteButton';
 
 class CommentItem extends PureComponent {
   constructor() {
@@ -38,12 +39,7 @@ class CommentItem extends PureComponent {
     }
 
     return (
-      <List.Item
-        actions={[
-          <ContentPayoutAndVotes type="comment" content={comment} />,
-          <a>vote</a>,
-          <a onClick={this.switchReplyForm}>reply</a>
-        ]}>
+      <List.Item>
         <List.Item.Meta
           avatar={<Avatar src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${comment.author}?s=120`} />}
           title={
@@ -54,8 +50,17 @@ class CommentItem extends PureComponent {
             </div>
           }
           description={
-            <div class="comment-body">
+            <div className="comment-body">
               <Body post={comment} />
+
+              <div className="actions">
+                <VoteButton post={comment} type="comment" layout="comment" />
+                <span className="separator">|</span>
+                <ContentPayoutAndVotes type="comment" content={comment} layout="list" />
+                <span className="separator">|</span>
+                <a className="hover-link" onClick={this.switchReplyForm}>reply</a>
+              </div>
+
               {showReplyForm && (
                 <CommentReplyForm content={comment} closeForm={this.closeReplyForm} />
               )}

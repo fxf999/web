@@ -10,7 +10,7 @@ import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
 import { voteBegin } from './actions/vote';
 import { hasVoted } from 'utils/helpers/steemitHelpers';
-import { formatAmount } from "utils/helpers/steemitHelpers";
+import { calculateContentPayout, formatAmount } from 'utils/helpers/steemitHelpers';
 
 class VoteButton extends Component {
   static propTypes = {
@@ -111,7 +111,7 @@ class VoteButton extends Component {
           <div className="payout-value">{formatAmount(post.payout_value)}</div>
         </div>
       )
-    } else { // detail-page
+    } else if (layout ==='detail-page') {
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Button
@@ -123,6 +123,24 @@ class VoteButton extends Component {
             UPVOTE
             <div className="payout-value">{formatAmount(post.payout_value)}</div>
           </Button>
+        </div>
+      )
+    } else { // comment
+      const payout = calculateContentPayout(post);
+
+      return (
+        <div className="vote-button">
+          <Popover content={content} trigger="click" placement="top">
+            <Button
+              type="primary"
+              shape="circle"
+              icon="up"
+              size="small"
+              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+              ghost={postUpvoted ? false : true}
+            />
+          </Popover>
+          <span className="payout-value">{formatAmount(payout)}</span>
         </div>
       )
     }

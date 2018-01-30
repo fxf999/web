@@ -1,48 +1,39 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Popover } from 'antd';
+
+import { Popover, Button } from 'antd';
 
 import { getUpvotes, sortVotes } from 'utils/helpers/voteHelpers';
-import CircularProgress from 'components/CircularProgress';
-import SmallFlatButton from 'components/SmallFlatButton';
-import Payout from 'features/Comment/Payout';
-import VoteButton from 'features/Vote/VoteButton';
 import VotePayout from 'features/Vote/VotePayout';
-import { calculateContentPayout, formatAmount } from 'utils/helpers/steemitHelpers';
+import Author from 'components/Author';
 
 const NB_SHOW_VOTES = 15;
 
 export default class ContentPayoutAndVotes extends PureComponent {
   static propTypes = {
-    content: PropTypes.object.isRequired, // Post or comment
-    type: PropTypes.oneOf(['post', 'comment']).isRequired, // post or comment
+    content: PropTypes.object.isRequired,
   };
 
   render() {
-    const { content, type } = this.props;
-    const payout = calculateContentPayout(content);
+    const { content } = this.props;
 
+    // Generate voting-details
     let lastVotesTooltipMsg;
     if (content.net_votes !== 0) {
       const totalRshares = content.active_votes.reduce((total, vote) => total + parseInt(vote.rshares, 10), 0);
+      // if cashout_time is set (not cashed out yet), use pending_payout_value, otherwise, use total_payout_value
       const totalPayout = content.cashout_time.indexOf('1969') === -1 ? parseFloat(content.pending_payout_value) : parseFloat(content.total_payout_value);
       const lastVotes =
-        sortVotes(getUpvotes(content.active_votes), 'rshares')
+        sortVotes(content.active_votes, 'rshares')
           .reverse()
           .slice(0, NB_SHOW_VOTES);
 
       lastVotesTooltipMsg = lastVotes.map(vote => (
-        <div className="Vote__details" key={vote.voter}>
-          <div>
-            <Link to={`/@${vote.voter}`}>
-              {vote.voter}
-            </Link>
-            <span className="weight">({vote.percent / 100}%)</span>
-          </div>
-          <strong>
-            <VotePayout vote={vote} totalRshares={totalRshares} totalPayout={totalPayout} />
-          </strong>
+        <div className="voting-list" key={vote.voter}>
+          <Author name={vote.voter} />
+          <span className="weight">({vote.percent / 100}%)</span>
+          <VotePayout vote={vote} totalRshares={totalRshares} totalPayout={totalPayout} />
         </div>
       ));
       if (content.net_votes > NB_SHOW_VOTES) lastVotesTooltipMsg.push(
@@ -53,31 +44,14 @@ export default class ContentPayoutAndVotes extends PureComponent {
     }
 
     return (
-      <div className="Voting">
-        <div className="Voting__button">
-          <VoteButton post={content} type={type} />
-        </div>
-        <div className="Voting__money">
-          {content.isUpdating && <CircularProgress size={20} style={{ marginRight: 10 }} />}
-          {payout === 0 ? (
-            <SmallFlatButton label={formatAmount(payout)} />
-          ) : (
-            <SmallFlatButton onClick={this.openMoneyCard} label={formatAmount(payout)} />
-          )}
-          {payout !== 0 && (
-            <Popover content={<Payout content={content} />} visible="true" />
-          )}
-        </div>
-        <div className="Voting__voters_list">
-          {content.net_votes === 0 ? (
-            <SmallFlatButton label={`${content.net_votes} votes`} />
-          ) : (
-            <SmallFlatButton onClick={this.openVoteCard} label={`${content.net_votes} votes`} />
-          )}
-          {content.net_votes !== 0 && (
-            <Popover content={lastVotesTooltipMsg} visible="true" />
-          )}
-        </div>
+      <div className="vote-count">
+        {content.net_votes === 0 ? (
+          <span className="fake-link hover-link">{`${content.net_votes} votes`}</span>
+        ) : (
+          <Popover content={lastVotesTooltipMsg} placement="bottom">
+            <span className="fake-link hover-link">{`${content.net_votes} votes`}</span>
+          </Popover>
+        )}
       </div>
     )
   }

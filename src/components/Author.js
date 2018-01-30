@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Author = ({ name }) => {
   return (
-    <div className="author">
-      <Link to={`/@${name}`}>@{name}</Link>
-    </div>
+    <Link to={`/@${name}`} className="author">@{name}</Link>
   )
 };
 

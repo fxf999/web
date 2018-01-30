@@ -106,7 +106,7 @@ class Post extends Component {
           <List
             className="comments"
             loading={commentsIsLoading}
-            itemLayout="vertical"
+            itemLayout="horizontal"
             dataSource={currentComments.list}
             renderItem={commentId => (
               <CommentItem

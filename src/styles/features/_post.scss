@@ -108,8 +108,13 @@
     margin: 0 auto;
 
     .ant-list-item-meta-title { // override
-      margin-bottom: 0.5em;
+      margin-bottom: 0.375em;
       font-weight: 400;
+    }
+
+    .separator {
+      color: $light_grey;
+      margin: 0 0.75em;
     }
 
     .comment-title {
@@ -121,14 +126,39 @@
         font-size: 0.75em;
         color: $text-grey;
       }
-
-      .separator {
-        margin: 0 0.5em;
-      }
     }
 
     .comment-body {
       color: $text-dark;
+
+      .actions {
+        .vote-button, .vote-count {
+          display: inline-block;
+        }
+
+        .vote-button {
+          .ant-btn-circle {
+            width: 1.25rem;
+            height: 1.25rem;
+            font-size: 0.625rem;
+          }
+
+          .payout-value {
+            margin-left: 0.75em;
+          }
+        }
+      }
+    }
+  }
+} // .post-container
+
+.ant-popover-content {
+  .voting-list {
+    color:  $text-grey;
+    min-width: 150px;
+
+    .value {
+      float: right;
     }
   }
 }

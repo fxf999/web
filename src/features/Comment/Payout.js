@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import isNumber from 'lodash/isNumber';
