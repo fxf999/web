@@ -38,10 +38,10 @@ class CommentReplyForm extends Component {
       <div className="reply-form">
         <Input.TextArea placeholder="Say something..." autosize />
         <div className="actions">
-          <Button type="primary" onClick={this.reply}>Post</Button>
           { closeForm  && (
-            <Button onClick={closeForm}>Close</Button>
+            <Button shape="circle" onClick={closeForm} icon="close" size="small" className="close-button"></Button>
           )}
+          <Button type="primary" onClick={this.reply}>Post</Button>
         </div>
       </div>
     );

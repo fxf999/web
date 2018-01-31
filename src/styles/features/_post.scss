@@ -135,7 +135,7 @@
       textarea {
         resize: none;
         border: 0;
-        padding: 0.625rem 1rem;
+        padding: 0.625rem 9rem 0.625rem 1rem;
         border-radius: 1.15625rem;
         background-color: #f3f3f3;
 
@@ -155,6 +155,16 @@
         button {
           margin: 0 0.125rem;
           border-radius: 50vh;
+
+          &.close-button {
+            color: $text_grey;
+            background-color: #ddd;
+
+            &:hover, &:focus, &:active {
+              background-color: #ccc;
+              border:0;
+            }
+          }
         }
       }
     }
