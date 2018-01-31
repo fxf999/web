@@ -93,6 +93,10 @@
 
 .post-container {
   .post-signup {
+    border: 1px dashed #ccc;
+    padding: 1em;
+    border-radius: 1em;
+    background-color: #f3f3f3;
     text-align: center;
     margin-bottom: 70px;
 
@@ -106,6 +110,54 @@
   .comments {
     width: 80%;
     margin: 0 auto;
+
+    hr {
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      color: $primary;
+      font-size: 1em;
+      margin-bottom: 1rem;
+
+      .fake-link {
+        color: $primary;
+      }
+
+      .separator {
+        color: $primary;
+        margin: 0 0.5em;
+        font-weight: 200;
+      }
+    }
+
+    .reply-form {
+      textarea {
+        resize: none;
+        border: 0;
+        padding: 0.625rem 1rem;
+        border-radius: 1.15625rem;
+        background-color: #f3f3f3;
+
+        &:focus { // override
+          -webkit-box-shadow: none;
+          box-shadow: none;
+        }
+      }
+
+      .actions {
+        margin-top: -2.3125rem;
+        margin-bottom: 1.5rem;
+        margin-right: 0.125rem;
+        // margin-top: 0.2rem;
+        text-align: right;
+
+        button {
+          margin: 0 0.125rem;
+          border-radius: 50vh;
+        }
+      }
+    }
 
     .ant-list-item-meta-title { // override
       margin-bottom: 0.375em;
@@ -131,7 +183,12 @@
     .comment-body {
       color: $text-dark;
 
+      p {
+        margin-bottom: 0.5em;
+      }
+
       .actions {
+        margin-bottom: 0.375em;
         .vote-button, .vote-count {
           display: inline-block;
         }
@@ -155,7 +212,7 @@
 .ant-popover-content {
   .voting-list {
     color:  $text-grey;
-    min-width: 150px;
+    min-width: 200px;
 
     .value {
       float: right;
@@ -261,6 +318,19 @@
       padding-bottom: 60px;
 
       // .vote-button -> _vote.scss
+      .resteem-button {
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+        border-radius: 50vh;
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+      }
+
+      .social-shares {
+        .share-icon {
+          margin: 0 2px;
+        }
+      }
     }
 
     .tags {

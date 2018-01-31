@@ -8,8 +8,7 @@ import steemconnect from 'sc2-sdk';
 
 import { List, Spin, Button } from 'antd';
 
-// import AvatarSteemit from 'components/AvatarSteemit';
-// import Author from 'components/Author';
+import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import CommentItem from 'features/Comment/CommentItem';
 import { getCommentsFromPostBegin } from 'features/Comment/actions/getCommentsFromPost';
 import {
@@ -17,11 +16,12 @@ import {
   selectCommentsData,
   selectCommentsIsLoading
 } from 'features/Comment/selectors';
+import { displayContentNbComments } from 'utils/helpers/steemitHelpers';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
 import { getPostBegin, setCurrentPost } from './actions/getPost';
 import PostView from './components/PostView';
-import PostFooter from './components/PostFooter';
+import CommentReplyForm from 'features/Comment/CommentReplyForm';
 
 class Post extends Component {
   static propTypes = {
@@ -68,21 +68,6 @@ class Post extends Component {
       return null;
     }
 
-    console.log('=====================------', currentComments);
-    // let comments = [];
-    // if (!isEmpty(currentComments)) {
-    //   comments = currentComments.list.map(commentId => {
-    //     return (
-    //       <CommentItem
-    //         key={commentId}
-    //         comment={commentsData[commentId]}
-    //         commentsData={commentsData}
-    //         commentsChild={commentsChild}
-    //       />
-    //     )
-    //   });
-    // }
-
     return (
       <div className="post-container">
         <Helmet>
@@ -90,34 +75,45 @@ class Post extends Component {
         </Helmet>
 
         <PostView post={post} />
-        {/* <PostFooter post={post} /> */}
 
-        {!isConnected && (
-          <div className="post-signup">
-            <p>You need a Steem account to join the discussion</p>
-            <Button type="primary" href="https://steemit.com/pick_account" target="_blank">
-              Sign up now
-            </Button>
-            <a href={steemconnect.getLoginURL()} className="signin-link">Already have a Steem account?</a>
-          </div>
-        )}
+        <div className="comments">
+          <hr />
 
-        {currentComments && (
-          <List
-            className="comments"
-            loading={commentsIsLoading}
-            itemLayout="horizontal"
-            dataSource={currentComments.list}
-            renderItem={commentId => (
-              <CommentItem
-                key={commentId}
-                comment={commentsData[commentId]}
-                commentsData={commentsData}
-                commentsChild={commentsChild}
-              />
-            )}
-          />
-        )}
+          <h3>
+            {displayContentNbComments(post)} comments
+            <span className="separator">&middot;</span>
+            <ContentPayoutAndVotes content={post} />
+          </h3>
+
+          {!isConnected && (
+            <div className="post-signup">
+              <p>You need a Steem account to join the discussion</p>
+              <Button type="primary" href="https://steemit.com/pick_account" target="_blank">
+                Sign up now
+              </Button>
+              <a href={steemconnect.getLoginURL()} className="signin-link">Already have a Steem account?</a>
+            </div>
+          )}
+
+          { /* TODO: only if connected */}
+          <CommentReplyForm content={post} closeForm={null} />
+
+          {currentComments && (
+            <List
+              loading={commentsIsLoading}
+              itemLayout="horizontal"
+              dataSource={currentComments.list}
+              renderItem={commentId => (
+                <CommentItem
+                  key={commentId}
+                  comment={commentsData[commentId]}
+                  commentsData={commentsData}
+                  commentsChild={commentsChild}
+                />
+              )}
+            />
+          )}
+        </div>
       </div>
     );
   }

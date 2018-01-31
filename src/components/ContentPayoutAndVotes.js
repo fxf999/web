@@ -20,10 +20,17 @@ export default class ContentPayoutAndVotes extends PureComponent {
 
     // Generate voting-details
     let lastVotesTooltipMsg;
-    if (content.net_votes !== 0) {
+    if (content.active_votes.length !== 0) {
       const totalRshares = content.active_votes.reduce((total, vote) => total + parseInt(vote.rshares, 10), 0);
+
       // if cashout_time is set (not cashed out yet), use pending_payout_value, otherwise, use total_payout_value
-      const totalPayout = content.cashout_time.indexOf('1969') === -1 ? parseFloat(content.pending_payout_value) : parseFloat(content.total_payout_value);
+      let totalPayout;
+      if (content.payout_value) {
+        totalPayout = content.payout_value;
+      } else {
+        totalPayout = content.cashout_time.indexOf('1969') === -1 ? parseFloat(content.pending_payout_value) : parseFloat(content.total_payout_value);
+      }
+
       const lastVotes =
         sortVotes(content.active_votes, 'rshares')
           .reverse()
@@ -36,7 +43,7 @@ export default class ContentPayoutAndVotes extends PureComponent {
           <VotePayout vote={vote} totalRshares={totalRshares} totalPayout={totalPayout} />
         </div>
       ));
-      if (content.net_votes > NB_SHOW_VOTES) lastVotesTooltipMsg.push(
+      if (content.active_votes.length > NB_SHOW_VOTES) lastVotesTooltipMsg.push(
         <div key="...">
           ... and <strong>{content.active_votes.length - 5}</strong> more votes.
         </div>
@@ -44,15 +51,15 @@ export default class ContentPayoutAndVotes extends PureComponent {
     }
 
     return (
-      <div className="vote-count">
-        {content.net_votes === 0 ? (
-          <span className="fake-link hover-link">{`${content.net_votes} votes`}</span>
+      <span className="vote-count">
+        {content.active_votes.length === 0 ? (
+          <span className="fake-link hover-link">{`${content.active_votes.length} votes`}</span>
         ) : (
           <Popover content={lastVotesTooltipMsg} placement="bottom">
-            <span className="fake-link hover-link">{`${content.net_votes} votes`}</span>
+            <span className="fake-link hover-link">{`${content.active_votes.length} votes`}</span>
           </Popover>
         )}
-      </div>
+      </span>
     )
   }
 }

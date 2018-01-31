@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Carousel, Icon, Timeline, Tag } from 'antd';
+import { Button, Carousel, Icon, Timeline, Tag, Tooltip } from 'antd';
+
+import IconFacebook from 'react-icons/lib/fa/facebook-square';
+import IconTwitter from 'react-icons/lib/fa/twitter-square';
+import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
 
 import VoteButton from 'features/Vote/VoteButton';
+import ResteemButton from './ResteemButton';
 
 export default class PostView extends Component {
   static propTypes = {
@@ -23,8 +28,9 @@ export default class PostView extends Component {
     permlink: PropTypes.string,
   };
 
+  // TODO: Handle share icon evnets
+
   render() {
-    console.log('render ----------', this.props);
     const { post } = this.props;
     const images = post.images.map((image, index) => {
       return (
@@ -76,6 +82,18 @@ export default class PostView extends Component {
 
           <div className="vote-container">
             <VoteButton post={post} type="post" layout="detail-page" />
+            <ResteemButton post={post} />
+            <div className="social-shares">
+              <Tooltip title="Share on Facebook">
+                <span className="share-icon"><IconFacebook /></span>
+              </Tooltip>
+              <Tooltip title="Share on Twitter">
+                <span className="share-icon"><IconTwitter /></span>
+              </Tooltip>
+              <Tooltip title="Share on LinkedIn">
+                <span className="share-icon"><IconLinkedIn /></span>
+              </Tooltip>
+            </div>
           </div>
 
           <div className="tags">

@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { Button } from 'antd';
+import { Button, Input } from 'antd';
 
-import AvatarSteemit from 'components/AvatarSteemit';
 import { selectMe } from 'features/User/selectors';
 import { replyBegin } from './actions/reply';
 
 class CommentReplyForm extends Component {
   static propTypes = {
     content: PropTypes.object.isRequired,
-    closeForm: PropTypes.func.isRequired,
+    closeForm: PropTypes.func,
     me: PropTypes.string.isRequired,
   };
 
@@ -29,28 +28,20 @@ class CommentReplyForm extends Component {
 
   reply = () => {
     this.props.reply(this.state.body);
-    this.props.closeForm();
+    this.props.closeForm && this.props.closeForm();
   };
 
   render() {
     const { closeForm, me } = this.props;
     const { body } = this.state;
     return (
-      <div className="CommentItem">
-        <div className="CommentComponent__avatar">
-          <AvatarSteemit name={me} />
-        </div>
-        <div className="CommentComponent__detail">
-          <textarea
-            name="comment-reply"
-            value={body}
-            placeholder="Reply"
-            onChange={this.onChange}
-          />
-          <div>
-            <Button type="primary" onClick={this.reply}>Post</Button>
+      <div className="reply-form">
+        <Input.TextArea placeholder="Say something..." autosize />
+        <div className="actions">
+          <Button type="primary" onClick={this.reply}>Post</Button>
+          { closeForm  && (
             <Button onClick={closeForm}>Close</Button>
-          </div>
+          )}
         </div>
       </div>
     );
