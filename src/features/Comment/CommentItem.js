@@ -1,15 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { FormattedRelative } from 'react-intl';
 import Body from 'components/Body';
-
-import { List, Avatar, Button, Spin } from 'antd';
-
+import { List, Avatar } from 'antd';
 import { sortCommentsFromSteem } from 'utils/helpers/stateHelpers';
 import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
-import AvatarSteemit from 'components/AvatarSteemit';
 import Author from 'components/Author';
-import ReplyButton from 'components/ReplyButton';
 import CommentReplyForm from './CommentReplyForm';
 import VoteButton from 'features/Vote/VoteButton';
 

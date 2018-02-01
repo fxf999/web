@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
 import steemconnect from 'sc2-sdk';
 
-import { List, Spin, Button } from 'antd';
+import { List, Button } from 'antd';
 
 import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import CommentItem from 'features/Comment/CommentItem';
@@ -45,8 +45,8 @@ class Post extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
-      const { match: { params : { topic, username, permlink }}} = nextProps;
-      // this.props.getCommentsFromPost(topic, username, permlink);
+      const { match: { params : { username, permlink }}} = nextProps;
+      this.props.getCommentsFromPost('steemhunt', username, permlink);
     }
 
     const { match: { params : { username, permlink }} } = this.props;

@@ -19,7 +19,7 @@ export default class HuntedList extends Component {
       daysAgoArray: this.state.daysAgoArray.concat([maxPage + 1]),
       isLoading: true,
     }, () => {
-      console.log(`----------> Load page: ${maxPage + 1}`);
+      // console.log(`----------> Load page: ${maxPage + 1}`);
       this.setState({ isLoading: false });
     });
   };

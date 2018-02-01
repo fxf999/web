@@ -26,7 +26,6 @@ export const selectCurrentPost = () => createSelector(
 export const selectPostByPermlink = (username, permlink) => createSelector(
   selectPosts(),
   posts => {
-    console.log(posts);
 
     for (const day in posts) {
       for (const i in posts[day]) {
@@ -41,35 +40,9 @@ export const selectPostByPermlink = (username, permlink) => createSelector(
   },
 );
 
-// export const selectCurrentPost = () => createSelector(
-//   [selectPosts(), selectCurrentPostId()],
-//   (posts, id) => {
-//     console.log(posts);
-
-//     if (isEmpty(posts)) {
-//       return null;
-//     }
-
-//     for (const [day, dailyPosts] of posts) {
-//       for (const post of dailyPosts) {
-//         if (post.id === id) {
-//           return post;
-//         }
-//       }
-//     }
-//     return null;
-//   },
-// );
-
 export const selectCurrentComments = () => createSelector(
   [selectCurrentPost(), selectCommentsDomain()],
   (currentPost, commentsDomain) => {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', currentPost);
     return currentPost ? commentsDomain.commentsFromPost[`${currentPost.username}/${currentPost.permlink}`] : {};
   }
 );
-
-/*export const selectPostVideosFeed = () => createSelector(
-  selectPostFeed(),
-  state => state.filter(post => post.json_metadata && !isEmpty(post.json_metadata.links) && post.json_metadata.links.find(link => link.match(/youtube/))) || [],
-);*/

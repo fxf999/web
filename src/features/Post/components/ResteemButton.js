@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-
 import { Button } from 'antd';
-
 import { resteemBegin } from '../actions/resteem';
-import { selectPostByPermlink } from '../selectors';
 
 function ResteemButton(props) {
   const { post } = props;

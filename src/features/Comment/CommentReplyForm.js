@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-
 import { Button, Input } from 'antd';
-
-import { selectMe } from 'features/User/selectors';
 import { replyBegin } from './actions/reply';
 
 class CommentReplyForm extends Component {
   static propTypes = {
     content: PropTypes.object.isRequired,
     closeForm: PropTypes.func,
-    me: PropTypes.string.isRequired,
   };
 
   constructor() {
@@ -22,9 +17,7 @@ class CommentReplyForm extends Component {
     }
   }
 
-  onChange = (evt, val) => {
-    this.setState({ body: val });
-  };
+  onChange = e => this.setState({ body: e.target.value });
 
   reply = () => {
     this.props.reply(this.state.body);
@@ -32,11 +25,11 @@ class CommentReplyForm extends Component {
   };
 
   render() {
-    const { closeForm, me } = this.props;
-    const { body } = this.state;
+    const { closeForm } = this.props;
+
     return (
       <div className="reply-form">
-        <Input.TextArea placeholder="Say something..." autosize />
+        <Input.TextArea placeholder="Say something..." onChange={this.onChange} autosize />
         <div className="actions">
           { closeForm  && (
             <Button shape="circle" onClick={closeForm} icon="close" size="small" className="close-button"></Button>
@@ -48,12 +41,8 @@ class CommentReplyForm extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => createStructuredSelector({
-  me: selectMe(),
-});
-
 const mapDispatchToProps = (dispatch, props) => ({
   reply: body => dispatch(replyBegin(props.content, body)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentReplyForm);
+export default connect(mapDispatchToProps)(CommentReplyForm);

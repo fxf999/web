@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-
-import { Popover, Button } from 'antd';
-
-import { getUpvotes, sortVotes } from 'utils/helpers/voteHelpers';
+import { Popover } from 'antd';
+import { sortVotes } from 'utils/helpers/voteHelpers';
 import VotePayout from 'features/Vote/VotePayout';
 import Author from 'components/Author';
 

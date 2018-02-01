@@ -3,7 +3,6 @@ import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
 
 import api from 'utils/api';
-import { getPostDayBucket } from '../utils/postKey';
 import { selectPostByPermlink } from '../selectors';
 
 /*--------- CONSTANTS ---------*/
@@ -34,10 +33,6 @@ export function getPostReducer(state, action) {
   switch (action.type) {
     case GET_POST_SUCCESS:
     case SET_CURRENT_POST:
-      console.log('------------post :', action.post);
-      // return update(state, {
-      //   posts: { $merge: { [getPostDayBucket(post)]: post } },
-      // });
       return update(state, {
         currentPost: { $set: action.post }
       });
