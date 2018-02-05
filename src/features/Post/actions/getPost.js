@@ -45,8 +45,7 @@ export function getPostReducer(state, action) {
 function* getPost({ author, permlink }) {
   try {
     // Try retrieving from state first
-    let post = yield select(selectPostByPermlink(author, permlink));
-
+    let { post } = yield select(selectPostByPermlink(author, permlink));
     if (isEmpty(post)) {
       // Retrieve from API when user accessed to a product page directly
       post = yield api.get(`/posts/@${author}/${permlink}.json`);

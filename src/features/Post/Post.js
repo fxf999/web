@@ -44,16 +44,15 @@ class Post extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
-      const { match: { params : { author, permlink }}} = nextProps;
-      this.props.getCommentsFromPost('steemhunt', author, permlink);
-    }
-
     const { match: { params : { author, permlink }} } = this.props;
     const nextAuthor = nextProps.match.params.author;
     const nextPermlink = nextProps.match.params.permlink;
     if (author !== nextAuthor || permlink !== nextPermlink) {
       this.props.getPost(nextAuthor, nextPermlink);
+
+      if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
+        this.props.getCommentsFromPost('steemhunt', nextAuthor, nextPermlink);
+      }
     }
   }
 

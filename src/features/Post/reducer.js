@@ -6,48 +6,44 @@ import {
   VOTE_SUCCESS
 } from 'features/Vote/actions/vote';
 import { manageContentVote } from 'features/Vote/utils';
-
-function getContentId(content) {
-  return `${content.author}/${content.permlink}`;
-}
+import { getPostByKey } from './utils';
+import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 /*--------- REDUCER ---------*/
 export default function postsReducer(state, action) {
   switch (action.type) {
     case VOTE_OPTIMISTIC: {
-      const { content, accountName, weight, params: { type } } = action;
-      if (type === 'post') {
-        const contentId = getContentId(content);
-        const newPost = manageContentVote({ ...state.posts[contentId] }, weight, accountName);
+      const { content, accountName, weight, contentType } = action;
+      if (contentType === 'post') {
+        const { day, rank, post } = getPostByKey(state.posts, content.author, content.permlink);
+        console.log('selected ------------>', day, rank, post);
+        const newPost = manageContentVote({ ...post }, weight, accountName);
         return update(state, {
           posts: {
-            [contentId]: {$set:
-            newPost,
-            },
+            [day]: { [rank]: { $set: newPost } },
           },
         });
       } else {
         return state;
       }
     }
-    case VOTE_FAILURE: {
-      const { content, accountName, params: { type } } = action;
-      if (type === 'post') {
-        const contentId = getContentId(content);
+    case VOTE_FAILURE: { // Revert on optimistic pre-update
+      const { content, accountName, contentType } = action;
+      if (contentType === 'post') {
+        const { day, rank } = getPostByKey(state.posts, content.author, content.permlink);
         return update(state, {
-          posts: {
-            [contentId]: {
-              active_votes: {$apply: votes => {
+          posts: { [day]: { [rank]: {
+            active_votes: {
+              $apply: votes => {
                 return votes.filter(vote => {
                   if (vote.voter !== accountName) {
                     return true;
                   }
-                  return vote.percent <= 0;
+                  return false;
                 });
-              }},
-              net_votes: {$apply: count => count - 1}
+              }
             }
-          },
+          }}},
         });
       } else {
         return state;
@@ -56,13 +52,11 @@ export default function postsReducer(state, action) {
     case VOTE_SUCCESS: {
       const { content, contentType } = action;
       if (contentType === 'post') {
-        const contentId = getContentId(content);
+        const { day, rank } = getPostByKey(state.posts, content.author, content.permlink);
         return update(state, {
-          posts: {
-            [contentId]: {
-              isUpdating: {$set: true},
-            }
-          },
+          posts: { [day]: { [rank]: {
+            isUpdating: { $set: true },
+          }}},
         });
       } else {
         return state;
@@ -71,16 +65,13 @@ export default function postsReducer(state, action) {
     case UPDATE_PAYOUT: {
       const { content, contentType } = action;
       if (contentType === 'post') {
-        const contentId = getContentId(content);
+        const { day, rank } = getPostByKey(state.posts, content.author, content.permlink);
         return update(state, {
-          posts: {
-            [contentId]: {
-              pending_payout_value: {$set: content.pending_payout_value},
-              total_payout_value: {$set: content.total_payout_value},
-              active_votes: {$set: content.active_votes},
-              isUpdating: {$set: false},
-            }
-          },
+          posts: { [day]: { [rank]: {
+            payout_value: { $set: calculateContentPayout(content) },
+            active_votes: { $set: content.active_votes },
+            isUpdating: { $set: false },
+          }}},
         });
       } else {
         return state;

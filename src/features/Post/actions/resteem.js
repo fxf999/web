@@ -2,7 +2,7 @@ import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
 import steemconnect from 'sc2-sdk';
-import { getPostKey } from '../utils/postKey';
+import { getPostKey } from '../utils';
 import { selectMe } from 'features/User/selectors';
 
 import { notification } from 'antd';

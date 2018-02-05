@@ -1,3 +1,4 @@
+// FIXME: Handle down votes
 export const manageContentVote = (content, weight, accountName) => {
   if (weight > 0) {
     // VOTE

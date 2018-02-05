@@ -40,10 +40,10 @@ class VoteButton extends Component {
     this.setState({ voteWeight: value });
   };
 
-  vote = weight => {
+  handleVote = weight => {
     const { isConnected, post, vote, type } = this.props;
     if (isConnected) {
-      vote(post, weight, { type });
+      vote(post, weight, type);
     } else {
       console.log('Not logged in');
     }
@@ -89,7 +89,7 @@ class VoteButton extends Component {
         </div>
         <Button
           type="primary"
-          onClick={() => this.vote(voteWeight * 100)}
+          onClick={() => this.handleVote(voteWeight * 100)}
           disabled={voteWeight === 0}>
           Vote
         </Button>
@@ -98,13 +98,13 @@ class VoteButton extends Component {
 
     if (layout === 'list') {
       return (
-        <div className="vote-button">
+        <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Popover content={content} trigger="click" placement="left">
             <Button
               type="primary"
               shape="circle"
               icon="up"
-              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
               ghost={postUpvoted ? false : true}
             />
           </Popover>
@@ -116,7 +116,7 @@ class VoteButton extends Component {
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Button
             type="primary"
-            onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+            onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
             ghost={postUpvoted ? false : true}
           >
             <Icon type="up" />
@@ -129,14 +129,14 @@ class VoteButton extends Component {
       const payout = calculateContentPayout(post);
 
       return (
-        <div className="vote-button">
+        <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Popover content={content} trigger="click" placement="top">
             <Button
               type="primary"
               shape="circle"
               icon="up"
               size="small"
-              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.vote(0)}
+              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
               ghost={postUpvoted ? false : true}
             />
           </Popover>
@@ -156,7 +156,7 @@ const mapStateToProps = (state, props) => createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  vote: (post, weight, params) => dispatch(voteBegin(post, weight, props.type, params)),
+  vote: (post, weight, params) => dispatch(voteBegin(post, weight, props.type)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VoteButton);

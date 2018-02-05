@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { selectCommentsDomain } from 'features/Comment/selectors';
+import { getPostByKey } from './utils';
 
 const selectPostDomain = () => state => state.post;
 
@@ -25,19 +26,7 @@ export const selectCurrentPost = () => createSelector(
 
 export const selectPostByPermlink = (author, permlink) => createSelector(
   selectPosts(),
-  posts => {
-
-    for (const day in posts) {
-      for (const rank in posts[day]) {
-        const post = posts[day][rank];
-        if (post.author === author && post.permlink === permlink) {
-          return { day: day, rank: rank, post: post };
-        }
-      }
-    }
-
-    return null;
-  },
+  posts => getPostByKey(posts, author, permlink),
 );
 
 export const selectCurrentComments = () => createSelector(

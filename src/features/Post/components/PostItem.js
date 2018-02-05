@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import { getPostKey } from '../utils/postKey';
+import { getPostKey } from '../utils';
 import VoteButton from 'features/Vote/VoteButton';
 
 const PostItem = ({ rank, post }) => {

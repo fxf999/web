@@ -23,8 +23,8 @@ export default function commentsReducer(state, action) {
       };
     }
     case VOTE_OPTIMISTIC: {
-      const { content, accountName, weight, params: { type } } = action;
-      if (type === 'comment') {
+      const { content, accountName, weight, contentType } = action;
+      if (contentType === 'comment') {
         const newComment = manageContentVote({ ...state.commentsData[content.id] }, weight, accountName);
         return update(state, {
           commentsData: {
@@ -38,8 +38,8 @@ export default function commentsReducer(state, action) {
       }
     }
     case VOTE_FAILURE: {
-      const { content, accountName, params: { type } } = action;
-      if (type === 'comment') {
+      const { content, accountName, contentType } = action;
+      if (contentType === 'comment') {
         return update(state, {
           commentsData: {
             [content.id]: {
