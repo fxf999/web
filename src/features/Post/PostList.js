@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import isEmpty from 'lodash/isEmpty';
 import { selectPosts } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
@@ -25,17 +25,21 @@ class PostList extends Component {
   }
 
   render() {
-    const { daysAgo } = this.props;
+    const { posts, daysAgo } = this.props;
+
     let dailyTotalReward = 0;
-    const posts = (this.props.posts[daysAgo] || []).map((post, index) => {
+    let dailyPosts = posts[daysAgo]
+    if (isEmpty(dailyPosts)) {
+      return null;
+    }
+
+    dailyPosts = dailyPosts.map((post, index) => {
       dailyTotalReward += post.payout_value;
       return (
         <PostItem key={post.id} rank={index + 1} post={post} />
       );
     });
-    if (posts.length === 0) {
-      return null;
-    }
+
     return (
       <div className="post-list">
         <div className="heading">
@@ -43,7 +47,7 @@ class PostList extends Component {
           <p><b>{posts.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
         </div>
         <div className="daily-posts">
-          {posts}
+          {dailyPosts}
         </div>
       </div>
     );

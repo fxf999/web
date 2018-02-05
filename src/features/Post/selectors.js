@@ -23,15 +23,15 @@ export const selectCurrentPost = () => createSelector(
   post => post.currentPost,
 );
 
-export const selectPostByPermlink = (username, permlink) => createSelector(
+export const selectPostByPermlink = (author, permlink) => createSelector(
   selectPosts(),
   posts => {
 
     for (const day in posts) {
-      for (const i in posts[day]) {
-        const post = posts[day][i];
-        if (post.username === username && post.permlink === permlink) {
-          return post;
+      for (const rank in posts[day]) {
+        const post = posts[day][rank];
+        if (post.author === author && post.permlink === permlink) {
+          return { day: day, rank: rank, post: post };
         }
       }
     }
@@ -43,6 +43,6 @@ export const selectPostByPermlink = (username, permlink) => createSelector(
 export const selectCurrentComments = () => createSelector(
   [selectCurrentPost(), selectCommentsDomain()],
   (currentPost, commentsDomain) => {
-    return currentPost ? commentsDomain.commentsFromPost[`${currentPost.username}/${currentPost.permlink}`] : {};
+    return currentPost ? commentsDomain.commentsFromPost[`${currentPost.author}/${currentPost.permlink}`] : {};
   }
 );

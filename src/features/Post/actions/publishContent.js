@@ -69,14 +69,14 @@ function getBody(post, permlink) {
     `${post.url}\n` +
     `\n---\n` +
     `## Contributors\n` +
-    `Hunter: @${post.username}\n` +
+    `Hunter: @${post.author}\n` +
     `${contributors}` +
     `\n---\n` +
     `<center>` +
     `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\n` +
     `*This is a test article from Steemhunt project*` +
     `Posted on Steemhunt, a Steem-fueled Product Hunt\n` +
-    `[View on Steemhunt.com](https://steemhunt.com/${post.username}/${permlink})\n` +
+    `[View on Steemhunt.com](https://steemhunt.com/${post.author}/${permlink})\n` +
     `</center>`;
 }
 
@@ -86,7 +86,7 @@ function* publishContent({ post }) {
 
   try {
     const title = `${post.title} - ${post.tagline}`;
-    const permlink = yield createPermlink(title, post.username, '', '');
+    const permlink = yield createPermlink(title, post.author, '', '');
 
     post.permlink = permlink;
 
@@ -94,7 +94,7 @@ function* publishContent({ post }) {
     console.log('2------', res);
 
     const myAccount = yield select(selectMyAccount());
-    if (myAccount.name !== post.username) {
+    if (myAccount.name !== post.author) {
       yield put(publishContentFailure('UNAUTHORIZED'));
       return;
     }
@@ -115,7 +115,7 @@ function* publishContent({ post }) {
         {
           parent_author: '',
           parent_permlink: tags[0],
-          author: post.username,
+          author: post.author,
           permlink,
           title,
           body: getBody(post, permlink),
@@ -123,7 +123,7 @@ function* publishContent({ post }) {
         },
       ],
       ['comment_options', {
-        author: post.username,
+        author: post.author,
         permlink,
         max_accepted_payout: '1000000.000 SBD',
         percent_steem_dollars: 10000,

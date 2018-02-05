@@ -37,22 +37,22 @@ class Post extends Component {
   };
 
   componentDidMount() {
-    const { match: { params : { username, permlink }} } = this.props;
-    this.props.getPost(username, permlink);
+    const { match: { params : { author, permlink }} } = this.props;
+    this.props.getPost(author, permlink);
 
-    this.props.getCommentsFromPost('steemhunt', username, permlink);
+    this.props.getCommentsFromPost('steemhunt', author, permlink);
   }
 
   componentWillReceiveProps(nextProps) {
     if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
-      const { match: { params : { username, permlink }}} = nextProps;
-      this.props.getCommentsFromPost('steemhunt', username, permlink);
+      const { match: { params : { author, permlink }}} = nextProps;
+      this.props.getCommentsFromPost('steemhunt', author, permlink);
     }
 
-    const { match: { params : { username, permlink }} } = this.props;
-    const nextAuthor = nextProps.match.params.username;
+    const { match: { params : { author, permlink }} } = this.props;
+    const nextAuthor = nextProps.match.params.author;
     const nextPermlink = nextProps.match.params.permlink;
-    if (username !== nextAuthor || permlink !== nextPermlink) {
+    if (author !== nextAuthor || permlink !== nextPermlink) {
       this.props.getPost(nextAuthor, nextPermlink);
     }
   }
@@ -129,9 +129,9 @@ const mapStateToProps = () => createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getPost: (username, permlink) => dispatch(getPostBegin(username, permlink)),
+  getPost: (author, permlink) => dispatch(getPostBegin(author, permlink)),
   setCurrentPost: post => dispatch(setCurrentPost(post)),
-  getCommentsFromPost: (category, username, permlink) => dispatch(getCommentsFromPostBegin(category, username, permlink)),
+  getCommentsFromPost: (category, author, permlink) => dispatch(getCommentsFromPostBegin(category, author, permlink)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

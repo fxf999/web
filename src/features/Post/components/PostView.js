@@ -18,13 +18,13 @@ export default class PostView extends Component {
       tagline: PropTypes.string.isRequired,
       tags: PropTypes.arrayOf(PropTypes.string).isRequired,
       images: PropTypes.arrayOf(PropTypes.object).isRequired,
-      username: PropTypes.string,
+      author: PropTypes.string,
       beneficiaries: PropTypes.arrayOf(PropTypes.shape({
         account: PropTypes.string.isRequired,
         weight: PropTypes.number.isRequired,
       })),
     }).isRequired,
-    username: PropTypes.string,
+    author: PropTypes.string,
     permlink: PropTypes.string,
   };
 
@@ -70,12 +70,12 @@ export default class PostView extends Component {
 
           <div className="timeline-container">
             <ul className="left">
-              {post.username && <li>Hunter</li>}
+              {post.author && <li>Hunter</li>}
               {beneficiaries && beneficiaries.length > 0 && <li>Makers</li>}
             </ul>
 
             <Timeline>
-              {post.username && <Timeline.Item>@{post.username}</Timeline.Item>}
+              {post.author && <Timeline.Item>@{post.author}</Timeline.Item>}
               {beneficiaries}
             </Timeline>
           </div>

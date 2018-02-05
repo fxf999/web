@@ -24,9 +24,9 @@ class Left extends Component {
         {this.props.location.search && <Redirect to="/" />}
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/@:username/:permlink" exact component={Post} />
+          <Route path="/@:author/:permlink" exact component={Post} />
           <Route path="/post" exact component={Draft} />
-          <Route path="/@:username" component={Profile} />
+          <Route path="/@:author" component={Profile} />
           <Route path="/:tag" exact component={Home} />
         </Switch>
       </div>
@@ -74,8 +74,8 @@ class Right extends Component {
         <Switch>
           <Route path="/" exact component={HuntedList} />
           <Route path="/post" exact component={PostForm} />
-          <Route path="/@:username" component={HuntedList} />
-          <Route path="/@:username/:permlink" exact component={HuntedList} />
+          <Route path="/@:author" component={HuntedList} />
+          <Route path="/@:author/:permlink" exact component={HuntedList} />
           <Route path="/:tag" exact component={HuntedList} />
         </Switch>
       </div>

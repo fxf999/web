@@ -113,7 +113,7 @@ class PostForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.me !== nextProps.me) {
-      this.props.updateDraft('username', nextProps.me);
+      this.props.updateDraft('author', nextProps.me);
     }
   }
 

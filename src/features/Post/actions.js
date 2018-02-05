@@ -7,7 +7,8 @@ import getPost, { getPostReducer } from './actions/getPost';
 import publishContent, { publishContentReducer } from './actions/publishContent';
 import { updateDraftReducer } from './actions/updateDraft';
 import resteem, { resteemReducer } from './actions/resteem';
-import postsReducer from './reducer';
+import postReducer from 'features/Post/reducer';
+import vote from 'features/Vote/actions/vote';
 
 export const initialState = {
   draft: {
@@ -16,7 +17,7 @@ export const initialState = {
     tagline: 'Short Description',
     tags: [],
     images: [],
-    username: null,
+    author: null,
     beneficiaries: [],
   },
   posts: {},
@@ -30,7 +31,7 @@ export const reducer = (state = initialState, action) => combine(
     getPostsReducer,
     getPostReducer,
     publishContentReducer,
-    postsReducer,
+    postReducer,
     resteemReducer,
   ],
   state,
@@ -43,4 +44,5 @@ export default [
   getPost,
   publishContent,
   resteem,
+  vote,
 ];

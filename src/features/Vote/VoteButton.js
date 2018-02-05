@@ -45,7 +45,7 @@ class VoteButton extends Component {
     if (isConnected) {
       vote(post, weight, { type });
     } else {
-      console.log('Not logged');
+      console.log('Not logged in');
     }
   };
 

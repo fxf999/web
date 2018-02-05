@@ -24,8 +24,8 @@ export const getFeedContentFromState = (sortBy, category, feedState, postsState)
   return feedList.map(feedId => postsState[feedId]);
 };
 
-export const getUserCommentsFromState = (username, feedState, commentsState) => {
-  const feedList = getFeedFromState('comments', username, feedState);
+export const getUserCommentsFromState = (author, feedState, commentsState) => {
+  const feedList = getFeedFromState('comments', author, feedState);
   return feedList.map(feedId => commentsState.comments[feedId]);
 };
 
@@ -67,11 +67,11 @@ export const getFeedHasMoreFromState = (sortBy, listName = 'all', feedState) => 
 
 // returning the same function but different naming helps to understand the code's flow better
 // and defines a pattern to scale this feature with reselect
-export const getUserFeedContentFromState = (username, feedState, postsState) =>
-  getFeedContentFromState('feed', username, feedState, postsState);
+export const getUserFeedContentFromState = (author, feedState, postsState) =>
+  getFeedContentFromState('feed', author, feedState, postsState);
 
-export const getUserFeedLoadingFromState = (username, feedState) =>
-  (feedState.feed[username] && feedState.feed[username].isFetching) || false;
+export const getUserFeedLoadingFromState = (author, feedState) =>
+  (feedState.feed[author] && feedState.feed[author].isFetching) || false;
 
 
 /**

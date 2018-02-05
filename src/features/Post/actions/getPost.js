@@ -12,8 +12,8 @@ const GET_POST_FAILURE = 'GET_POST_FAILURE';
 const SET_CURRENT_POST = 'SET_CURRENT_POST';
 
 /*--------- ACTIONS ---------*/
-export function getPostBegin(username, permlink) {
-  return { type: GET_POST_BEGIN, username, permlink };
+export function getPostBegin(author, permlink) {
+  return { type: GET_POST_BEGIN, author, permlink };
 }
 
 export function getPostSuccess(post) {
@@ -42,14 +42,14 @@ export function getPostReducer(state, action) {
 }
 
 /*--------- SAGAS ---------*/
-function* getPost({ username, permlink }) {
+function* getPost({ author, permlink }) {
   try {
     // Try retrieving from state first
-    let post = yield select(selectPostByPermlink(username, permlink));
+    let post = yield select(selectPostByPermlink(author, permlink));
 
     if (isEmpty(post)) {
       // Retrieve from API when user accessed to a product page directly
-      post = yield api.get(`/posts/@${username}/${permlink}.json`);
+      post = yield api.get(`/posts/@${author}/${permlink}.json`);
     }
 
     yield put(getPostSuccess(post));
