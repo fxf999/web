@@ -56,3 +56,8 @@ function* vote({ content, weight, contentType }) {
 export default function* voteManager() {
   yield takeEvery(VOTE_BEGIN, vote);
 }
+
+
+// FIXME: TODO:
+// - why actiosn twice?
+// - state.currentPost should not be duplicated - it should be selected from daily bucket

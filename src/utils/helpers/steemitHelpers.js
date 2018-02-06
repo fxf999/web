@@ -74,7 +74,6 @@ export const calculateContentPayout = content => {
   return totalPayoutValue + pendingPayoutValue + curatorPayoutValue;
 };
 
-export const displayContentNbComments = content => numeral(content.children).format('0,0');
 export const hasVoted = (content, name) => !!content.active_votes.find(vote => vote.voter === name && vote.percent > 0);
 export const formatAmount = amount => numeral(amount).format('$0,0.00');
 

@@ -16,7 +16,7 @@ import {
   selectCommentsData,
   selectCommentsIsLoading
 } from 'features/Comment/selectors';
-import { displayContentNbComments } from 'utils/helpers/steemitHelpers';
+import { getCommentsCount } from './utils';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
 import { getPostBegin, setCurrentPost } from './actions/getPost';
@@ -79,8 +79,12 @@ class Post extends Component {
           <hr />
 
           <h3>
-            {displayContentNbComments(post)} comments
-            <span className="separator">&middot;</span>
+            {currentComments && (
+              <span>
+                {getCommentsCount(post, currentComments.list, commentsChild)} comments
+                <span className="separator">&middot;</span>
+              </span>
+            )}
             <ContentPayoutAndVotes content={post} />
           </h3>
 

@@ -13,7 +13,6 @@ import Author from './Author';
 import VoteButton from 'features/Vote/VoteButton';
 import {
   calculateContentPayout,
-  displayContentNbComments,
   formatAmount,
 } from 'utils/helpers/steemitHelpers';
 
@@ -62,7 +61,7 @@ function ContentItem(props) {
             </Link>
             <Link title="Responses" to={{ pathname: linkUrl, hash: hashUrl }} className="social_area social_area--comment">
               <Icon type="message" />
-              <span>{displayContentNbComments(content)}</span>
+              <span>{0}</span>
             </Link>
           </div>
           <div className="info">
