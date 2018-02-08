@@ -31,7 +31,9 @@ export function getPostsReducer(state, action) {
       const dailyRanking = [];
       posts.forEach(post => {
         const key = getPostKey(post);
-        newPosts[key] = post;
+        if (!state.posts[key]) { // only update non-existing post (preventing race-condition with getPost)
+          newPosts[key] = post;
+        }
         dailyRanking.push(key);
       });
 

@@ -10,7 +10,7 @@ import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
 import { voteBegin } from './actions/vote';
 import { hasVoted } from 'utils/helpers/steemitHelpers';
-import { calculateContentPayout, formatAmount } from 'utils/helpers/steemitHelpers';
+import { formatAmount } from 'utils/helpers/steemitHelpers';
 
 class VoteButton extends Component {
   static propTypes = {
@@ -132,7 +132,7 @@ class VoteButton extends Component {
           </Popover>
           <div className="payout-value">{formatAmount(post.payout_value)}</div>
         </div>
-      )
+      );
     } else if (layout ==='detail-page') {
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
@@ -154,10 +154,8 @@ class VoteButton extends Component {
             </Button>
           </Popover>
         </div>
-      )
+      );
     } else { // comment
-      const payout = calculateContentPayout(post);
-
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
           <Popover
@@ -176,9 +174,9 @@ class VoteButton extends Component {
               loading={post.isUpdating}
             />
           </Popover>
-          <span className="payout-value">{formatAmount(payout)}</span>
+          <span className="payout-value">{formatAmount(post.payout_value)}</span>
         </div>
-      )
+      );
     }
   }
 }

@@ -53,5 +53,4 @@ export default function* voteManager() {
 
 
 // FIXME: TODO:
-// - why actiosn twice?
-// - state.currentPost should not be duplicated - it should be selected from daily bucket
+// - why actions twice?

@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { formatAmount } from "utils/helpers/steemitHelpers";
 
 export default function VotePayout({ vote, totalRshares, totalPayout }) {
-  let value = vote.rshares / totalRshares * totalPayout;
+  const value = (vote.rshares / totalRshares * totalPayout) || 0;
 
   return (
     <span className="value">
-      {value && formatAmount(value)}
+      {formatAmount(value)}
     </span>
   );
 }

@@ -5,21 +5,15 @@ import { GET_COMMENTS_FROM_POST_SUCCESS } from './actions/getCommentsFromPost';
 import { GET_COMMENTS_FROM_USER_SUCCESS } from './actions/getCommentsFromUser';
 import { GET_REPLIES_TO_USER_SUCCESS } from './actions/getRepliesToUser';
 import { getCommentsChildrenLists, mapCommentsBasedOnId } from './utils/comments';
-import format from './utils/format';
 
 export default function commentsReducer(state, action) {
   switch (action.type) {
     case GET_COMMENTS_FROM_POST_SUCCESS:
     case GET_COMMENTS_FROM_USER_SUCCESS:
     case GET_REPLIES_TO_USER_SUCCESS: {
-      const commentsData = mapCommentsBasedOnId(action.state.content);
-      Object.keys(commentsData).forEach(key => {
-        commentsData[key] = format(commentsData[key]);
-      });
-
       return update(state, {
         commentsChild: { $merge: getCommentsChildrenLists(action.state) },
-        commentsData: { $merge: commentsData },
+        commentsData: { $merge: mapCommentsBasedOnId(action.state.content) },
       });
     }
     case VOTE_OPTIMISTIC: {

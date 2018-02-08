@@ -8,7 +8,6 @@ import publishContent, { publishContentReducer } from './actions/publishContent'
 import { updateDraftReducer } from './actions/updateDraft';
 import resteem, { resteemReducer } from './actions/resteem';
 import postReducer from 'features/Post/reducer';
-import vote from 'features/Vote/actions/vote';
 
 export const initialState = {
   draft: {
@@ -45,5 +44,4 @@ export default [
   getPost,
   publishContent,
   resteem,
-  vote,
 ];

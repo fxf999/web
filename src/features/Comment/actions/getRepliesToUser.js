@@ -1,3 +1,5 @@
+// TODO: DEPRECATE
+
 import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import update from 'immutability-helper';

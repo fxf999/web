@@ -34,9 +34,19 @@ export function getPostReducer(state, action) {
     case GET_POST_SUCCESS:
       const { post } = action;
       const key = getPostKey(post);
-      return update(state, {
-        posts: { [key]: { $set: post } },
-      });
+
+      if (state.posts[key]) {
+        return update(state, {
+          posts: { [key]: {
+            active_votes: { $set: post.active_votes },
+            payout_value: { $set: post.payout_value },
+          }},
+        });
+      } else {
+        return update(state, {
+          posts: { [key]: { $set: post } },
+        });
+      }
     case SET_CURRENT_POST_KEY:
       return update(state, {
         currentPostKey: { $set: action.key },

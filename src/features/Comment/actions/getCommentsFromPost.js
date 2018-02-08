@@ -1,8 +1,12 @@
-import { put, takeEvery } from 'redux-saga/effects';
+import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import update from 'immutability-helper';
 import { getRootCommentsList, mapCommentsBasedOnId } from '../utils/comments';
 import { sortCommentsFromSteem } from 'utils/helpers/stateHelpers';
+import { selectPosts } from 'features/Post/selectors';
+import { getPostKey } from 'features/Post/utils';
+import { getPostSuccess } from 'features/Post/actions/getPost';
+import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 /*--------- CONSTANTS ---------*/
 const GET_COMMENTS_FROM_POST_BEGIN = 'GET_COMMENTS_FROM_POST_BEGIN';
@@ -55,6 +59,21 @@ export function getCommentsFromPostReducer(state, action) {
 function* getCommentsFromPost({ category, author, permlink }) {
   try {
     const state = yield steem.api.getStateAsync(`/${category}/@${author}/${permlink}`);
+
+    // Update posts dictionary with the fresh blockchain data
+    const posts = yield select(selectPosts());
+    const commentsData = mapCommentsBasedOnId(state.content);
+
+    for (const content of Object.values(commentsData)) {
+      const postKey = getPostKey(content);
+      content.payout_value = calculateContentPayout(content); // Sync with local format
+
+      if (posts && posts[postKey]) {
+        // console.log('==========> update');
+        yield put(getPostSuccess(content));
+      }
+    }
+
     yield put(getCommentsFromPostSuccess(`${author}/${permlink}`, state));
   } catch(e) {
     yield put(getCommentsFromPostFailure(e.message));
