@@ -28,25 +28,41 @@ class VoteButton extends Component {
   constructor() {
     super();
     this.state = {
-      voteWeight: 100,
+      voteWeight: 100, // TODO: Remember the last one
+      sliderOpened: false,
     }
   }
 
   openSignin = () => {
     console.log('TODO: Open sign in pop up');
-  }
+  };
 
   onChangeVotingWeight = value => {
     this.setState({ voteWeight: value });
   };
 
-  handleVote = weight => {
+  doVote = weight => {
     const { isConnected, post, vote, type } = this.props;
+
     if (isConnected) {
       vote(post, weight, type);
+      this.setState({ sliderOpened: false });
     } else {
       console.log('Not logged in');
     }
+  };
+
+  handleVisibleChange = (visible, postUpvoted) => {
+    if (visible) {
+      if (!this.props.isConnected) {
+        return this.openSignin();
+      }
+
+      if (postUpvoted) { // Cancel voting if already voted
+        return this.doVote(0);
+      }
+    }
+    this.setState({ sliderOpened: visible });
   };
 
   votingValueCalculator = voteWeight => {
@@ -71,7 +87,7 @@ class VoteButton extends Component {
 
   render() {
     const { myAccount, isConnected, post, layout } = this.props;
-    const { voteWeight } = this.state;
+    const { voteWeight, sliderOpened } = this.state;
     const postUpvoted = hasVoted(post, myAccount.name);
 
     const content = isConnected ? (
@@ -89,7 +105,7 @@ class VoteButton extends Component {
         </div>
         <Button
           type="primary"
-          onClick={() => this.handleVote(voteWeight * 100)}
+          onClick={() => this.doVote(voteWeight * 100)}
           disabled={voteWeight === 0}>
           Vote
         </Button>
@@ -99,13 +115,19 @@ class VoteButton extends Component {
     if (layout === 'list') {
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
-          <Popover content={content} trigger="click" placement="left">
+          <Popover
+            content={content}
+            trigger="click"
+            placement="left"
+            visible={sliderOpened}
+            onVisibleChange={(visible) => this.handleVisibleChange(visible, postUpvoted)}
+          >
             <Button
               type="primary"
               shape="circle"
               icon="up"
-              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
               ghost={postUpvoted ? false : true}
+              loading={post.isUpdating}
             />
           </Popover>
           <div className="payout-value">{formatAmount(post.payout_value)}</div>
@@ -114,15 +136,23 @@ class VoteButton extends Component {
     } else if (layout ==='detail-page') {
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
-          <Button
-            type="primary"
-            onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
-            ghost={postUpvoted ? false : true}
+          <Popover
+            content={content}
+            trigger="click"
+            placement="top"
+            visible={sliderOpened}
+            onVisibleChange={(visible) => this.handleVisibleChange(visible, postUpvoted)}
           >
-            <Icon type="up" />
-            UPVOTE
-            <div className="payout-value">{formatAmount(post.payout_value)}</div>
-          </Button>
+            <Button
+              type="primary"
+              ghost={postUpvoted ? false : true}
+              loading={post.isUpdating}
+            >
+              <Icon type="up" />
+              UPVOTE
+              <div className="payout-value">{formatAmount(post.payout_value)}</div>
+            </Button>
+          </Popover>
         </div>
       )
     } else { // comment
@@ -130,14 +160,20 @@ class VoteButton extends Component {
 
       return (
         <div className={`vote-button${postUpvoted ? ' active' : ''}`}>
-          <Popover content={content} trigger="click" placement="top">
+          <Popover
+            content={content}
+            trigger="click"
+            placement="top"
+            visible={sliderOpened}
+            onVisibleChange={(visible) => this.handleVisibleChange(visible, postUpvoted)}
+          >
             <Button
               type="primary"
               shape="circle"
               icon="up"
               size="small"
-              onClick={!isConnected ? () => this.openSignin() : !postUpvoted ? this.openSlider : () => this.handleVote(0)}
               ghost={postUpvoted ? false : true}
+              loading={post.isUpdating}
             />
           </Popover>
           <span className="payout-value">{formatAmount(payout)}</span>

@@ -21,8 +21,9 @@ export const initialState = {
     beneficiaries: [],
   },
   posts: {},
+  dailyRanking: {},
   isPublishing: false,
-  currentPost: null,
+  currentPostKey: null,
 };
 
 export const reducer = (state = initialState, action) => combine(

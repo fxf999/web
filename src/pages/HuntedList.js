@@ -27,7 +27,7 @@ export default class HuntedList extends Component {
   render() {
     const { daysAgoArray, isLoading } = this.state;
 
-    const genesis = (new Date('2018-01-26')).getTime();
+    const genesis = (new Date('2018-02-08')).getTime();
     const oldest = Date.now() - last(daysAgoArray) * 86400000;
     const hasMore = oldest > genesis;
 

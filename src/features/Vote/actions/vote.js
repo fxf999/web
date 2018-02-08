@@ -6,7 +6,6 @@ import { selectMe } from 'features/User/selectors';
 /*--------- CONSTANTS ---------*/
 const VOTE_BEGIN = 'VOTE_BEGIN';
 export const VOTE_OPTIMISTIC = 'VOTE_OPTIMISTIC';
-export const VOTE_SUCCESS = 'VOTE_SUCCESS';
 export const VOTE_FAILURE = 'VOTE_FAILURE';
 export const UPDATE_PAYOUT = 'UPDATE_PAYOUT';
 
@@ -17,10 +16,6 @@ export function voteBegin(content, weight, contentType) {
 
 function voteOptimistic(content, accountName, weight, contentType) {
   return { type: VOTE_OPTIMISTIC, content, accountName, weight, contentType };
-}
-
-export function voteSuccess(content, contentType) {
-  return { type: VOTE_SUCCESS, content, contentType };
 }
 
 export function voteFailure(content, accountName, contentType, message) {
@@ -38,7 +33,6 @@ function* vote({ content, weight, contentType }) {
 
   try {
     yield steemconnect.vote(accountName, content.author, content.permlink, weight);
-    yield put(voteSuccess(content, contentType));
 
     // UPDATE PAYOUT
     const { author, permlink } = content;

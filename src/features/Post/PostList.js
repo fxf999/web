@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
-import { selectPosts } from './selectors';
+import { selectPosts, selectDailyRanking } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
 import PostItem from './components/PostItem';
@@ -14,6 +14,7 @@ class PostList extends Component {
     daysAgo: PropTypes.number.isRequired,
     getPosts: PropTypes.func.isRequired,
     posts: PropTypes.object.isRequired,
+    dailyRanking: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -25,15 +26,16 @@ class PostList extends Component {
   }
 
   render() {
-    const { posts, daysAgo } = this.props;
+    const { posts, dailyRanking, daysAgo } = this.props;
 
-    let dailyTotalReward = 0;
-    let dailyPosts = posts[daysAgo]
-    if (isEmpty(dailyPosts)) {
+    let ranking = dailyRanking[daysAgo];
+    if (isEmpty(ranking)) {
       return null;
     }
 
-    dailyPosts = dailyPosts.map((post, index) => {
+    let dailyTotalReward = 0;
+    const rankingItems = ranking.map((postKey, index) => {
+      const post = posts[postKey];
       dailyTotalReward += post.payout_value;
       return (
         <PostItem key={post.id} rank={index + 1} post={post} />
@@ -44,10 +46,10 @@ class PostList extends Component {
       <div className="post-list">
         <div className="heading">
           <h3>{daysAgoToString(daysAgo)}</h3>
-          <p><b>{posts.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
+          <p><b>{ranking.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
         </div>
         <div className="daily-posts">
-          {dailyPosts}
+          {rankingItems}
         </div>
       </div>
     );
@@ -56,6 +58,7 @@ class PostList extends Component {
 
 const mapStateToProps = () => createStructuredSelector({
   posts: selectPosts(),
+  dailyRanking: selectDailyRanking(),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,15 +1,15 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
-
 import api from 'utils/api';
-import { selectPostByPermlink } from '../selectors';
+import { selectPostByKey } from '../selectors';
+import { getPostKey, generatePostKey } from '../utils';
 
 /*--------- CONSTANTS ---------*/
 const GET_POST_BEGIN = 'GET_POST_BEGIN';
 const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
 const GET_POST_FAILURE = 'GET_POST_FAILURE';
-const SET_CURRENT_POST = 'SET_CURRENT_POST';
+const SET_CURRENT_POST_KEY = 'SET_CURRENT_POST_KEY';
 
 /*--------- ACTIONS ---------*/
 export function getPostBegin(author, permlink) {
@@ -24,17 +24,22 @@ export function getPostFailure(message) {
   return { type: GET_POST_FAILURE, message };
 }
 
-export function setCurrentPost(post) {
-  return { type: SET_CURRENT_POST, post };
+export function setCurrentPostKey(key) {
+  return { type: SET_CURRENT_POST_KEY, key };
 }
 
 /*--------- REDUCER ---------*/
 export function getPostReducer(state, action) {
   switch (action.type) {
     case GET_POST_SUCCESS:
-    case SET_CURRENT_POST:
+      const { post } = action;
+      const key = getPostKey(post);
       return update(state, {
-        currentPost: { $set: action.post }
+        posts: { [key]: { $set: post } },
+      });
+    case SET_CURRENT_POST_KEY:
+      return update(state, {
+        currentPostKey: { $set: action.key },
       });
     default:
       return state;
@@ -45,13 +50,15 @@ export function getPostReducer(state, action) {
 function* getPost({ author, permlink }) {
   try {
     // Try retrieving from state first
-    let { post } = yield select(selectPostByPermlink(author, permlink));
+    const key = generatePostKey(author, permlink);
+    let post = yield select(selectPostByKey(key));
     if (isEmpty(post)) {
       // Retrieve from API when user accessed to a product page directly
-      post = yield api.get(`/posts/@${author}/${permlink}.json`);
+      post = yield api.get(`/posts/@${key}.json`);
     }
 
     yield put(getPostSuccess(post));
+    yield put(setCurrentPostKey(key)); // Set current page
   } catch(e) {
     yield put(getPostFailure(e.message));
   }

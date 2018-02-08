@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { manageContentVote } from '../Vote/utils';
-import { UPDATE_PAYOUT, VOTE_FAILURE, VOTE_OPTIMISTIC, VOTE_SUCCESS } from '../Vote/actions/vote';
+import { UPDATE_PAYOUT, VOTE_FAILURE, VOTE_OPTIMISTIC } from '../Vote/actions/vote';
 import { GET_COMMENTS_FROM_POST_SUCCESS } from './actions/getCommentsFromPost';
 import { GET_COMMENTS_FROM_USER_SUCCESS } from './actions/getCommentsFromUser';
 import { GET_REPLIES_TO_USER_SUCCESS } from './actions/getRepliesToUser';
@@ -26,6 +26,7 @@ export default function commentsReducer(state, action) {
       const { content, accountName, weight, contentType } = action;
       if (contentType === 'comment') {
         const newComment = manageContentVote({ ...state.commentsData[content.id] }, weight, accountName);
+        newComment.isUpdating = true;
         return update(state, {
           commentsData: {
             [content.id]: {$set:
@@ -52,20 +53,6 @@ export default function commentsReducer(state, action) {
                 });
               }},
               net_votes: {$apply: count => count - 1}
-            }
-          },
-        });
-      } else {
-        return state;
-      }
-    }
-    case VOTE_SUCCESS: {
-      const { content, contentType } = action;
-      if (contentType === 'comment') {
-        return update(state, {
-          commentsData: {
-            [content.id]: {
-              isUpdating: {$set: true},
             }
           },
         });

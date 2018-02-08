@@ -19,14 +19,14 @@ import {
 import { getCommentsCount } from './utils';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
-import { getPostBegin, setCurrentPost } from './actions/getPost';
+import { getPostBegin, setCurrentPostKey } from './actions/getPost';
 import PostView from './components/PostView';
 import CommentReplyForm from 'features/Comment/CommentReplyForm';
 
 class Post extends Component {
   static propTypes = {
     getPost: PropTypes.func.isRequired,
-    setCurrentPost: PropTypes.func.isRequired,
+    setCurrentPostKey: PropTypes.func.isRequired,
     getCommentsFromPost: PropTypes.func.isRequired,
     isConnected: PropTypes.bool.isRequired,
     post: PropTypes.object,
@@ -57,7 +57,7 @@ class Post extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setCurrentPost(undefined);
+    this.props.setCurrentPostKey(null);
   }
 
   render() {
@@ -133,7 +133,7 @@ const mapStateToProps = () => createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   getPost: (author, permlink) => dispatch(getPostBegin(author, permlink)),
-  setCurrentPost: post => dispatch(setCurrentPost(post)),
+  setCurrentPostKey: key => dispatch(setCurrentPostKey(key)),
   getCommentsFromPost: (category, author, permlink) => dispatch(getCommentsFromPostBegin(category, author, permlink)),
 });
 

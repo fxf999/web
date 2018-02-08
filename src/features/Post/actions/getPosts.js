@@ -1,6 +1,7 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import api from 'utils/api';
+import { getPostKey } from '../utils';
 
 /*--------- CONSTANTS ---------*/
 const GET_POSTS_BEGIN = 'GET_POSTS_BEGIN';
@@ -26,8 +27,17 @@ export function getPostsReducer(state, action) {
     case GET_POSTS_SUCCESS: {
       const { daysAgo, posts } = action;
 
+      const newPosts = {};
+      const dailyRanking = [];
+      posts.forEach(post => {
+        const key = getPostKey(post);
+        newPosts[key] = post;
+        dailyRanking.push(key);
+      });
+
       return update(state, {
-        posts: { [daysAgo]: { $set: posts } },
+        posts: { $merge: newPosts },
+        dailyRanking: { [daysAgo]: { $set: dailyRanking } },
       });
     }
     default:
