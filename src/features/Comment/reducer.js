@@ -16,11 +16,11 @@ export default function commentsReducer(state, action) {
       Object.keys(commentsData).forEach(key => {
         commentsData[key] = format(commentsData[key]);
       });
-      return {
-        ...state,
-        commentsChild: Object.assign(getCommentsChildrenLists(action.state), state.commentsChild),
-        commentsData: Object.assign(commentsData, state.commentsData),
-      };
+
+      return update(state, {
+        commentsChild: { $merge: getCommentsChildrenLists(action.state) },
+        commentsData: { $merge: commentsData },
+      });
     }
     case VOTE_OPTIMISTIC: {
       const { content, accountName, weight, contentType } = action;
