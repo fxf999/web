@@ -33,3 +33,14 @@ header {
     }
   }
 }
+
+// override for header dropdown
+.ant-popover.ant-popover-placement-bottomRight {
+  .ant-popover-inner-content, .ant-popover-arrow {
+    background: #001529;
+  }
+
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+}

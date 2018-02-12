@@ -101,6 +101,12 @@ hr {
   color: $primary;
 }
 
+[role="button"] {
+  cursor: pointer;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
 .hover-link {
   color: $text_dark;
   transition: color 0.3s ease;

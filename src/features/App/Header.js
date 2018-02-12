@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import steemconnect from 'sc2-sdk';
 
-import { Icon, Button } from 'antd';
+import { Menu, Popover, Icon, Button } from 'antd';
 
 import { selectMe, selectMyAccount } from 'features/User/selectors';
 import { logoutBegin } from 'features/User/actions/logout';
@@ -20,49 +20,27 @@ class Header extends Component {
     logout: PropTypes.func.isRequired,
   };
 
-  constructor() {
-    super();
-
-    this.state = {
-      filter: {
-        post: 1,
-        category: "videos",
-      },
-      dropdownMenu: {
-        open: false,
-      },
-      collapseOpen: false,
-    }
-  }
-
-  handleCloseDropdownMenu = () => {
-    this.setState({
-      dropdownMenu: {
-        open: false,
-      }
-    });
-  };
-
-  handleControlCollapse = () => {
-    this.setState({
-      collapseOpen: !this.state.collapseOpen
-    });
-  };
-
-  handleShowDropdownMenu = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
-    this.setState({
-      dropdownMenu: {
-        open: true,
-        anchorEl: event.currentTarget,
-      }
-    })
-  };
-
   render() {
     const { me, myAccount } = this.props;
+
+    let menu;
+    if(me) {
+      menu = (
+        <Menu theme="dark">
+          <Menu.Item key="0">
+            <Link to={`/@${me}`}>
+              <Icon type="user" /> MY PROFILE
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="1">
+            <span onClick={this.props.logout}>
+              <Icon type="poweroff" /> LOGOUT
+            </span>
+          </Menu.Item>
+        </Menu>
+      );
+    }
+
     return (
       <header>
         <Link to="/">
@@ -75,7 +53,11 @@ class Header extends Component {
           </Link>
 
           {me ? (
-            <AvatarSteemit name={me} votingPower={myAccount.voting_power} />
+            <Popover content={menu} trigger="click" placement="bottomRight">
+              <span className="ant-dropdown-link" role="button">
+                <AvatarSteemit name={me} votingPower={myAccount.voting_power} />
+              </span>
+            </Popover>
           ) : (
             <Button type="primary" href={steemconnect.getLoginURL()}>Connect</Button>
           )}
