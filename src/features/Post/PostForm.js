@@ -317,6 +317,8 @@ class PostForm extends Component {
                 fileList={this.state.fileList}
                 onPreview={this.handleImagePreview}
                 onChange={this.handleImageChange}
+                multiple={true}
+                accept="image/*"
               >
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
@@ -360,7 +362,7 @@ class PostForm extends Component {
         </FormItem>
 
         <FormItem {...formItemLayoutWithOutLabel}>
-          <Button type="primary" htmlType="submit" className="pull-right round-border primary-gradient padded-button">POST NOW</Button>
+          <Button type="primary" htmlType="submit" className="pull-right round-border primary-gradient padded-button" loading={this.props.isPublishing}>POST NOW</Button>
         </FormItem>
       </Form>
     );

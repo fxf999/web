@@ -2,17 +2,15 @@ import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import steemconnect from 'sc2-sdk';
 import { createPermlink } from 'utils/helpers/steemitHelpers';
-import { selectMyAccount } from 'features/User/selectors';
-
+import {  selectMyAccount } from 'features/User/selectors';
+import { selectDraft } from '../selectors';
 import { notification } from 'antd';
-
 import api from 'utils/api';
 
-
 /*--------- CONSTANTS ---------*/
-const MAIN_CATEGORY = 'steemhunt'
-const APP_NAME = 'steemhunt'
-const DEFAULT_BENEFICIARY = { account: 'steemhunt', weight: 1000 }
+const MAIN_CATEGORY = 'steemhunt';
+const APP_NAME = 'steemhunt';
+const DEFAULT_BENEFICIARY = { account: 'steemhunt', weight: 1000 };
 
 const PUBLISH_CONTENT_BEGIN = 'PUBLISH_CONTENT_BEGIN';
 const PUBLISH_CONTENT_SUCCESS = 'PUBLISH_CONTENT_SUCCESS';
@@ -74,14 +72,15 @@ function getBody(post, permlink) {
     `\n---\n` +
     `<center>` +
     `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\n` +
-    `*This is a test article from Steemhunt project*` +
+    `*This is a test article from Steemhunt project*\n` +
     `Posted on Steemhunt, a Steem-fueled Product Hunt\n` +
     `[View on Steemhunt.com](https://steemhunt.com/${post.author}/${permlink})\n` +
     `</center>`;
 }
 
 /*--------- SAGAS ---------*/
-function* publishContent({ post }) {
+function* publishContent() {
+  const post = yield select(selectDraft());
   console.log('1------', post);
 
   try {

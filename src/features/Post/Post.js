@@ -98,8 +98,9 @@ class Post extends Component {
             </div>
           )}
 
-          { /* TODO: only if connected */}
-          <CommentReplyForm content={post} closeForm={null} />
+          {isConnected && (
+            <CommentReplyForm content={post} closeForm={null} />
+          )}
 
           {currentComments && (
             <List

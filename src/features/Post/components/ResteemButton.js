@@ -29,4 +29,4 @@ const mapDispatchToProps = dispatch => ({
   resteem: post => dispatch(resteemBegin(post)),
 });
 
-export default connect(mapDispatchToProps)(ResteemButton);
+export default connect(null, mapDispatchToProps)(ResteemButton);

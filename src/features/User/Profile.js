@@ -12,16 +12,6 @@ import UserMenu from './components/UserMenu';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
 import { selectCurrentAccount } from './selectors';
 
-const ProfileBlog = asyncComponent(() => import('./ProfileBlog'));
-const ProfileComments = asyncComponent(() => import('./ProfileComments'));
-const ProfileReplies = asyncComponent(() => import('./ProfileReplies'));
-const ProfileVotes = asyncComponent(() => import('./ProfileVotes'));
-const ProfileFollowers = asyncComponent(() => import('./ProfileFollowers'));
-const ProfileFollowings = asyncComponent(() => import('./ProfileFollowings'));
-const ProfileRewards = asyncComponent(() => import('./ProfileRewards'));
-const ProfileWallet = asyncComponent(() => import('./ProfileWallet'));
-
-
 class Profile extends Component {
   static propTypes = {
     account: PropTypes.shape({
@@ -77,16 +67,6 @@ class Profile extends Component {
         />
         <div className="content">
           <UserMenu accountName={accountName} />
-          <div className="content__details">
-            <Route path="/@:accountName/blog" exact component={ProfileBlog} />
-            <Route path="/@:accountName/comments" exact component={ProfileComments} />
-            <Route path="/@:accountName/replies" exact component={ProfileReplies} />
-            <Route path="/@:accountName/votes" exact component={ProfileVotes} />
-            <Route path="/@:accountName/followers" exact component={ProfileFollowers} />
-            <Route path="/@:accountName/followings" exact component={ProfileFollowings} />
-            <Route path="/@:accountName/rewards" component={ProfileRewards} />
-            <Route path="/@:accountName/wallet" component={ProfileWallet} />
-          </div>
         </div>
       </div>
     );

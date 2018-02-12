@@ -94,12 +94,17 @@ export const sortCommentsFromSteem = (list, commentsData, sortBy = 'trending') =
       if (compareRes === 0) {
         compareRes = itemA.net_votes - itemB.net_votes;
       }
+      if (compareRes === 0) {
+        compareRes = Date.parse(itemB.created) - Date.parse(itemA.created); // older goes first
+      }
       return compareRes;
     };
   } else if (sortBy === 'votes') {
     compareFunc = (itemA, itemB) => itemA.net_votes - itemB.net_votes;
   } else if (sortBy === 'new') {
     compareFunc = (itemA, itemB) => Date.parse(itemA.created) - Date.parse(itemB.created);
+  } else if (sortBy === 'old') {
+    compareFunc = (itemA, itemB) => Date.parse(itemB.created) - Date.parse(itemA.created);
   }
 
   return newList.sort((item1, item2) =>

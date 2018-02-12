@@ -3,8 +3,6 @@ import combine from 'utils/combine';
  * EXPORTING REDUCERS and SAGAS
  */
 import getCommentsFromPost, { getCommentsFromPostReducer } from './actions/getCommentsFromPost';
-import getCommentsFromUser, { getCommentsFromUserReducer } from './actions/getCommentsFromUser';
-import getRepliesToUser, { getRepliesToUserReducer } from './actions/getRepliesToUser';
 import reply, { replyReducer } from './actions/reply';
 import commentsReducer from './reducer';
 
@@ -20,8 +18,6 @@ export const initialState = {
 export const reducer = (state = initialState, action) => combine(
   [
     getCommentsFromPostReducer,
-    getRepliesToUserReducer,
-    getCommentsFromUserReducer,
     commentsReducer,
     replyReducer,
   ],
@@ -32,7 +28,5 @@ export const reducer = (state = initialState, action) => combine(
 // All sagas to be loaded
 export default [
   getCommentsFromPost,
-  getCommentsFromUser,
-  getRepliesToUser,
   reply,
 ];

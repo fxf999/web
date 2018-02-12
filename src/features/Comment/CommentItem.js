@@ -27,7 +27,7 @@ class CommentItem extends PureComponent {
   };
 
   render() {
-    const { comment, commentsChild, commentsData, sortOrder } = this.props;
+    const { comment, commentsChild, commentsData } = this.props;
     const { showReplyForm } = this.state;
 
     if (!comment) {
@@ -64,7 +64,7 @@ class CommentItem extends PureComponent {
               {commentsChild[comment.id] && sortCommentsFromSteem(
                 commentsChild[comment.id],
                 commentsData,
-                sortOrder
+                'trending'
               ).map(commentId =>
                 <CommentItem
                   {...this.props}

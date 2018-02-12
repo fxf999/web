@@ -45,4 +45,4 @@ const mapDispatchToProps = (dispatch, props) => ({
   reply: body => dispatch(replyBegin(props.content, body)),
 });
 
-export default connect(mapDispatchToProps)(CommentReplyForm);
+export default connect(null, mapDispatchToProps)(CommentReplyForm);

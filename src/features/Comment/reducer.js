@@ -2,15 +2,11 @@ import update from 'immutability-helper';
 import { manageContentVote } from '../Vote/utils';
 import { UPDATE_PAYOUT, VOTE_FAILURE, VOTE_OPTIMISTIC } from '../Vote/actions/vote';
 import { GET_COMMENTS_FROM_POST_SUCCESS } from './actions/getCommentsFromPost';
-import { GET_COMMENTS_FROM_USER_SUCCESS } from './actions/getCommentsFromUser';
-import { GET_REPLIES_TO_USER_SUCCESS } from './actions/getRepliesToUser';
 import { getCommentsChildrenLists, mapCommentsBasedOnId } from './utils/comments';
 
 export default function commentsReducer(state, action) {
   switch (action.type) {
-    case GET_COMMENTS_FROM_POST_SUCCESS:
-    case GET_COMMENTS_FROM_USER_SUCCESS:
-    case GET_REPLIES_TO_USER_SUCCESS: {
+    case GET_COMMENTS_FROM_POST_SUCCESS: {
       return update(state, {
         commentsChild: { $merge: getCommentsChildrenLists(action.state) },
         commentsData: { $merge: mapCommentsBasedOnId(action.state.content) },

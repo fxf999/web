@@ -40,7 +40,7 @@ export function getCommentsFromPostReducer(state, action) {
         commentsFromPost: {
           [action.postKey]: {$auto: {
             // SORTS COMMENTS HERE TO AVOID JUMPS WHEN VOTING
-            list: {$set: sortCommentsFromSteem(getRootCommentsList(action.state), mapCommentsBasedOnId(action.state.content))},
+            list: {$set: sortCommentsFromSteem(getRootCommentsList(action.state), mapCommentsBasedOnId(action.state.content), 'trending')},
           }},
         }
       });

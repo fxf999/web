@@ -4,6 +4,7 @@ import steemconnect from 'sc2-sdk';
 import { createCommentPermlink } from 'utils/helpers/steemitHelpers';
 import { selectMyAccount } from 'features/User/selectors';
 import { toCustomISOString } from'utils/date';
+import { notification } from 'antd';
 
 
 /*--------- CONSTANTS ---------*/
@@ -44,7 +45,7 @@ export function replyReducer(state, action) {
           [tempId]: { $set: replyObj },
         },
         commentsChild: {
-          [parent.id]: { $push: [tempId] },
+          [parent.id]: { $autoArray: { $push: [tempId] } },
         },
       });
     }
@@ -65,10 +66,11 @@ export function replyReducer(state, action) {
 
 /*--------- SAGAS ---------*/
 function* reply({ parent, body }) {
+  console.log('C1 -------------', parent, body);
   try {
     const myAccount = yield select(selectMyAccount());
     const permlink = createCommentPermlink(parent.author, parent.permlink);
-    const json_metadata = { tags: [parent.category] };
+    const json_metadata = { tags: [ parent.category || (parent.tags && parent.tags[0]) ] };
     const now = toCustomISOString(new Date());
     const cashoutTime = toCustomISOString(new Date(Date.now() + 604800));
     const tempId = Math.floor((Math.random() * 1000000) + 1);
@@ -101,10 +103,11 @@ function* reply({ parent, body }) {
       permlink,
       '',
       body,
-      { tags: [parent.category] },
+      { tags: [ parent.category || (parent.tags && parent.tags[0]) ] },
     );
     yield put(replySuccess());
   } catch (e) {
+    yield notification['error']({ message: e.message });
     yield put(replyFailure(e.message));
   }
 }
