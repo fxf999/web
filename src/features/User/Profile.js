@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
 
-import asyncComponent from 'asyncComponent';
 import UserHeader from './components/UserHeader';
 import UserMenu from './components/UserMenu';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
@@ -55,9 +53,7 @@ class Profile extends Component {
     if (isEmpty(account)) {
       return <div></div>;
     }
-    if (match.isExact) {
-      return <Redirect to={`/@${accountName}/blog`} />;
-    }
+
     return (
       <div className="profile_container">
         <UserHeader account={account} />

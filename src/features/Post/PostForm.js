@@ -224,7 +224,7 @@ class PostForm extends Component {
                 addonBefore="@"
                 placeholder="steemhunt"
                 className="beneficiaries"
-                ref={el => { this.beneficiaryInput[k]['accountInput'] = el; }}
+                ref={node => this.beneficiaryInput[k]['accountInput'] = node}
                 onChange={this.onBeneficiariesChanged}
                 maxLength="16"
               />

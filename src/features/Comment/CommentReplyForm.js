@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Input } from 'antd';
 import { replyBegin } from './actions/reply';
+import { selectIsCommentPublishing, selectHasCommentSucceeded } from './selectors';
 
 class CommentReplyForm extends Component {
   static propTypes = {
@@ -14,6 +16,15 @@ class CommentReplyForm extends Component {
     super();
     this.state = {
       body: '',
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.hasCommentSucceeded &&
+      this.form &&
+      this.props.hasCommentSucceeded !== nextProps.hasCommentSucceeded) {
+      this.form.textAreaRef.value = '';
+      this.form.resizeTextarea();
     }
   }
 
@@ -29,20 +40,29 @@ class CommentReplyForm extends Component {
 
     return (
       <div className="reply-form">
-        <Input.TextArea placeholder="Say something..." onChange={this.onChange} autosize />
+        <Input.TextArea
+          placeholder="Say something..."
+          onChange={this.onChange}
+          ref={node => this.form = node}
+          autosize />
         <div className="actions">
           { closeForm  && (
             <Button shape="circle" onClick={closeForm} icon="close" size="small" className="close-button"></Button>
           )}
-          <Button type="primary" onClick={this.reply}>Post</Button>
+          <Button type="primary" onClick={this.reply} loading={this.props.isCommentPublishing}>Post</Button>
         </div>
       </div>
     );
   }
 }
 
+const mapStateToProps = () => createStructuredSelector({
+  hasCommentSucceeded: selectHasCommentSucceeded(),
+  isCommentPublishing: selectIsCommentPublishing(),
+});
+
 const mapDispatchToProps = (dispatch, props) => ({
   reply: body => dispatch(replyBegin(props.content, body)),
 });
 
-export default connect(null, mapDispatchToProps)(CommentReplyForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentReplyForm);

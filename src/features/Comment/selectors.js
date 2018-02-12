@@ -30,64 +30,13 @@ export const selectCommentsFromPost = id => createSelector(
   state => state.commentsFromPost[id] || [],
 );
 
-// COMMENTS FROM USER
-export const selectCommentsFromUser = name => createSelector(
+export const selectIsCommentPublishing = () => createSelector(
   selectCommentsDomain(),
-  state => state.commentsFromUser[name] || {},
+  state => state.isPublishing,
 );
 
-export const selectListCommentsFromUser = name => createSelector(
-  selectCommentsFromUser(name),
-  state => state.list || [],
-);
-
-export const selectObjectCommentsFromUser = name => createSelector(
-  [selectListCommentsFromUser(name), selectCommentsData()],
-  (list, data) => list.map(commentId => data[commentId]),
-);
-
-export const selectLastPermlinkCommentsFromUser = name => createSelector(
-  selectObjectCommentsFromUser(name),
-  commentsArray => commentsArray[commentsArray.length - 1].permlink,
-);
-
-export const selectHasMoreCommentsFromUser = name => createSelector(
-  selectCommentsFromUser(name),
-  state => state.hasMore,
-);
-
-export const selectIsLoadingCommentsFromUser = name => createSelector(
-  selectCommentsFromUser(name),
-  state => state.isLoading || false,
-);
-
-// REPLIES TO USER
-const selectRepliesToUser = name => createSelector(
+export const selectHasCommentSucceeded = () => createSelector(
   selectCommentsDomain(),
-  state => state.repliesToUser[name] || {},
+  state => state.hasSucceeded,
 );
 
-export const selectListRepliesToUser = name => createSelector(
-  selectRepliesToUser(name),
-  state => state.list || [],
-);
-
-export const selectObjectRepliesToUser = name => createSelector(
-  [selectListRepliesToUser(name), selectCommentsData()],
-  (list, data) => list.map(commentId => data[commentId]),
-);
-
-export const selectLastObjectRepliesToUser = name => createSelector(
-  selectObjectRepliesToUser(name),
-  commentsArray => commentsArray[commentsArray.length - 1],
-);
-
-export const selectHasMoreRepliesToUser = name => createSelector(
-  selectRepliesToUser(name),
-  state => state.hasMore,
-);
-
-export const selectIsLoadingRepliesToUser = name => createSelector(
-  selectRepliesToUser(name),
-  state => state.isLoading || false,
-);

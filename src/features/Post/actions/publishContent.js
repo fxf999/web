@@ -35,13 +35,13 @@ export function publishContentReducer(state, action) {
   switch (action.type) {
     case PUBLISH_CONTENT_BEGIN: {
       return update(state, {
-        isPublishing: {$set: true},
+        isPublishing: { $set: true },
       });
     }
-    case PUBLISH_CONTENT_SUCCESS: {
+    case PUBLISH_CONTENT_SUCCESS:
+    case PUBLISH_CONTENT_FAILURE: {
       return update(state, {
-        isPublishing: {$set: false},
-        // publishFormOpen: {$set: false}, // TODO: Redirect to the article
+        isPublishing: { $set: false },
       });
     }
     default:

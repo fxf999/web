@@ -13,6 +13,8 @@ export const initialState = {
   commentsFromUser: {},
   repliesToUser: {},
   isLoading: false,
+  isPublishing: false,
+  hasSucceeded: false,
 };
 
 export const reducer = (state = initialState, action) => combine(

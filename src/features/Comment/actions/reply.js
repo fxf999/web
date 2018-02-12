@@ -38,6 +38,11 @@ function addCommentsFromPosts(parent, tempId) {
 /*--------- REDUCER ---------*/
 export function replyReducer(state, action) {
   switch (action.type) {
+    case REPLY_BEGIN: {
+      return update(state, {
+        isPublishing: { $set: true },
+      });
+    }
     case REPLY_OPTIMISTIC: {
       const { parent, tempId, replyObj } = action;
       return update(state, {
@@ -59,6 +64,17 @@ export function replyReducer(state, action) {
         }
       });
     }
+    case REPLY_SUCCESS: {
+      return update(state, {
+        isPublishing: { $set: false },
+        hasSucceeded: { $set: true },
+      });
+    }
+    case REPLY_FAILURE: {
+      return update(state, {
+        isPublishing: { $set: false },
+      });
+    }
     default:
       return state;
   }
@@ -66,7 +82,6 @@ export function replyReducer(state, action) {
 
 /*--------- SAGAS ---------*/
 function* reply({ parent, body }) {
-  console.log('C1 -------------', parent, body);
   try {
     const myAccount = yield select(selectMyAccount());
     const permlink = createCommentPermlink(parent.author, parent.permlink);
