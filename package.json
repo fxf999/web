@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "antd": "^3.2.0",
+    "antd": "^3.2.1",
     "bs58": "^4.0.1",
     "embedjs": "^0.0.10",
     "emojione": "^3.1.2",
@@ -24,7 +24,7 @@
     "react-markdown": "^2.5.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",
-    "react-scripts": "^1.1.0",
+    "react-scripts": "^1.1.1",
     "react-tagsinput": "^3.19.0",
     "react-tap-event-plugin": "^3.0.2",
     "redux": "^3.7.2",
@@ -42,12 +42,12 @@
     "start": "NODE_PATH=src react-app-rewired start",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
+    "build": "NODE_PATH=src react-app-rewired build",
+    "test": "NODE_PATH=src react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "babel-plugin-import": "^1.6.3",
+    "babel-plugin-import": "^1.6.4",
     "node-sass-chokidar": "0.0.3",
     "react-app-rewire-less": "^2.1.0",
     "redux-logger": "^3.0.6"

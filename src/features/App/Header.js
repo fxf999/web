@@ -48,9 +48,11 @@ class Header extends Component {
         </Link>
 
         <div className="pull-right">
-          <Link to="/post" className="header-button">
-            <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
-          </Link>
+          {me && (
+            <Link to="/post" className="header-button">
+              <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
+            </Link>
+          )}
 
           {me ? (
             <Popover content={menu} trigger="click" placement="bottomRight">
