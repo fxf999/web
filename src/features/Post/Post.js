@@ -47,10 +47,11 @@ class Post extends Component {
     const { match: { params : { author, permlink }} } = this.props;
     const nextAuthor = nextProps.match.params.author;
     const nextPermlink = nextProps.match.params.permlink;
+
     if (author !== nextAuthor || permlink !== nextPermlink) {
       this.props.getPost(nextAuthor, nextPermlink);
 
-      if (isEmpty(nextProps.currentComments) && nextProps.commentsIsLoading === false) {
+      if (nextProps.commentsIsLoading === false) {
         this.props.getCommentsFromPost('steemhunt', nextAuthor, nextPermlink);
       }
     }
