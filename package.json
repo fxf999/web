@@ -42,7 +42,7 @@
     "start": "NODE_PATH=src react-app-rewired start",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "build": "NODE_PATH=src react-app-rewired build",
+    "build": "sh -ac '. .env.production; NODE_PATH=src react-app-rewired build'",
     "test": "NODE_PATH=src react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },
