@@ -40,6 +40,7 @@ export function getPostReducer(state, action) {
           posts: { [key]: {
             active_votes: { $set: post.active_votes },
             payout_value: { $set: post.payout_value },
+            children: { $set: post.children },
           }},
         });
       } else {

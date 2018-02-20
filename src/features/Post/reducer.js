@@ -54,6 +54,7 @@ export default function postsReducer(state, action) {
           posts: { [getPostKey(content)]: {
             payout_value: { $set: calculateContentPayout(content) },
             active_votes: { $set: content.active_votes },
+            children: { $set: content.children },
             isUpdating: { $set: false },
           }},
         });

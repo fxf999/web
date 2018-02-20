@@ -2,6 +2,7 @@ import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import steemconnect from 'sc2-sdk';
 import { selectMe } from 'features/User/selectors';
+import api from 'utils/api';
 
 /*--------- CONSTANTS ---------*/
 const VOTE_BEGIN = 'VOTE_BEGIN';
@@ -38,7 +39,9 @@ function* vote({ content, weight, contentType }) {
     const { author, permlink } = content;
     const updatedContent = yield steem.api.getContentAsync(author, permlink);
 
-    // TODO: Signal out server to update payout as well
+    if (contentType === 'post') {
+      yield api.updatePost(updatedContent);
+    }
 
     yield put(updatePayout(updatedContent, contentType));
 

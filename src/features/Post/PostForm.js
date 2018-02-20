@@ -270,7 +270,7 @@ class PostForm extends Component {
 
         <FormItem
           {...formItemLayout}
-          label="Name (Title)"
+          label="Name of Product"
         >
           {getFieldDecorator('title', {
             rules: [{ required: true, message: 'Name cannot be empty', whitespace: true }],
@@ -351,7 +351,7 @@ class PostForm extends Component {
         <FormItem {...formItemLayoutWithOutLabel}>
           {!this.state.beneficiariesValid && (
               <div className="ant-form-item-control has-error">
-                <p className="ant-form-explain">Sum or reward values must be less than or equal to 90%</p>
+                <p className="ant-form-explain">Sum of reward values must be less than or equal to 90%</p>
               </div>
             )
           }

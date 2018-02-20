@@ -111,6 +111,8 @@ function* reply({ parent, body }) {
     if (!parent.parent_author) {
       yield put(addCommentsFromPosts(parent, tempId));
     }
+
+    // TODO: Update cache using `api.updatePost`
     yield steemconnect.comment(
       parent.author,
       parent.permlink,

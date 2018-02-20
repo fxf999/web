@@ -53,5 +53,12 @@ export default {
   get: (path, params) => request('GET', path, params),
   post: (path, params) => request('POST', path, params),
   put: (path, params) => request('PUT', path, params),
-  delete: (path, params) => request('DELETE', path, params)
+  delete: (path, params) => request('DELETE', path, params),
+  updatePost: (content) => request('PATCH', `/posts/@${content.author}/${content.permlink}.json`, {
+    post: {
+      active_votes: content.active_votes,
+      payout_value: content.payout_value,
+      children: content.children,
+    }
+  }),
 };

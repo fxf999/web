@@ -4,9 +4,10 @@ import update from 'immutability-helper';
 import { getRootCommentsList, mapCommentsBasedOnId } from '../utils/comments';
 import { sortCommentsFromSteem } from 'utils/helpers/stateHelpers';
 import { selectPosts } from 'features/Post/selectors';
-import { getPostKey } from 'features/Post/utils';
+import { getPostKey, hasUpdated } from 'features/Post/utils';
 import { getPostSuccess } from 'features/Post/actions/getPost';
 import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
+import api from 'utils/api';
 
 /*--------- CONSTANTS ---------*/
 const GET_COMMENTS_FROM_POST_BEGIN = 'GET_COMMENTS_FROM_POST_BEGIN';
@@ -68,8 +69,12 @@ function* getCommentsFromPost({ category, author, permlink }) {
       const postKey = getPostKey(content);
       content.payout_value = calculateContentPayout(content); // Sync with local format
 
-      if (posts && posts[postKey]) {
-        // console.log('==========> update');
+      if (posts && posts[postKey] && hasUpdated(posts[postKey], content)) {
+        console.log('UPDATE!');
+        // Update posts cache with the fresh blockchain data
+        yield api.updatePost(content);
+
+        // Update local posts cache
         yield put(getPostSuccess(content));
       }
     }
