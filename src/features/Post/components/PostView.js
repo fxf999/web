@@ -19,6 +19,9 @@ export default class PostView extends Component {
       tags: PropTypes.arrayOf(PropTypes.string).isRequired,
       images: PropTypes.arrayOf(PropTypes.object).isRequired,
       author: PropTypes.string,
+      active_votes: PropTypes.arrayOf(PropTypes.object).isRequired,
+      payout_value: PropTypes.number.isRequired,
+      children: PropTypes.number.isRequired,
       beneficiaries: PropTypes.arrayOf(PropTypes.shape({
         account: PropTypes.string.isRequired,
         weight: PropTypes.number.isRequired,

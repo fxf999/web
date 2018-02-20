@@ -47,23 +47,25 @@ class Header extends Component {
           <img src={logo} alt="logo" className="nav-logo"/>
         </Link>
 
-        <div className="pull-right">
-          {me && (
+        {me ? (
+          <div className="pull-right">
             <Link to="/post" className="header-button">
               <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
             </Link>
-          )}
-
-          {me ? (
             <Popover content={menu} trigger="click" placement="bottomRight">
               <span className="ant-dropdown-link" role="button">
                 <AvatarSteemit name={me} votingPower={myAccount.voting_power} />
               </span>
             </Popover>
-          ) : (
+          </div>
+        ) : (
+          <div className="pull-right">
+            <a href={steemconnect.getLoginURL()} className="header-button">
+              <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
+            </a>
             <Button type="primary" href={steemconnect.getLoginURL()}>Connect</Button>
-          )}
-        </div>
+          </div>
+        )}
       </header>
     )
   }
