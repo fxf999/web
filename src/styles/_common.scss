@@ -55,13 +55,14 @@ hr {
 }
 
 .primary-gradient {
-  background: $primary !important; /* For browsers that do not support gradients */
-  background: linear-gradient($primary, #fa7f92) !important;
+  background-color: $primary; /* For browsers that do not support gradients */
+  background: linear-gradient($primary, #fa7f92);
 }
 
 .inversed-color {
   background-color: #fff !important;
   color: $primary !important;
+  border-color: #fff !important;
 }
 
 .padded-button {
@@ -121,4 +122,65 @@ hr {
   display: block;
   margin: 40px auto;
   color: $primary;
+}
+
+.diagonal-split-view {
+  .top-container {
+    padding: 30px 0 150px 0;
+    text-align: center;
+    color: #fff;
+
+    h1 {
+      margin-top: 70px;
+      font-size: 3.125rem;
+      margin-bottom: 0;
+      color: #fff;
+    }
+    h2 {
+      margin-top: 15px;
+      margin-bottom: 0;
+      font-size: 1.25rem;
+      color: #fff;
+      font-weight: 300;
+    }
+    button {
+      margin-top: 40px;
+    }
+  }
+
+  .diagonal-line {
+    height: 80px;
+    margin-top: -80px;
+    background-color: #fff;
+    background: linear-gradient(to right bottom, transparent 49.9%, #fff 50.1%);
+  }
+
+  .bottom-container {
+    text-align: center;
+
+    .timeline-container {
+      margin-top: 40px;
+      text-align: left;
+      display: inline-block;
+
+      .left {
+        float: left;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        line-height: 1;
+        margin-top: -4px;
+        color: #bbb;
+        text-align: right;
+        li {
+          padding-bottom: 25px;
+        }
+      }
+      .ant-timeline {
+        float: left;
+        margin-left: 12px;
+        color: #666;
+      }
+    } // .timeline-container
+  } // .bottom-container
 }

@@ -9,6 +9,7 @@ import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
 
 import VoteButton from 'features/Vote/VoteButton';
 import ResteemButton from './ResteemButton';
+import Author from 'components/Author';
 
 export default class PostView extends Component {
   static propTypes = {
@@ -53,7 +54,7 @@ export default class PostView extends Component {
     })
 
     return (
-      <div className="post-view">
+      <div className="post-view diagonal-split-view">
         <div className="top-container primary-gradient">
           <span className="featured-date round-border">#1 on Jan 1st, 2018</span>
           <h1>{post.title}</h1>
@@ -78,7 +79,7 @@ export default class PostView extends Component {
             </ul>
 
             <Timeline>
-              {post.author && <Timeline.Item>@{post.author}</Timeline.Item>}
+              {post.author && <Timeline.Item><Author name={post.author} /></Timeline.Item>}
               {beneficiaries}
             </Timeline>
           </div>

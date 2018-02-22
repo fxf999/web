@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { formatter } from 'steem';
 import numeral from 'numeral';
 
-import { selectAppProps, selectAppRate } from '../App/selectors';
+import { selectAppProps, selectAppRate } from 'features/App/selectors';
 
 function UserEstimatedValue(props) {
   const { appProps, appRate, account } = props;
@@ -22,7 +22,7 @@ function UserEstimatedValue(props) {
     + parseFloat(account.sbd_balance);
   return (
     <span>
-      {numeral(value).format('0,0.00')}
+      ${numeral(value).format('0,0')}
     </span>
   );
 }

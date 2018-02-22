@@ -5,10 +5,6 @@ import combine from 'utils/combine';
 import getMe, { getMeReducer } from './actions/getMe';
 import getAccounts, { getAccountsReducer } from './actions/getAccounts';
 import getFollowerCount, { getFollowerCountReducer } from './actions/getFollowerCount';
-import getFollowers, { getFollowersReducer } from './actions/getFollowers';
-import getFollowings, { getFollowingsReducer } from './actions/getFollowings';
-import getVoteHistory, { getVoteHistoryReducer } from './actions/getVoteHistory';
-import getTransferHistory, { getTransferHistoryReducer } from './actions/getTransferHistory';
 import setCurrentUser, { setCurrentUserReducer } from './actions/setCurrentUser';
 import logout, { logoutReducer } from './actions/logout';
 import follow, { followReducer } from './actions/follow';
@@ -27,10 +23,6 @@ export const reducer = (state = initialState, action) => combine(
     getMeReducer,
     getAccountsReducer,
     getFollowerCountReducer,
-    getFollowersReducer,
-    getFollowingsReducer,
-    getVoteHistoryReducer,
-    getTransferHistoryReducer,
     logoutReducer,
     setCurrentUserReducer,
     followReducer,
@@ -46,10 +38,6 @@ export default [
   getMe,
   getAccounts,
   getFollowerCount,
-  getFollowers,
-  getFollowings,
-  getVoteHistory,
-  getTransferHistory,
   logout,
   setCurrentUser,
   follow,

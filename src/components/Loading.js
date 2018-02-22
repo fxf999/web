@@ -1,7 +1,7 @@
 import React from 'react';
 import CircularProgress from './CircularProgress';
 
-const LoadingComponent = ({isLoading, error}) => {
+const Loading = ({isLoading, error}) => {
   // Handle the loading state
   if (isLoading) {
     return <CircularProgress />;
@@ -15,4 +15,4 @@ const LoadingComponent = ({isLoading, error}) => {
   }
 };
 
-export default LoadingComponent;
+export default Loading;
