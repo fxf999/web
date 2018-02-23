@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Button, Carousel, Icon, Timeline, Tag, Tooltip } from 'antd';
-
 import IconFacebook from 'react-icons/lib/fa/facebook-square';
 import IconTwitter from 'react-icons/lib/fa/twitter-square';
 import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
-
 import VoteButton from 'features/Vote/VoteButton';
 import ResteemButton from './ResteemButton';
 import Author from 'components/Author';
+import { selectMe } from 'features/User/selectors';
 
-export default class PostView extends Component {
+class PostView extends Component {
   static propTypes = {
     post: PropTypes.shape({
       url: PropTypes.string.isRequired,
@@ -30,12 +31,13 @@ export default class PostView extends Component {
     }).isRequired,
     author: PropTypes.string,
     permlink: PropTypes.string,
+    me: PropTypes.string.isRequired,
   };
 
   // TODO: Handle share icon evnets
 
   render() {
-    const { post } = this.props;
+    const { me, post } = this.props;
     const images = post.images.map((image, index) => {
       return (
         <div key={index}><img src={image.link} alt={image.name} /></div>
@@ -86,16 +88,43 @@ export default class PostView extends Component {
 
           <div className="vote-container">
             <VoteButton post={post} type="post" layout="detail-page" />
-            <ResteemButton post={post} />
+
+            { me && me !== post.author &&
+              <ResteemButton post={post} />
+            }
+
             <div className="social-shares">
               <Tooltip title="Share on Facebook">
-                <span className="share-icon"><IconFacebook /></span>
+                <a
+                  href={'https://www.facebook.com/sharer.php?u=' + encodeURI(window.location.href)}
+                  target="_blank"
+                  className="share-icon"
+                >
+                  <IconFacebook />
+                </a>
               </Tooltip>
               <Tooltip title="Share on Twitter">
-                <span className="share-icon"><IconTwitter /></span>
+                <a href={'https://twitter.com/intent/tweet?url=' + encodeURI(window.location.href) +
+                    '&text=' + encodeURI(post.title) +
+                    '&hashtags=steemhunt,steem'}
+                  target="_blank"
+                  className="share-icon"
+                >
+                  <IconTwitter />
+                </a>
               </Tooltip>
               <Tooltip title="Share on LinkedIn">
-                <span className="share-icon"><IconLinkedIn /></span>
+                <a
+                  href={'https://www.linkedin.com/shareArticle?mini=true' +
+                    '&url=' + encodeURI(window.location.href) +
+                    '&title=' + encodeURI(post.title) +
+                    '&summary=' + encodeURI(post.tagline) +
+                    '&source=Steemhunt'}
+                  target="_blank"
+                  className="share-icon"
+                >
+                  <IconLinkedIn />
+                </a>
               </Tooltip>
             </div>
           </div>
@@ -108,3 +137,10 @@ export default class PostView extends Component {
     )
   }
 }
+
+
+const mapStateToProps = createStructuredSelector({
+  me: selectMe(),
+});
+
+export default withRouter(connect(mapStateToProps)(PostView));
