@@ -2,26 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { selectMe, selectMyFollowingsList, selectMyFollowingsLoadStatus } from './selectors';
-
-import { followBegin } from './actions/follow';
-import { unfollowBegin } from './actions/unfollow';
-import CircularProgress from 'components/CircularProgress';
-
 import { Button } from 'antd';
+import steemconnect from 'sc2-sdk';
+import { selectMe, selectMyFollowingsList, selectMyFollowingsLoadStatus } from '../selectors';
+import { followBegin } from '../actions/follow';
+import { unfollowBegin } from '../actions/unfollow';
 
 function FollowButton(props) {
   const { followingsList, followingLoadStatus, accountName, me, unfollow, follow } = props;
   const isFollowing = followingsList.find(following => following.following === accountName);
   const isLoading = followingLoadStatus[accountName];
-  const loadingStyle = isLoading ? { paddingLeft: '1rem' } : {};
 
-  return (
-    <Button style={loadingStyle} onClick={isFollowing ? unfollow : follow} disabled={accountName === me || isLoading}>
-      {isLoading && <CircularProgress size={20} style={{ marginRight: 10 }} color="white" />}
-      {isFollowing ? 'Unfollow' : 'Follow'}
+  return me ? (
+    <Button
+      type="primary"
+      className="round-border inversed-color padded-button"
+      onClick={isFollowing ? unfollow : follow}
+      disabled={accountName === me || isLoading}
+      loading={isLoading}
+    >
+      {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
     </Button>
-  );
+  ) : (
+    <Button href={steemconnect.getLoginURL()} type="primary" className="round-border inversed-color padded-button">FOLLOW</Button>
+  )
 }
 
 FollowButton.propTypes = {

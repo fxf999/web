@@ -23,7 +23,6 @@ class App extends Component {
     return (
       <div id="app-container" className="app-container">
         <Helmet>
-          <meta charSet="utf-8" />
           <title>Steemhunt</title>
         </Helmet>
         <div className="split-container">

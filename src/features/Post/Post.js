@@ -71,7 +71,7 @@ class Post extends Component {
     return (
       <div className="post-container">
         <Helmet>
-          <title>{post.title}</title>
+          <title>{post.title} - Steemhunt</title>
         </Helmet>
 
         <PostView post={post} />

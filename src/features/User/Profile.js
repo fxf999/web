@@ -4,19 +4,20 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
-
-import { Button, Spin, Icon, Timeline } from 'antd';
-
+import { FormattedRelative } from 'react-intl';
+import { Icon, Timeline } from 'antd';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
-import { selectCurrentAccount } from './selectors';
-import Loading from 'components/Loading';
+import { selectMe, selectCurrentAccount, selectFollowingsList } from 'features/User/selectors';
 import { COLOR_PRIMARY, COLOR_LIGHT_GREY } from 'styles/constants';
 import UserSteemPower from './components/UserSteemPower';
 import UserEstimatedValue from './components/UserEstimatedValue';
 import FollowerCount from './components/FollowerCount';
+import FollowButton from './components/FollowButton';
+import { getFollowingsBegin } from './actions/getFollowings';
 
 class Profile extends Component {
   static propTypes = {
+    me: PropTypes.string.isRequired,
     account: PropTypes.shape({
       name: PropTypes.string,
       reputation: PropTypes.oneOfType([
@@ -27,16 +28,19 @@ class Profile extends Component {
       follower_count: PropTypes.number,
       following_count: PropTypes.number,
     }).isRequired,
+    myFollowings: PropTypes.array,
   };
 
   static defaultProps = {
+    me: undefined,
     account: {
       name: undefined,
       reputation: 0,
       post_count: 0,
       follower_count: 0,
       following_count: 0,
-    }
+    },
+    myFollowings: undefined,
   };
 
   componentDidMount() {
@@ -44,11 +48,19 @@ class Profile extends Component {
     if (match.params.author !== account.name) {
       this.props.setCurrentUser(match.params.author);
     }
+
+    if (this.props.myFollowings === undefined && this.props.me) {
+      this.props.getFollowings(this.props.me);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.author !== this.props.match.params.author) {
       this.props.setCurrentUser(nextProps.match.params.author);
+    }
+
+    if (nextProps.myFollowings === undefined && nextProps.me) {
+      this.props.getFollowings(nextProps.me);
     }
   }
 
@@ -76,10 +88,13 @@ class Profile extends Component {
 
     return (
       <div className="profile diagonal-split-view">
+        <Helmet>
+          <title>@{account.name} - Steemhunt</title>
+        </Helmet>
         <div className="top-container primary-gradient" style={coverStyle}>
           <h1>{profile.name || account.name}</h1>
           <h2>{profile.about}</h2>
-          <Button type="primary" htmlType="submit" className="round-border inversed-color padded-button">FOLLOW</Button>
+          <FollowButton accountName={account.name} />
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
@@ -91,7 +106,7 @@ class Profile extends Component {
               <li>Followers</li>
               <li>Reputation Score</li>
               <li>Steem Power</li>
-              <li>Estimated Account Value</li>
+              <li>Estimated Value</li>
             </ul>
 
             <Timeline>
@@ -101,6 +116,13 @@ class Profile extends Component {
               <Timeline.Item><UserEstimatedValue account={account} /></Timeline.Item>
             </Timeline>
           </div>
+
+          <div className="other-info">
+            { profile.website &&
+              <p><a href={profile.website} target="_blank"><Icon type="link" /> {profile.website.replace(/^https?:\/\//, '')}</a></p>
+            }
+            <p><Icon type="calendar" /> Joined <FormattedRelative value={`${account.created}Z`} /></p>
+          </div>
         </div>
       </div>
     );
@@ -108,11 +130,14 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state, props) => createStructuredSelector({
+  me: selectMe(),
   account: selectCurrentAccount(),
+  myFollowings: selectFollowingsList(state.me),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   setCurrentUser: user => dispatch(setCurrentUserBegin(user)),
+  getFollowings: me => dispatch(getFollowingsBegin(me, {}, false, 0)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
@@ -45,7 +45,7 @@ export function getAccountsReducer(state, action) {
 /*--------- SAGAS ---------*/
 function* getAccounts({ accounts }) {
   try {
-    const res = yield call(() => new Promise(resolve => resolve(steem.api.getAccountsAsync(accounts))));
+    const res = yield steem.api.getAccountsAsync(accounts);
 
     // FILTER USERS ALREADY IN STATE
     const accountsState = yield select(selectAccounts());
