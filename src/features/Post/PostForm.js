@@ -111,6 +111,12 @@ class PostForm extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.me) {
+      this.props.updateDraft('author', this.props.me);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.me !== nextProps.me) {
       this.props.updateDraft('author', nextProps.me);
@@ -362,7 +368,13 @@ class PostForm extends Component {
         </FormItem>
 
         <FormItem {...formItemLayoutWithOutLabel}>
-          <Button type="primary" htmlType="submit" className="pull-right round-border primary-gradient padded-button" loading={this.props.isPublishing}>POST NOW</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="pull-right round-border padded-button"
+            loading={this.props.isPublishing}
+            disabled={!this.props.me}
+          >POST NOW</Button>
         </FormItem>
       </Form>
     );
@@ -376,9 +388,9 @@ const mapStateToProps = () => createStructuredSelector({
   isPublishing: selectIsPublishing(),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   updateDraft: (field, value) => dispatch(updateDraft(field, value)),
-  publishContent: () => dispatch(publishContentBegin()),
+  publishContent: () => dispatch(publishContentBegin(props)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedPostForm);

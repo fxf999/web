@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, Carousel, Icon, Timeline, Tag, Tooltip } from 'antd';
@@ -143,4 +142,4 @@ const mapStateToProps = createStructuredSelector({
   me: selectMe(),
 });
 
-export default withRouter(connect(mapStateToProps)(PostView));
+export default connect(mapStateToProps)(PostView);

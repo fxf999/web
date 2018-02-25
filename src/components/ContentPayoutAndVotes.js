@@ -28,10 +28,10 @@ export default class ContentPayoutAndVotes extends PureComponent {
     const totalRshares = activeVotes.reduce((total, vote) => total + (parseInt(vote.rshares, 10) || 0), 0);
 
     // if cashout_time is set (not cashed out yet), use pending_payout_value, otherwise, use total_payout_value
-    let totalPayout;
+    let totalPayout = 0.0;
     if (content.payout_value) {
       totalPayout = content.payout_value;
-    } else {
+    } else if (content.cashout_time) {
       totalPayout = content.cashout_time.indexOf('1969') === -1 ? parseFloat(content.pending_payout_value) : parseFloat(content.total_payout_value);
     }
 

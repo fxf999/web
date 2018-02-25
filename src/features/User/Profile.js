@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
-import { FormattedRelative } from 'react-intl';
 import { Icon, Timeline } from 'antd';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
 import { selectMe, selectCurrentAccount, selectFollowingsList } from 'features/User/selectors';
@@ -14,6 +13,7 @@ import UserEstimatedValue from './components/UserEstimatedValue';
 import FollowerCount from './components/FollowerCount';
 import FollowButton from './components/FollowButton';
 import { getFollowingsBegin } from './actions/getFollowings';
+import { toTimeAgo } from 'utils/date';
 
 class Profile extends Component {
   static propTypes = {
@@ -121,7 +121,7 @@ class Profile extends Component {
             { profile.website &&
               <p><a href={profile.website} target="_blank"><Icon type="link" /> {profile.website.replace(/^https?:\/\//, '')}</a></p>
             }
-            <p><Icon type="calendar" /> Joined <FormattedRelative value={`${account.created}Z`} /></p>
+            <p><Icon type="calendar" /> Joined {toTimeAgo(account.created)}</p>
           </div>
         </div>
       </div>

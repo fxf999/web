@@ -6,6 +6,7 @@ import {  selectMyAccount } from 'features/User/selectors';
 import { selectDraft } from '../selectors';
 import { notification } from 'antd';
 import api from 'utils/api';
+import { getPostKey } from 'features/Post/utils';
 
 /*--------- CONSTANTS ---------*/
 const MAIN_CATEGORY = 'steemhunt';
@@ -18,8 +19,8 @@ const PUBLISH_CONTENT_FAILURE = 'PUBLISH_CONTENT_FAILURE';
 
 /*--------- ACTIONS ---------*/
 
-export function publishContentBegin(post) {
-  return { type: PUBLISH_CONTENT_BEGIN, post };
+export function publishContentBegin(props) {
+  return { type: PUBLISH_CONTENT_BEGIN, props };
 }
 
 export function publishContentSuccess() {
@@ -79,7 +80,7 @@ function getBody(post, permlink) {
 }
 
 /*--------- SAGAS ---------*/
-function* publishContent() {
+function* publishContent({ props }) {
   const post = yield select(selectDraft());
   console.log('1------', post);
 
@@ -140,6 +141,8 @@ function* publishContent() {
     yield steemconnect.broadcast(operations);
     yield put(publishContentSuccess());
     yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
+
+    yield props.history.push('/@' + getPostKey(post)); // Redirect to #show
   } catch (e) {
     yield notification['error']({ message: e.message });
     yield put(publishContentFailure(e.message));

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import steemconnect from 'sc2-sdk';
@@ -80,4 +80,4 @@ const mapDispatchToProps = (dispatch, props) => ({
   logout: () => dispatch(logoutBegin()),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

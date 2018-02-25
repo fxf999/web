@@ -8,5 +8,5 @@ export default combineReducers({
   app: appReducer,
   user: userReducer,
   post: postReducer,
-  comments: commentsReducer
+  comments: commentsReducer,
 });

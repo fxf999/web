@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react';
-import { withRouter } from 'react-router-dom';
-import { FormattedRelative } from 'react-intl';
 import Body from 'components/Body';
 import { List, Avatar } from 'antd';
 import { sortCommentsFromSteem } from 'utils/helpers/stateHelpers';
@@ -8,8 +6,9 @@ import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import Author from 'components/Author';
 import CommentReplyForm from './CommentReplyForm';
 import VoteButton from 'features/Vote/VoteButton';
+import { toTimeAgo } from 'utils/date';
 
-class CommentItem extends PureComponent {
+export default class CommentItem extends PureComponent {
   constructor() {
     super();
     this.state = {
@@ -42,7 +41,7 @@ class CommentItem extends PureComponent {
             <div className="comment-title">
               <Author name={comment.author} />
               <span className="separator">&middot;</span>
-              <span className="date"><FormattedRelative value={`${comment.created}Z`} /></span>
+              <span className="date">{toTimeAgo(comment.created)}</span>
             </div>
           }
           description={
@@ -79,5 +78,3 @@ class CommentItem extends PureComponent {
     );
   }
 }
-
-export default withRouter(CommentItem);

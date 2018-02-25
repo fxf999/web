@@ -23,3 +23,7 @@ export const daysAgoToString = function(daysAgo) {
 
   return moment(date).format('MMMM Do');
 }
+
+export const toTimeAgo = function(dateString) {
+  return moment(dateString + 'Z').fromNow();
+}
