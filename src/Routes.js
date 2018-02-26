@@ -20,7 +20,7 @@ const Profile = asyncComponent(() => import('./features/User/Profile'));
 class Left extends Component {
   render() {
     return (
-      <div className="panel-left">
+      <div className="panel-left" id="panel-left">
         {this.props.location.search && <Redirect to="/" />}
         <Switch>
           <Route path="/" exact component={Home} />
