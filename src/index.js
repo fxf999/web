@@ -16,7 +16,8 @@ steem.api.setOptions({ url: process.env.REACT_APP_STEEM_API_URL });
 steemconnect.init({
   app: 'steemhunt.com',
   callbackURL: process.env.REACT_APP_STEEMCONNECT_REDIRECT_URL,
-  accessToken: 'access_token'
+  accessToken: 'access_token',
+  scope: [ 'login', 'vote', 'comment', 'comment_delete', 'comment_options', 'custom_json' ],
 });
 steemconnect.setAccessToken(getToken());
 
