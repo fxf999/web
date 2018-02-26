@@ -1,21 +1,24 @@
+.full-page {
+  height: 100vh;
+}
+
+.main-logo {
+  width: 80px;
+  height: 119px;
+}
+
 .home-page {
-  height: 100%;
   position: relative;
 
   .center-content {
     position: absolute;
     top: 50%;
-    left: 00;
+    left: 0;
     right: 0;
     padding: 1rem;
     transform: translateY(-50%);
     text-align: center;
     color: #fff;
-
-    .main-logo {
-      width: 80px;
-      height: 119px;
-    }
 
     h1 {
       margin-top: 3rem;
@@ -40,5 +43,143 @@
         border-color: rgba(255, 255, 255, 0.8);
       }
     }
+  }
+}
+
+.padded-page {
+  padding: 105px 0;
+  overflow: hidden;
+  text-align: center;
+
+  h2 {
+    font-size: 1.75em;
+  }
+
+  p, a {
+    font-weight: 300;
+  }
+}
+
+.split-page {
+  max-width: 290px;
+  text-align: left;
+  display: inline-block;
+  font-size: 0.875rem;
+
+  h2 {
+    color: $primary;
+  }
+
+  p {
+    color: $text_dark;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+}
+
+.primary-gradient {
+  h2 {
+    color: #fff;
+  }
+}
+
+.page-3 {
+  color: #fff;
+
+  h2 {
+    margin-bottom: 60px;
+  }
+
+  .howto {
+    max-width: 300px;
+    margin: 20px auto;
+
+    .circle {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      border-radius: 40px;
+      font-size: 1.875rem;
+      box-shadow: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px 0 rgba(0,0,0,0.20);
+
+      .steem-logo {
+        width: 24px;
+        height: 29px;
+      }
+    }
+
+    h4 {
+      color: #fff;
+      font-size: 1.125rem;
+      margin: 1.5rem 0 0.75rem 0;
+    }
+
+    p {
+      font-size: 0.875rem;
+    }
+  }
+
+  .splitter {
+    font-size: 1.25rem;
+    margin: 1.875rem 0;
+    opacity: 0.6;
+  }
+
+  .bottom-link {
+    color: #fff;
+    text-decoration: none !important;
+  }
+}
+
+.side-image {
+  margin-left: 40px;
+  display: inline-block;
+  vertical-align: bottom;
+
+  &.cat {
+    width: 201px;
+    height: 282px;
+  }
+
+  &.producthunt {
+    width: 197px;
+    height: 181px;
+    margin-bottom: 30px;
+  }
+}
+
+.page-last {
+  height: 100vh;
+  position: relative;
+
+  .left-container {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 110;
+    text-align: left;
+
+    h2 {
+      line-height: 1.2;
+      margin: 2.5rem 0;
+    }
+
+    .post-button {
+      display: inline-block;
+      border: 1px solid #fff;
+      color: #fff;
+    }
+  }
+
+  .bg-image {
+    z-index: 101;
+    height: 110vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 170px;
   }
 }

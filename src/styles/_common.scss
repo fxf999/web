@@ -55,6 +55,7 @@ hr {
 }
 
 .primary-gradient {
+  color: #fff;
   background-color: $primary; /* For browsers that do not support gradients */
   background: linear-gradient($primary, #fa7f92);
 }
