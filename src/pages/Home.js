@@ -12,7 +12,6 @@ export default class Home extends Component {
   scrollNext = (e) => {
     e.stopPropagation();
     const vh = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    console.log(vh);
     scrollTo(document.getElementById('panel-left'), vh + 2, 800);
   };
 

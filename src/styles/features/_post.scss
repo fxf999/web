@@ -29,6 +29,10 @@
   .heading {
     padding-left: 80px;
 
+    @include responsive(tablet) {
+      padding-left: 20px;
+    }
+
     h3 {
       font-size: 1.375rem;
       margin-bottom: 0;
@@ -39,45 +43,79 @@
       color: $text_dark;
       font-size: 0.875rem;
       margin-bottom: 2.5rem;
+
+      @include responsive(tablet) {
+        margin-bottom: 1.5rem;
+      }
     }
   }
 
   .post {
     overflow: hidden;
     border-bottom: 1px solid #e8e8e8;
-    padding: 10px 80px 10px 0;
+    padding: 10px 0;
+    position: relative;
 
     &:first-child {
       border-top: 1px solid #e8e8e8;
     }
 
-    .rank, .thumbnail, .summary {
-      float: left;
-    }
     .rank {
+      position: absolute;
+      top: 10px;
+      left: 0;
       width: 80px;
       height: 80px;
       line-height: 80px;
       font-size: 0.875rem;
       color: $primary;
       text-align: center;
+
+      @include responsive(tablet) {
+        display: none;
+      }
     }
 
     .thumbnail {
+      position: absolute;
+      top: 10px;
+      left: 80px;
       width: 80px;
       height: 80px;
       object-fit: cover;
+
+      @include responsive(tablet) {
+        left: 20px;
+        width: 60px;
+        height: 60px;
+      }
     }
 
     .summary {
-      margin-left: 20px;
+      padding-left: 180px;
+      padding-right: 130px;
+      min-height: 80px;
+
+      @include responsive(tablet) {
+        padding-left: 100px;
+        padding-right: 65px;
+        min-height: 60px;
+      }
 
       .title {
         font-size: 1.125rem;
+
+        @include responsive(tablet) {
+          font-size: 1rem;
+        }
       }
 
       .tagline, .stats {
         font-size: 0.875rem;
+
+        @include responsive(tablet) {
+          font-size: 0.75rem;
+        }
       }
 
       .stats {
@@ -86,8 +124,20 @@
     }
 
     .vote-section {
-      float: right;
-      text-align: right;
+      position: absolute;
+      right: 80px;
+      top: 20px;
+      text-align: center;
+
+      @include responsive(tablet) {
+        right: 20px;
+      }
+
+      button {
+        @include responsive(tablet) {
+          witdh
+        }
+      }
     }
   }
 } // .post-list

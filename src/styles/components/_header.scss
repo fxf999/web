@@ -6,6 +6,11 @@ header {
   background-color: rgba(255, 255, 255, 0.9);
   z-index: 100;
 
+  @include responsive(tablet) {
+    padding: 20px 20px 0 20px;
+    z-index: 110;
+  }
+
   .nav-logo {
     width: 31px;
     height: 45px;
@@ -15,6 +20,10 @@ header {
   .pull-right {
     min-width: 150px;
     text-align: right;
+
+    @include responsive(tablet) {
+      margin-top: 7px;
+    }
 
     .header-button, .avatar-steemit {
       display: inline-block;
