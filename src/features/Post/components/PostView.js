@@ -60,7 +60,16 @@ class PostView extends Component {
           <span className="featured-date round-border">#1 on Jan 1st, 2018</span>
           <h1>{post.title}</h1>
           <h2>{post.tagline}</h2>
-          <Button type="primary" htmlType="submit" className="round-border inversed-color padded-button">CHECK IT OUT</Button>
+          <Button
+            href={post.url}
+            type="primary"
+            htmlType="submit"
+            className="round-border inversed-color padded-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CHECK IT OUT
+          </Button>
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
