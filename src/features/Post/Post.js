@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
 import steemconnect from 'sc2-sdk';
-
 import { List, Button } from 'antd';
-
 import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import CommentItem from 'features/Comment/CommentItem';
 import { getCommentsFromPostBegin } from 'features/Comment/actions/getCommentsFromPost';
@@ -39,7 +37,6 @@ class Post extends Component {
   componentDidMount() {
     const { match: { params : { author, permlink }} } = this.props;
     this.props.getPost(author, permlink);
-
     this.props.getCommentsFromPost('steemhunt', author, permlink);
   }
 

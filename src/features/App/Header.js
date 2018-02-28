@@ -20,6 +20,12 @@ class Header extends Component {
     logout: PropTypes.func.isRequired,
   };
 
+  state = {
+    menuVisible: false,
+  }
+
+  handleVisibleChange = (visible) => this.setState({ menuVisible: visible });
+
   render() {
     const { me, myAccount } = this.props;
 
@@ -28,7 +34,7 @@ class Header extends Component {
       menu = (
         <Menu theme="dark">
           <Menu.Item key="0">
-            <Link to={`/@${me}`}>
+            <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
               <Icon type="user" /> MY PROFILE
             </Link>
           </Menu.Item>
@@ -52,7 +58,13 @@ class Header extends Component {
             <Link to="/post" className="header-button">
               <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
             </Link>
-            <Popover content={menu} trigger="click" placement="bottomRight">
+            <Popover
+              content={menu}
+              trigger="click"
+              placement="bottomRight"
+              visible={this.state.menuVisible}
+              onVisibleChange={this.handleVisibleChange}
+            >
               <span className="ant-dropdown-link" role="button">
                 <AvatarSteemit name={me} votingPower={myAccount.voting_power} />
               </span>

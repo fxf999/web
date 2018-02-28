@@ -44,8 +44,8 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    const { match, account } = this.props;
-    if (match.params.author !== account.name) {
+    const { match } = this.props;
+    if (match.params.author !== this.props.account.name) {
       this.props.setCurrentUser(match.params.author);
     }
 
@@ -55,7 +55,7 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.author !== this.props.match.params.author) {
+    if (nextProps.match.params.author !== this.props.account.name) {
       this.props.setCurrentUser(nextProps.match.params.author);
     }
 
@@ -137,7 +137,7 @@ const mapStateToProps = (state, props) => createStructuredSelector({
 
 const mapDispatchToProps = (dispatch, props) => ({
   setCurrentUser: user => dispatch(setCurrentUserBegin(user)),
-  getFollowings: me => dispatch(getFollowingsBegin(me, {}, false, 0)),
+  getFollowings: me => dispatch(getFollowingsBegin(me)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

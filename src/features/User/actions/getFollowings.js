@@ -1,19 +1,15 @@
-import { put, select, take, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import update from 'immutability-helper';
-
-import { selectAccounts } from '../selectors';
-import { GET_ACCOUNTS_SUCCESS, getAccountsBegin } from './getAccounts';
 
 /*--------- CONSTANTS ---------*/
 const GET_FOLLOWINGS_BEGIN = 'GET_FOLLOWINGS_BEGIN';
 const GET_FOLLOWINGS_SUCCESS = 'GET_FOLLOWINGS_SUCCESS';
 const GET_FOLLOWINGS_FAILURE = 'GET_FOLLOWINGS_FAILURE';
-const GET_FOLLOWINGS_END = 'GET_FOLLOWINGS_END';
 
 /*--------- ACTIONS ---------*/
-export function getFollowingsBegin(accountName, query = {}, fetchProfiles = false, limit = 0) {
-  return { type: GET_FOLLOWINGS_BEGIN, accountName, query, fetchProfiles, limit };
+export function getFollowingsBegin(accountName, query = {}, limit = 0) {
+  return { type: GET_FOLLOWINGS_BEGIN, accountName, query, limit };
 }
 
 export function getFollowingsSuccess(accountName, followings) {
@@ -22,10 +18,6 @@ export function getFollowingsSuccess(accountName, followings) {
 
 export function getFollowingsFailure(message) {
   return { type: GET_FOLLOWINGS_FAILURE, message };
-}
-
-export function getFollowingsEnd(accountName) {
-  return { type: GET_FOLLOWINGS_END, accountName };
 }
 
 /*--------- REDUCER ---------*/
@@ -38,7 +30,6 @@ export function getFollowingsReducer(state, action) {
           [accountName]: {$auto: {
             list: {$autoArray: {}},
             isLoading: {$set: true},
-            hasMore: {$set: true},
           }},
         },
       });
@@ -61,16 +52,6 @@ export function getFollowingsReducer(state, action) {
         },
       });
     }
-    case GET_FOLLOWINGS_END: {
-      const { accountName } = action;
-      return update(state, {
-        followings: {
-          [accountName]: {
-            hasMore: {$set: false},
-          },
-        },
-      });
-    }
     default:
       return state;
   }
@@ -78,9 +59,10 @@ export function getFollowingsReducer(state, action) {
 
 /*--------- SAGAS ---------*/
 function* getFollowings(props) {
-  const { accountName, query, fetchProfiles } = props;
+  const { accountName, query } = props;
   let { limit } = props;
   let endList = false;
+
   try {
     let startFollowing = '';
 
@@ -90,12 +72,10 @@ function* getFollowings(props) {
     }
     if (query.addMore) {
       startFollowing = query.lastFollowing;
-      limit = limit + 1;
     }
 
     let followings = yield steem.api.getFollowingAsync(accountName, startFollowing, 'blog', limit);
     if (followings.length < limit) {
-      yield put(getFollowingsEnd(accountName));
       endList = true;
     }
 
@@ -103,24 +83,10 @@ function* getFollowings(props) {
       followings = followings.slice(1);
     }
 
-    // Get followings accounts
-    if (fetchProfiles) {
-      const accounts = yield select(selectAccounts());
-      const arrayAccounts = Object.keys(accounts);
-
-      const accountNames = followings
-        .map(account => account.following)
-        // Removes accounts already in state.accounts
-        .filter(accountName => !arrayAccounts.includes(accountName));
-      if (accountNames.length > 0) {
-        yield put(getAccountsBegin(accountNames));
-      }
-      yield take(GET_ACCOUNTS_SUCCESS);
-    }
     yield put(getFollowingsSuccess(accountName, followings));
 
-    if ((limit === 90 || limit === 91) && endList === false) {
-      yield put(getFollowingsBegin(accountName, { addMore: true }, false, 0));
+    if (limit === 90 && endList === false) {
+      yield put(getFollowingsBegin(accountName, { addMore: true, lastFollowing: followings[followings.length -  1].following }, 0));
     }
   } catch(e) {
     yield put(getFollowingsFailure(e.message));

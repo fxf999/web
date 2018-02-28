@@ -12,18 +12,18 @@ Math.easeInOutQuint = function (t, b, c, d) {
 };
 
 export const scrollTo = function (element, to, duration) {
-    var start = element.scrollTop,
-        change = to - start,
-        currentTime = 0,
-        increment = 20;
+  var start = element.scrollTop,
+      change = to - start,
+      currentTime = 0,
+      increment = 20;
 
-    var animateScroll = function(){
-        currentTime += increment;
-        var val = Math.easeInOutQuint(currentTime, start, change, duration);
-        element.scrollTop = val;
-        if(currentTime < duration) {
-            setTimeout(animateScroll, increment);
-        }
-    };
-    animateScroll();
+  var animateScroll = function(){
+    currentTime += increment;
+    var val = Math.easeInOutQuint(currentTime, start, change, duration);
+    element.scrollTop = val;
+    if(currentTime < duration) {
+      setTimeout(animateScroll, increment);
+    }
+  };
+  animateScroll();
 };

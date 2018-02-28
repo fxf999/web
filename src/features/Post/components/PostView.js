@@ -44,6 +44,7 @@ class PostView extends Component {
     });
     const autoplay = images.length > 1 ? true : false;
     const tags = post.tags.map((tag, index) => {
+      // TODO: To steemhunt tags
       return (
         <Tag key={index}><a href={`https://steemit.com/trending/${tag}`} target="_blank" rel="noopener noreferrer">{tag}</a></Tag>
       );

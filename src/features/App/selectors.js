@@ -19,13 +19,3 @@ export const selectAppRate = () => createSelector(
   selectAppConfig(),
   state => state.rate,
 );
-
-export const selectCurrentCategory = () => createSelector(
-  selectAppConfig(),
-  posts => posts.currentCategory,
-);
-
-export const selectCurrentTag = () => createSelector(
-  selectAppConfig(),
-  posts => posts.currentTag,
-);

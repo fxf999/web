@@ -48,8 +48,8 @@ export default class Home extends Component {
         <div className="padded-page primary-gradient page-3">
           <h2>Dig More, Earn More<br/>How?</h2>
 
-          <div class="howto">
-            <div class="circle">
+          <div className="howto">
+            <div className="circle">
               <Icon type="search" />
             </div>
             <h4>DISCOVER</h4>
@@ -59,8 +59,8 @@ export default class Home extends Component {
             </p>
           </div>
           <Icon type="down" className="splitter" />
-          <div class="howto">
-            <div class="circle">
+          <div className="howto">
+            <div className="circle">
               <Icon type="edit" />
             </div>
             <h4>ACKNOWLEDGE MAKERS</h4>
@@ -69,8 +69,8 @@ export default class Home extends Component {
             </p>
           </div>
           <Icon type="down" className="splitter" />
-          <div class="howto">
-            <div class="circle">
+          <div className="howto">
+            <div className="circle">
               <img src={imgSteemLogo} alt="Steem Logo" className="steem-logo" />
             </div>
             <h4>COMPETE AND EARN STEEM</h4>
