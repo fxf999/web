@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import steem from 'steem';
 
@@ -46,7 +46,7 @@ export function getFollowerCountReducer(state, action) {
 /*--------- SAGAS ---------*/
 function* getFollowerCount({ accountName }) {
   try {
-    const count = yield call(() => new Promise(resolve => resolve(steem.api.getFollowCountAsync(accountName))));
+    const count = yield steem.api.getFollowCountAsync(accountName);
     yield put(getFollowerCountSuccess(accountName, count));
   } catch(e) {
     yield put(getFollowerCountFailure(e.message));

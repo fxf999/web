@@ -1,12 +1,12 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
-import steemconnect from 'sc2-sdk';
+import api from 'utils/api';
 import { createPermlink } from 'utils/helpers/steemitHelpers';
 import {  selectMyAccount } from 'features/User/selectors';
 import { selectDraft } from '../selectors';
 import { notification } from 'antd';
-import api from 'utils/api';
 import { getPostKey } from 'features/Post/utils';
+import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
 const MAIN_CATEGORY = 'steemhunt';
@@ -138,7 +138,7 @@ function* publishContent({ props }) {
     ];
     console.log('3-------------', operations);
 
-    yield steemconnect.broadcast(operations);
+    yield steemConnectAPI.broadcast(operations);
     yield put(publishContentSuccess());
     yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
 

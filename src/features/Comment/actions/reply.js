@@ -1,11 +1,10 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
-import steemconnect from 'sc2-sdk';
+import { notification } from 'antd';
 import { createCommentPermlink } from 'utils/helpers/steemitHelpers';
 import { selectMyAccount } from 'features/User/selectors';
 import { toCustomISOString } from'utils/date';
-import { notification } from 'antd';
-
+import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
 const REPLY_BEGIN = 'REPLY_BEGIN';
@@ -113,7 +112,7 @@ function* reply({ parent, body }) {
     }
 
     // TODO: Update cache using `api.updatePost`
-    yield steemconnect.comment(
+    yield steemConnectAPI.comment(
       parent.author,
       parent.permlink,
       myAccount.name,

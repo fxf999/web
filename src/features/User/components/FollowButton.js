@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
-import steemconnect from 'sc2-sdk';
+import { getLoginURL } from 'utils/token';
 import { selectMe, selectMyFollowingsList, selectMyFollowingsLoadStatus } from '../selectors';
 import { followBegin } from '../actions/follow';
 import { unfollowBegin } from '../actions/unfollow';
@@ -24,7 +24,7 @@ function FollowButton(props) {
       {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
     </Button>
   ) : (
-    <Button href={steemconnect.getLoginURL()} type="primary" className="round-border inversed-color padded-button">FOLLOW</Button>
+    <Button href={getLoginURL()} type="primary" className="round-border inversed-color padded-button">FOLLOW</Button>
   )
 }
 

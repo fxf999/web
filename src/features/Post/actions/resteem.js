@@ -1,7 +1,7 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
-import steemconnect from 'sc2-sdk';
+import steemConnectAPI from 'utils/steemConnectAPI';
 import { getPostKey } from '../utils';
 import { selectMe } from 'features/User/selectors';
 
@@ -79,7 +79,7 @@ export function resteemReducer(state, action) {
 function* resteem({ post }) {
   try {
     const me = yield select(selectMe());
-    yield steemconnect.reblog(me, post.author, post.permlink);
+    yield steemConnectAPI.reblog(me, post.author, post.permlink);
     yield put(resteemSuccess(me, post));
     yield notification['success']({ message: 'Content was successfully resteemed.' });
   } catch (e) {

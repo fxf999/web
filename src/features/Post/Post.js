@@ -4,7 +4,6 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
-import steemconnect from 'sc2-sdk';
 import { List, Button } from 'antd';
 import ContentPayoutAndVotes from 'components/ContentPayoutAndVotes';
 import CommentItem from 'features/Comment/CommentItem';
@@ -14,6 +13,7 @@ import {
   selectCommentsData,
   selectCommentsIsLoading
 } from 'features/Comment/selectors';
+import { getLoginURL } from 'utils/token';
 import { getCommentsCount } from './utils';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
@@ -92,7 +92,9 @@ class Post extends Component {
               <Button type="primary" href="https://steemit.com/pick_account" target="_blank">
                 Sign up now
               </Button>
-              <a href={steemconnect.getLoginURL()} className="signin-link">Already have a Steem account?</a>
+              <a href={getLoginURL()} className="signin-link">
+                Already have a Steem account?
+              </a>
             </div>
           )}
 

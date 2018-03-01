@@ -1,9 +1,8 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
-import steemconnect from 'sc2-sdk';
 import update from 'immutability-helper';
-import { selectMe } from '../selectors';
-
 import { notification } from 'antd';
+import { selectMe } from '../selectors';
+import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
 const FOLLOW_BEGIN = 'FOLLOW_BEGIN';
@@ -69,7 +68,7 @@ function* follow({ accountName }) {
   try {
     const me = yield select(selectMe());
     yield put(followInit(me, accountName));
-    yield steemconnect.follow(me, accountName);
+    yield steemConnectAPI.follow(me, accountName);
     yield put(followSuccess(me, accountName));
     yield notification['success']({ message: `You are now following ${accountName}.` });
   } catch (e) {

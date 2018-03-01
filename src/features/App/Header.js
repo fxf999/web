@@ -3,13 +3,10 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import steemconnect from 'sc2-sdk';
-
+import { getLoginURL } from 'utils/token';
 import { Menu, Popover, Icon, Button } from 'antd';
-
 import { selectMe, selectMyAccount } from 'features/User/selectors';
 import { logoutBegin } from 'features/User/actions/logout';
-
 import logo from 'assets/images/logo-nav-pink@2x.png'
 import AvatarSteemit from 'components/AvatarSteemit';
 
@@ -72,10 +69,10 @@ class Header extends Component {
           </div>
         ) : (
           <div className="pull-right">
-            <a href={steemconnect.getLoginURL()} className="header-button">
+            <a href={getLoginURL()} className="header-button">
               <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
             </a>
-            <Button type="primary" href={steemconnect.getLoginURL()}>Connect</Button>
+            <Button type="primary" href={getLoginURL()}>Connect</Button>
           </div>
         )}
       </header>

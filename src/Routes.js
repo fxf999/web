@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import asyncComponent from 'asyncComponent';
 import { Icon } from 'antd';
-import { getToken } from './utils/token';
 import { getMeBegin } from './features/User/actions/getMe';
 import { selectMe } from './features/User/selectors';
 import Header from './features/App/Header';
@@ -59,21 +58,18 @@ class Right extends Component {
   };
 
   componentDidMount() {
+    let accessToken = null;
     if (this.props.location.search) {
-      const { access_token } = queryString.parse(this.props.location.search);
-      if (access_token) {
-        this.props.getMe(access_token);
-      }
+      accessToken = queryString.parse(this.props.location.search).access_token;
     }
-    const accessToken = getToken();
-    if (accessToken) {
-      this.props.getMe(accessToken);
-    }
+
+    this.props.getMe(accessToken); // with existing token
   }
 
   render() {
     return (
       <div className="panel-right">
+        {this.props.location.search && <Redirect to="/" /> /* Authentication redirection */ }
         <Header/>
         <Switch>
           <Route path="/" exact component={HuntedList} />

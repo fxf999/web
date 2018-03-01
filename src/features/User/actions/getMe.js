@@ -1,9 +1,10 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import { setToken, removeToken } from 'utils/token';
-import steemconnect from 'sc2-sdk';
 import format from '../utils/format';
 import { selectAppProps } from 'features/App/selectors';
+import steemConnectAPI from 'utils/steemConnectAPI';
+import { getToken } from 'utils/token';
 
 /*--------- CONSTANTS ---------*/
 const GET_ME_BEGIN = 'GET_ME_BEGIN';
@@ -43,8 +44,10 @@ export function getMeReducer(state, action) {
 /*--------- SAGAS ---------*/
 function* getMe({ token }) {
   try {
-    steemconnect.setAccessToken(token);
-    const me = yield call(steemconnect.me);
+    token = token || getToken();
+    steemConnectAPI.setAccessToken(token);
+
+    const me = yield steemConnectAPI.me();
     const appProps = yield select(selectAppProps());
 
     yield put(getMeSuccess({
@@ -54,6 +57,7 @@ function* getMe({ token }) {
     setToken(token);
   } catch(e) {
     removeToken();
+    console.error(e);
     yield put(getMeFailure(e.message));
   }
 }

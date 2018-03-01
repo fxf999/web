@@ -1,3 +1,13 @@
-export const removeToken = () => localStorage.removeItem('access_token');
-export const setToken = token => localStorage.setItem('access_token', token);
-export const getToken = () => localStorage.getItem('access_token');
+import steemConnectAPI from 'utils/steemConnectAPI';
+
+export function getToken() {
+  return localStorage.getItem('access_token');
+}
+export function setToken(token) {
+  return localStorage.setItem('access_token', token);
+}
+export function removeToken() {
+  return localStorage.removeItem('access_token');
+}
+export const getLoginURL = () => steemConnectAPI.getLoginURL(window.location.pathname.length > 1 ? window.location.pathname : '');
+

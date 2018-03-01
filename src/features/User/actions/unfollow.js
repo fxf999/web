@@ -1,9 +1,8 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
-import steemconnect from 'sc2-sdk';
+import { notification } from 'antd';
 import update from 'immutability-helper';
 import { selectMe } from '../selectors';
-
-import { notification } from 'antd';
+import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
 const UNFOLLOW_BEGIN = 'UNFOLLOW_BEGIN';
@@ -66,7 +65,7 @@ function* unfollow({ accountName }) {
   try {
     const me = yield select(selectMe());
     yield put(unfollowInit(me, accountName));
-    yield steemconnect.unfollow(me, accountName);
+    yield steemConnectAPI.unfollow(me, accountName);
     yield put(unfollowSuccess(me, accountName));
     yield notification['success']({ message: `You are not following ${accountName} anymore.` });
   } catch (e) {

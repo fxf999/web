@@ -1,8 +1,8 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
-import steemconnect from 'sc2-sdk';
 import { selectMe } from 'features/User/selectors';
 import api from 'utils/api';
+import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
 const VOTE_BEGIN = 'VOTE_BEGIN';
@@ -33,7 +33,7 @@ function* vote({ content, weight, contentType }) {
   yield put(voteOptimistic(content, accountName, weight, contentType));
 
   try {
-    yield steemconnect.vote(accountName, content.author, content.permlink, weight);
+    yield steemConnectAPI.vote(accountName, content.author, content.permlink, weight);
 
     // UPDATE PAYOUT
     const { author, permlink } = content;
