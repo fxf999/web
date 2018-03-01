@@ -14,6 +14,17 @@
     <title>Steemhunt</title>
 
     <link href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,700|Open+Sans:300,400,600" rel="stylesheet">
+    <script>
+      // Goodbye Internet Explorer
+      if(navigator.userAgent.indexOf('MSIE')!==-1 || navigator.appVersion.indexOf('Trident/') > 0){
+        document.write(
+          "<div style=\"text-align: center; font-family: 'Open Sans'; padding-top: 100px; color: #fc6f6f; font-weight: normal;\">" +
+          "<h1>OMG! We don't support your prehistoric browser...</h1>"+
+          "<h2>You need Chrome, Safari, Firefox, Opera,<br/>or at least Edge to see the coolest products on Steemhunt.</h2></div>"
+        );
+        document.write('<!--');
+      }
+    </script>
   </head>
   <body>
     <noscript>

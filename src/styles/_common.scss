@@ -92,6 +92,8 @@ hr {
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -ms-overflow-style: none;
     position: relative;
 
     @include responsive(tablet) {
