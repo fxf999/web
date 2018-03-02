@@ -69,21 +69,6 @@ class Post extends Component {
       <div className="post-container">
         <Helmet>
           <title>{post.title} - Steemhunt</title>
-          {/* Search Engine */}
-          <meta name="description" content={post.tagline} />
-          <meta name="image" content={post.images[0].link} />
-          {/* Schema.org for Google */}
-          <meta itemprop="name" content={post.title} />
-          <meta itemprop="description" content={post.tagline} />
-          <meta itemprop="image" content={post.images[0].link} />
-          {/* Twitter */}
-          <meta name="twitter:title" content={post.title} />
-          <meta name="twitter:description" content={post.tagline} />
-          <meta name="twitter:image:src" content={post.images[0].link} />
-          {/* Open Graph general (Facebook, Pinterest & Google+) */}
-          <meta name="og:title" content={post.title} />
-          <meta name="og:description" content={post.tagline} />
-          <meta name="og:image" content={post.images[0].link} />
         </Helmet>
 
         <PostView post={post} />
