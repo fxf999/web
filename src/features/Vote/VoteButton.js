@@ -67,6 +67,10 @@ class VoteButton extends Component {
 
   votingValueCalculator = voteWeight => {
     const { appProps, rewardFund, myAccount } = this.props;
+    if (!appProps) {
+      return 0;
+    }
+
     const { steemPower, voting_power } = myAccount;
     const { total_vesting_fund_steem, total_vesting_shares } = appProps;
     const { reward_balance, recent_claims } = rewardFund;
