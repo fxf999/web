@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Modal } from 'antd';
 
-import { selectIsPublishing } from './selectors';
+import { selectDraft, selectIsPublishing } from './selectors';
 import { selectMe } from 'features/User/selectors';
 
 import { publishContentBegin } from './actions/publishContent';
@@ -23,6 +23,7 @@ class PostForm extends Component {
 
   static propTypes = {
     me: PropTypes.string.isRequired,
+    draft: PropTypes.object.isRequired,
     updateDraft: PropTypes.func.isRequired,
     publishContent: PropTypes.func.isRequired,
     isPublishing: PropTypes.bool.isRequired,
@@ -186,6 +187,16 @@ class PostForm extends Component {
     this.props.updateDraft('images', images.filter(x => !!x));
   }
   handleTagsChange = (tags) => this.props.updateDraft('tags', tags)
+
+  isReadyToSubmit = () => {
+    const { me, draft } = this.props;
+    const initial = initialState.draft;
+
+    return me && me == draft.author &&
+      draft.title !== initial.title && draft.url !== initial.url &&
+      draft.tagline !== initial.tagline && draft.images.length > 0;
+  }
+
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -371,9 +382,9 @@ class PostForm extends Component {
           <Button
             type="primary"
             htmlType="submit"
-            className="pull-right round-border padded-button"
+            className="submit-button pull-right round-border padded-button"
             loading={this.props.isPublishing}
-            disabled={!this.props.me}
+            disabled={!this.isReadyToSubmit()}
           >POST NOW</Button>
         </FormItem>
       </Form>
@@ -385,6 +396,7 @@ const WrappedPostForm = Form.create()(PostForm);
 
 const mapStateToProps = () => createStructuredSelector({
   me: selectMe(),
+  draft: selectDraft(),
   isPublishing: selectIsPublishing(),
 });
 
