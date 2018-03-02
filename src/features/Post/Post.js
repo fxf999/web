@@ -89,7 +89,7 @@ class Post extends Component {
           {!isConnected && (
             <div className="post-signup">
               <p>You need a Steem account to join the discussion</p>
-              <Button type="primary" href="https://steemit.com/pick_account" target="_blank">
+              <Button type="primary" href="https://steemit.com/pick_account" target="_blank" rel="noopener noreferrer">
                 Sign up now
               </Button>
               <a href={getLoginURL()} className="signin-link">

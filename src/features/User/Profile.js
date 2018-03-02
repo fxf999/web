@@ -98,9 +98,7 @@ class Profile extends Component {
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
-          <div className="profile-picture" style={profileStyle}>
-
-          </div>
+          <div className="profile-picture" style={profileStyle}></div>
           <div className="timeline-container">
             <ul className="left">
               <li>Followers</li>
@@ -122,6 +120,7 @@ class Profile extends Component {
               <p><a href={profile.website} target="_blank"><Icon type="link" /> {profile.website.replace(/^https?:\/\//, '')}</a></p>
             }
             <p><Icon type="calendar" /> Joined {toTimeAgo(account.created)}</p>
+            <p><Icon type="book" /> <a href={`https://steemit.com/@${account.name}`} target="_blank" rel="noopener noreferrer">View Steemit blog</a></p>
           </div>
         </div>
       </div>

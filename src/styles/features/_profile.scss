@@ -25,9 +25,12 @@
     .other-info {
       color: $text_dark;
       font-size: 0.875rem;
+      margin-top: 0.5rem;
+      line-height: 1.5;
 
-      a, a:visited {
+      a, a:visited, a:active {
         color: $text_dark;
+        text-decoration: none;
       }
     }
   }

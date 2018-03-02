@@ -116,6 +116,7 @@ class PostView extends Component {
                 <a
                   href={'https://www.facebook.com/sharer.php?u=' + encodeURI(window.location.href)}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="share-icon"
                 >
                   <IconFacebook />
@@ -126,6 +127,7 @@ class PostView extends Component {
                     '&text=' + encodeURI(post.title) +
                     '&hashtags=steemhunt,steem'}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="share-icon"
                 >
                   <IconTwitter />
@@ -139,6 +141,7 @@ class PostView extends Component {
                     '&summary=' + encodeURI(post.tagline) +
                     '&source=Steemhunt'}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="share-icon"
                 >
                   <IconLinkedIn />
