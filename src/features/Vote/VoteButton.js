@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 
-import { Icon, Button, Slider, Popover } from 'antd';
+import { Button, Slider, Popover } from 'antd';
 
 import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
@@ -17,11 +17,9 @@ class VoteButton extends Component {
     post: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
     layout: PropTypes.string.isRequired,
-
     appProps: PropTypes.object,
     myAccount: PropTypes.object.isRequired,
     isConnected: PropTypes.bool.isRequired,
-
     vote: PropTypes.func.isRequired,
   };
 
@@ -149,10 +147,11 @@ class VoteButton extends Component {
           >
             <Button
               type="primary"
+              shape="circle"
               ghost={postUpvoted ? false : true}
+              icon="up"
               loading={post.isUpdating}
             >
-              <Icon type="up" />
               UPVOTE
               <div className="payout-value">{formatAmount(post.payout_value)}</div>
             </Button>

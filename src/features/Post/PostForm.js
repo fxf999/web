@@ -192,7 +192,7 @@ class PostForm extends Component {
     const { me, draft } = this.props;
     const initial = initialState.draft;
 
-    return me && me == draft.author &&
+    return me && me === draft.author &&
       draft.title !== initial.title && draft.url !== initial.url &&
       draft.tagline !== initial.tagline && draft.images.length > 0;
   }

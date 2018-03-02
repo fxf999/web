@@ -16,14 +16,15 @@
 .post-view {
   .vote-button {
     button {
+      font-size: 0.875rem;
       width: 120px;
       height: 120px;
-      border-radius: 50%;
 
       i {
+        font-size: 1rem;
         display: block;
-        margin-bottom: 0.714em;
-        margin-top: -0.714em;
+        margin-bottom: 0.5rem;
+        margin-top: -0.5rem;
       }
       span { /* override */
         margin-left: 0;
