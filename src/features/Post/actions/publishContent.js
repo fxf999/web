@@ -56,13 +56,16 @@ function getBody(post, permlink) {
   let contributors = '';
   if (post.beneficiaries && post.beneficiaries.length > 0) {
     contributors = 'Makers and Contributors:\n' +
-      post.beneficiaries.map(b => `- @${b.account} (${b.weight})\n`).join('');
+      post.beneficiaries.map(b => `- @${b.account} (${b.weight / 100}% beneficiary of this article)\n`).join('');
   }
   return `# ${post.title}\n` +
     `${post.tagline}\n` +
     `\n---\n` +
     `## Screenshots\n` +
     `${screenshots}\n` +
+    `\n---\n` +
+    `## Description\n` +
+    `${post.description}\n` +
     `\n---\n` +
     `## Link\n` +
     `${post.url}\n` +

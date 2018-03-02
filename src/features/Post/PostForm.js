@@ -171,6 +171,7 @@ class PostForm extends Component {
 
   handleTitleChange = (e) => this.props.updateDraft('title', e.target.value || initialState.draft.title)
   handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline)
+  handleDescriptionChange = (e) => this.props.updateDraft('description', e.target.value || initialState.draft.description)
   handleImageChange = ({ fileList }) => {
     const images = fileList.map(f => f.response && f.response.data &&
       {
@@ -347,6 +348,18 @@ class PostForm extends Component {
           <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleImagePreviewCancel}>
             <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
           </Modal>
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Description"
+        >
+          {getFieldDecorator('description')(
+            <Input.TextArea
+              placeholder="Extra information, if needed"
+              rows={4}
+              onChange={this.handleDescriptionChange} />
+          )}
         </FormItem>
 
         <FormItem

@@ -16,7 +16,7 @@ export default class PostItem extends Component {
     return (
       <div className="post">
         <div className="rank">{rank}</div>
-        <img src={post.images[0].link} alt={post.title} className="thumbnail" />
+        <img src={post.images && post.images[0].link} alt={post.title} className="thumbnail" />
         <div className="summary">
           <div className="title"><Link to={'/@' + getPostKey(post)}>{post.title}</Link></div>
           <div className="tagline">{post.tagline}</div>

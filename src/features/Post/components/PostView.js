@@ -10,6 +10,7 @@ import VoteButton from 'features/Vote/VoteButton';
 import ResteemButton from './ResteemButton';
 import Author from 'components/Author';
 import { selectMe } from 'features/User/selectors';
+import { getHtml } from 'components/Body';
 
 class PostView extends Component {
   static propTypes = {
@@ -82,6 +83,10 @@ class PostView extends Component {
               <div><Icon type="video-camera" /></div>
             </Carousel>
           )}
+
+          <div className="description">
+            {post.description && getHtml(post.description)}
+          </div>
 
           <div className="timeline-container">
             <ul className="left">

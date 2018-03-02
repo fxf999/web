@@ -14,6 +14,7 @@ export const initialState = {
     url: '#',
     title: 'Title',
     tagline: 'Short Description',
+    description: 'Long Description',
     tags: [],
     images: [],
     author: null,

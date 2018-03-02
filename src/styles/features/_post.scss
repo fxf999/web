@@ -1,6 +1,10 @@
 .post-form {
   padding: 0 80px;
 
+  @include responsive(mobile) {
+    padding: 0 20px;
+  }
+
   .delete-button {
     cursor: pointer;
     margin-left: 5px;
@@ -353,6 +357,16 @@
         }
       }
     } // .carousel
+
+    .description {
+      font-size: 0.875rem;
+      margin-top: 3rem;
+      padding: 0 80px;
+
+      @include responsive(mobile) {
+        padding: 0 20px;
+      }
+    }
 
     .vote-container {
       padding-bottom: 60px;
