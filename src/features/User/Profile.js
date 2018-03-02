@@ -75,14 +75,14 @@ class Profile extends Component {
     if (profile.cover_image) {
       coverStyle = {
         backgroundColor: COLOR_PRIMARY,
-        backgroundImage: 'url(' + profile.cover_image + ')',
+        backgroundImage: 'url(' + profile.cover_image + ')', // TODO: https://steemitimages.com/2048x512/https://steemitimages.com/DQmbXe773mAdzvvM2Ufkv2Panxda18S5j12KEaXyu84dqYr/image.png
         backgroundSize: 'cover',
       };
     }
     if (profile.profile_image) {
       profileStyle = {
         backgroundColor: COLOR_LIGHT_GREY,
-        backgroundImage: 'url(' + profile.profile_image + ')',
+        backgroundImage: 'url(' + profile.profile_image + ')',  // TODO: https://steemitimages.com/u/avocadoxy/avatar
       }
     }
 

@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-
 import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Modal } from 'antd';
-
 import { selectDraft, selectIsPublishing } from './selectors';
 import { selectMe } from 'features/User/selectors';
-
 import { publishContentBegin } from './actions/publishContent';
 import { updateDraft } from './actions/updateDraft';
 import { initialState } from './actions';
-
 import { splitTags } from 'utils/sanitizer';
+import { timeUntilMidnightSeoul } from 'utils/date';
 import api from 'utils/api';
 
 const FormItem = Form.Item;
@@ -388,7 +385,10 @@ class PostForm extends Component {
           <Button type="dashed" onClick={this.addBeneficiary}>
             <Icon type="plus" /> Add makers or contributors
           </Button>
-          <p className="text-small top-margin">10% of author's rewards will be used to pay for the operation of Steemhunt.</p>
+          <p className="text-small top-margin">
+            10% of the rewards will be used to pay for the operation of Steemhunt.<br/>
+            {timeUntilMidnightSeoul()}
+          </p>
         </FormItem>
 
         <FormItem {...formItemLayoutWithOutLabel}>
