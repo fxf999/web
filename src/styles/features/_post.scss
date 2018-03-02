@@ -183,7 +183,7 @@
     }
 
     hr {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
 
       @include responsive(mobile) {
         margin-bottom: 1.5rem;
@@ -193,7 +193,7 @@
     h3 {
       color: $primary;
       font-size: 1em;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
 
       .fake-link {
         color: $primary;
@@ -208,6 +208,7 @@
 
     .reply-form {
       textarea {
+        margin-top: 0.625rem;
         resize: none;
         border: 0;
         padding: 0.625rem 9rem 0.625rem 1rem;
