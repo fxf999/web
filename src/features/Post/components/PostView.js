@@ -43,7 +43,6 @@ class PostView extends Component {
         <div key={index}><img src={image.link} alt={image.name} /></div>
       );
     });
-    const autoplay = images.length > 1 ? true : false;
     const tags = post.tags.map((tag, index) => {
       // TODO: To steemhunt tags
       return (
@@ -52,7 +51,7 @@ class PostView extends Component {
     });
     const beneficiaries = post.beneficiaries && post.beneficiaries.map((b, index) => {
       return (
-        <Timeline.Item key={index}>@{b.account} ({b.weight / 100}%)</Timeline.Item>
+        <Timeline.Item key={index}><Author name={b.account} /> ({b.weight / 100}%)</Timeline.Item>
       );
     })
 
@@ -76,11 +75,16 @@ class PostView extends Component {
         <div className="diagonal-line"></div>
         <div className="bottom-container">
           {post.images.length > 0 ? (
-            <Carousel className="carousel" autoplay={autoplay}>{images}</Carousel>
+            <Carousel
+              className="carousel"
+              autoplay={images.length > 1 ? true : false}
+              effect={images.length === 1 ? 'fade' : 'scrollx'}
+            >
+              {images}
+            </Carousel>
           ) : (
-            <Carousel className="carousel" autoplay>
+            <Carousel className="carousel" effect="fade">
               <div><Icon type="camera-o" /></div>
-              <div><Icon type="video-camera" /></div>
             </Carousel>
           )}
 

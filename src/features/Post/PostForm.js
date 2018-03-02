@@ -173,7 +173,7 @@ class PostForm extends Component {
   handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline)
   handleDescriptionChange = (e) => this.props.updateDraft('description', e.target.value || initialState.draft.description)
   handleImageChange = ({ fileList }) => {
-    const images = fileList.map(f => f.response && f.response.data &&
+    const images = fileList.map(f => f.response && f.response.data && f.response.data.link &&
       {
         name: f.name,
         link: f.response.data.link,
