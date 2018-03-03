@@ -70,7 +70,6 @@ function* getCommentsFromPost({ category, author, permlink }) {
       content.payout_value = calculateContentPayout(content); // Sync with local format
 
       if (posts && posts[postKey] && hasUpdated(posts[postKey], content)) {
-        console.log('UPDATE!');
         // Update posts cache with the fresh blockchain data
         yield api.updatePost(content);
 
