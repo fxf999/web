@@ -37,12 +37,12 @@
   .heading {
     padding-left: 80px;
 
-    @include responsive(tablet) {
-      padding-left: 20px;
-    }
-
     @include responsive(ipadpro) {
       padding-left: 40px;
+    }
+
+    @include responsive(tablet) {
+      padding-left: 20px;
     }
 
     h3 {
@@ -87,12 +87,12 @@
       color: $primary;
       text-align: center;
 
-      @include responsive(tablet) {
-        display: none;
-      }
-
       @include responsive(ipadpro) {
         width: 40px;
+      }
+
+      @include responsive(tablet) {
+        display: none;
       }
     }
 
@@ -104,14 +104,14 @@
       height: 80px;
       object-fit: cover;
 
+      @include responsive(ipadpro) {
+        left: 40px;
+      }
+
       @include responsive(tablet) {
         left: 0;
         width: 80px;
         height: 80px;
-      }
-
-      @include responsive(ipadpro) {
-        left: 40px;
       }
     }
 
@@ -120,15 +120,15 @@
       padding-right: 130px;
       min-height: 80px;
 
+      @include responsive(ipadpro) {
+        padding-left: 130px;
+        padding-right: 90px;
+      }
+
       @include responsive(tablet) {
         padding-left: 94px;
         padding-right: 55px;
         min-height: 80px;
-      }
-
-      @include responsive(ipadpro) {
-        padding-left: 130px;
-        padding-right: 90px;
       }
 
       .title {
@@ -176,8 +176,6 @@
           font-size: 0.75rem;
         }
       }
-
-
     }
   }
 } // .post-list
