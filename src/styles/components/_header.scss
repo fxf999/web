@@ -12,6 +12,10 @@ header {
     z-index: 110;
   }
 
+  @include responsive(ipadpro) {
+    padding: 50px 40px 0 40px;
+  }
+
   .nav-logo {
     width: 31px;
     height: 45px;

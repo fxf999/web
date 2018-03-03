@@ -41,6 +41,10 @@
       padding-left: 20px;
     }
 
+    @include responsive(ipadpro) {
+      padding-left: 40px;
+    }
+
     h3 {
       font-size: 1.375rem;
       margin-bottom: 0;
@@ -86,6 +90,10 @@
       @include responsive(tablet) {
         display: none;
       }
+
+      @include responsive(ipadpro) {
+        width: 40px;
+      }
     }
 
     .thumbnail {
@@ -101,17 +109,26 @@
         width: 80px;
         height: 80px;
       }
+
+      @include responsive(ipadpro) {
+        left: 40px;
+      }
     }
 
     .summary {
       padding-left: 170px;
-      padding-right: 120px;
+      padding-right: 130px;
       min-height: 80px;
 
       @include responsive(tablet) {
         padding-left: 94px;
         padding-right: 55px;
         min-height: 80px;
+      }
+
+      @include responsive(ipadpro) {
+        padding-left: 130px;
+        padding-right: 90px;
       }
 
       .title {
@@ -140,6 +157,10 @@
       right: 80px;
       top: 20px;
       text-align: center;
+
+      @include responsive(ipadpro) {
+        right: 40px;
+      }
 
       @include responsive(tablet) {
         right: 2px;
