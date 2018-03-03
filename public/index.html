@@ -39,11 +39,14 @@
       // Goodbye Internet Explorer
       if(navigator.userAgent.indexOf('MSIE')!==-1 || navigator.appVersion.indexOf('Trident/') > 0){
         document.write(
-          "<div style=\"text-align: center; font-family: 'Open Sans'; padding-top: 100px; color: #fc6f6f; font-weight: normal;\">" +
+          "<center><div style=\"font-family: 'Open Sans'; padding-top: 100px; color: #fc6f6f; font-weight: normal;\">" +
           "<h1>OMG! We don't support your prehistoric browser...</h1>"+
-          "<h2>You need Chrome, Safari, Firefox, Opera,<br/>or at least Edge to see the coolest products on Steemhunt.</h2></div>"
+          "<h2>You need Chrome, Safari, Firefox, Opera,<br/>or at least Edge to see the coolest products on Steemhunt.</h2></div>" +
+          "<p><a href=\"https://www.google.com/chrome\" target=\"_blank\">Download Chrome</a></p>" +
+          "<p><a href=\"https://www.mozilla.org/en-US/firefox/new\" target=\"_blank\">Download Firefox</a></p></center>"
         );
         document.write('<!--');
+        document.execCommand('Stop');
       }
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
