@@ -11,6 +11,7 @@ import ResteemButton from './ResteemButton';
 import Author from 'components/Author';
 import { selectMe } from 'features/User/selectors';
 import { getHtml } from 'components/Body';
+import { shortFormat } from 'utils/date';
 
 class PostView extends Component {
   static propTypes = {
@@ -58,7 +59,7 @@ class PostView extends Component {
     return (
       <div className="post-view diagonal-split-view">
         <div className="top-container primary-gradient">
-          <span className="featured-date round-border">#1 on Jan 1st, 2018</span>
+          <span className="featured-date round-border">Featured on {shortFormat(post.created_at)}</span>
           <h1>{post.title}</h1>
           <h2>{post.tagline}</h2>
           <Button

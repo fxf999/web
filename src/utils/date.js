@@ -45,4 +45,7 @@ export const timeUntilMidnightSeoul = function() {
 
   return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} left till midnight (GMT + 9)`;
 }
-timeUntilMidnightSeoul();
+
+export const shortFormat = function(dateString) {
+  return moment(dateString).format('MMM Mo, YYYY');
+}
