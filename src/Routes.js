@@ -27,7 +27,7 @@ const BackButton = withRouter(({ history }) => (
 export class RoutesLeft extends Component {
   shouldLeftBeActive() {
     const path = window.location.pathname;
-    return path.match(/^\/@.+/);
+    return path.match(/^\/@.+/) || path.match(/^\/about/);
   }
 
   render() {
@@ -41,6 +41,7 @@ export class RoutesLeft extends Component {
         <BackButton/>
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/about" exact component={Home} />
           <Route path="/@:author/:permlink" exact component={Post} />
           <Route path="/post" exact component={Draft} />
           <Route path="/@:author/:permlink/edit" exact component={Draft} />
@@ -74,6 +75,7 @@ class Right extends Component {
         <Header/>
         <Switch>
           <Route path="/" exact component={HuntedList} />
+          <Route path="/about" exact component={HuntedList} />
           <Route path="/post" exact component={PostForm} />
           <Route path="/@:author/:permlink/edit" exact component={PostForm} />
           <Route path="/@:author" component={HuntedList} />

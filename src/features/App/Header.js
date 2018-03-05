@@ -52,8 +52,11 @@ class Header extends Component {
 
         {me ? (
           <div className="pull-right">
+            <Link to="/about" className="header-button tablet-only">
+              <Icon type="question-circle-o" />
+            </Link>
             <Link to="/post" className="header-button">
-              <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
+              <Icon type="plus-circle-o" />
             </Link>
             <Popover
               content={menu}
@@ -69,6 +72,9 @@ class Header extends Component {
           </div>
         ) : (
           <div className="pull-right">
+            <Link to="/about" className="header-button tablet-only">
+              <Icon type="question-circle-o" />
+            </Link>
             <a href={getLoginURL()} className="header-button">
               <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
             </a>

@@ -40,6 +40,14 @@ header {
       font-size: 24px;
       color: $text-dark;
       margin-right: 14px;
+
+      &.tablet-only {
+        display: none;
+
+        @include responsive(tablet) {
+          display: inline-block;
+        }
+      }
     }
 
     .avatar-steemit {
