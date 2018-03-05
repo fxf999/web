@@ -43,7 +43,7 @@ export const timeUntilMidnightSeoul = function() {
   let hours   = Math.floor(seoulTillMidnight / 60);
   let minutes = Math.floor(seoulTillMidnight - (hours * 60));
 
-  return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} left till midnight (GMT + 9)`;
+  return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} left for today's ranking, based on KST midnight (GMT + 9)`;
 }
 
 export const shortFormat = function(dateString) {
