@@ -82,19 +82,29 @@ class PostView extends Component {
         </div>
         <div className="diagonal-line"></div>
         <div className="bottom-container">
-          {post.images.length > 0 ? (
-            <Carousel
-              className="carousel"
-              autoplay={images.length > 1 ? true : false}
-              effect={images.length === 1 ? 'fade' : 'scrollx'}
-            >
-              {images}
-            </Carousel>
-          ) : (
+          {post.images.length === 0 &&
             <Carousel className="carousel" effect="fade">
               <div><Icon type="camera-o" /></div>
             </Carousel>
-          )}
+          }
+          {post.images.length === 1 &&
+            <Carousel
+              className="carousel"
+              autoplay={false}
+              effect="fade"
+            >
+              {images}
+            </Carousel>
+          }
+          {post.images.length > 1 &&
+            <Carousel
+              className="carousel"
+              autoplay={true}
+              effect="scrollx"
+            >
+              {images}
+            </Carousel>
+          }
 
           <div className="description">
             {post.description && getHtml(post.description)}
