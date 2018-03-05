@@ -103,6 +103,7 @@ function* publishContent({ props }) {
     if (editMode) { // Edit
       yield api.put(`/posts${getPostPath(post)}.json`, { post: post }, true);
     } else { // Create
+      post.permlink = permlink;
       yield api.post('/posts.json', { post: post }, true);
     }
     // console.log('2------', res);
