@@ -34,6 +34,7 @@ class PostForm extends Component {
 
     this.state = {
       editMode: false,
+      resetted: false,
       previewImageVisible: false,
       previewImage: '',
       fileList: [],
@@ -44,30 +45,24 @@ class PostForm extends Component {
   }
 
   componentDidMount() {
-    if (this.props.me) {
-      this.props.updateDraft('author', this.props.me);
-    }
-
     const { match: { params : { author, permlink }} } = this.props;
     if (author && permlink) {
       this.props.getPost(author, permlink);
-      this.setState({ editMode: true });
+      this.setState({ editMode: true, resetted: false });
     } else {
-      this.props.setCurrentPostKey(null);
-      this.props.resetDraft();
+      this.checkAndResetDraft();
+    }
+
+    if (this.props.me) {
+      this.props.updateDraft('author', this.props.me);
     }
   }
 
   componentWillUnmount() {
-    this.props.setCurrentPostKey(null);
-    this.props.resetDraft();
+    this.checkAndResetDraft();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.me !== nextProps.me) {
-      this.props.updateDraft('author', nextProps.me);
-    }
-
     const { match: { params : { author, permlink }} } = this.props;
     const nextAuthor = nextProps.match.params.author;
     const nextPermlink = nextProps.match.params.permlink;
@@ -76,14 +71,17 @@ class PostForm extends Component {
       if (author !== nextAuthor || permlink !== nextPermlink) {
         this.props.getPost(nextAuthor, nextPermlink);
       }
-      this.setState({ editMode: true });
+      this.setState({ editMode: true, resetted: false });
     } else {
-      this.props.setCurrentPostKey(null);
-      this.props.resetDraft();
+      this.checkAndResetDraft();
     }
 
     if (this.props.draft.title !== nextProps.draft.title) {
       this.prepareForEdit(nextProps.draft);
+    }
+
+    if (this.props.me !== nextProps.draft.author) {
+      this.props.updateDraft('author', this.props.me);
     }
   }
 
@@ -92,6 +90,14 @@ class PostForm extends Component {
       this.onBeneficiariesChanged();
     }
   }
+
+  checkAndResetDraft = () => {
+    if (!this.state.resetted) {
+      this.props.setCurrentPostKey(null);
+      this.props.resetDraft();
+      this.setState({ resetted: true });
+    }
+  };
 
   prepareForEdit = (draft) => {
     this.props.updateDraft('permlink', draft.permlink);
