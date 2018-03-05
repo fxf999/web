@@ -38,22 +38,7 @@ export function resteemReducer(state, action) {
       });
     }
     case RESTEEM_SUCCESS: {
-      let tempState = state;
-      if (!isEmpty(state.categories.blog[action.me])) {
-        tempState = update(tempState, {
-          categories: {
-            blog: {
-              [action.me]: {
-                list: {$apply: list => {
-                  list.unshift(getPostKey(action.post));
-                  return list;
-                }}
-              }
-            }
-          }
-        });
-      }
-      return update(tempState, {
+      return update(state, {
         posts: {
           [getPostKey(action.post)]: {
             isResteeming: { $set: false },

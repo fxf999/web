@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import { resteemBegin } from '../actions/resteem';
 
 function ResteemButton(props) {
   const { post } = props;
 
   return (
-    <Button
-      type="default"
-      size="small"
-      icon="retweet"
-      className="resteem-button"
-      loading={post.isResteeming}
-      onClick={() => props.resteem(post)}
-    >
-      Resteem
-    </Button>
+    <Popconfirm title="Are you sure to resteem this post?" onConfirm={() => props.resteem(post)} okText="Yes" cancelText="No">
+      <Button
+        type="default"
+        size="small"
+        icon="retweet"
+        className="resteem-button"
+        loading={post.isResteeming}
+      >
+        Resteem
+      </Button>
+    </Popconfirm>
   );
 }
 
