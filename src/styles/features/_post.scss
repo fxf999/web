@@ -392,6 +392,16 @@
       margin-top: 3rem;
       padding: 0 80px;
 
+      ul {
+        list-style: none;
+
+        li {
+          &:before {
+            content: '- ';
+          }
+        }
+      }
+
       @include responsive(mobile) {
         padding: 0 20px;
       }
