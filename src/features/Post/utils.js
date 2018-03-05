@@ -1,6 +1,7 @@
 import numeral from 'numeral';
 
 export const getPostKey = (post) => `${post.author}/${post.permlink}`;
+export const getPostPath = (post) => `/@${post.author}/${post.permlink}`;
 export const generatePostKey = (author, permlink) => `${author}/${permlink}`;
 
 export const getCommentsCount = (post, commentsList, commentsChild) => {

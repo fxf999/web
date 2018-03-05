@@ -6,6 +6,8 @@ import { Button, Carousel, Icon, Timeline, Tag, Tooltip } from 'antd';
 import IconFacebook from 'react-icons/lib/fa/facebook-square';
 import IconTwitter from 'react-icons/lib/fa/twitter-square';
 import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
+import { Link } from 'react-router-dom';
+import { getPostPath } from '../utils';
 import VoteButton from 'features/Vote/VoteButton';
 import ResteemButton from './ResteemButton';
 import Author from 'components/Author';
@@ -56,10 +58,17 @@ class PostView extends Component {
       );
     })
 
+    const shouldShowEdit = window.location.pathname !== '/post' && me === post.author;
+
     return (
       <div className="post-view diagonal-split-view">
         <div className="top-container primary-gradient">
           <span className="featured-date round-border">Featured on {shortFormat(post.created_at)}</span>
+          { shouldShowEdit &&
+            <Link to={`${getPostPath(post)}/edit`}>
+              <Button icon="edit" size="small" className="edit-button" ghost>Edit</Button>
+            </Link>
+          }
           <h1>{post.title}</h1>
           <h2>{post.tagline}</h2>
           <Button

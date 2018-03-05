@@ -12,12 +12,12 @@ const GET_POST_FAILURE = 'GET_POST_FAILURE';
 const SET_CURRENT_POST_KEY = 'SET_CURRENT_POST_KEY';
 
 /*--------- ACTIONS ---------*/
-export function getPostBegin(author, permlink) {
-  return { type: GET_POST_BEGIN, author, permlink };
+export function getPostBegin(author, permlink, updateDraft = false) {
+  return { type: GET_POST_BEGIN, author, permlink, updateDraft };
 }
 
-export function getPostSuccess(post) {
-  return { type: GET_POST_SUCCESS, post };
+export function getPostSuccess(post, updateDraft) {
+  return { type: GET_POST_SUCCESS, post, updateDraft };
 }
 
 export function getPostFailure(message) {
@@ -32,21 +32,31 @@ export function setCurrentPostKey(key) {
 export function getPostReducer(state, action) {
   switch (action.type) {
     case GET_POST_SUCCESS:
-      const { post } = action;
+      const { post, updateDraft } = action;
       const key = getPostKey(post);
 
       if (state.posts[key]) {
-        return update(state, {
+        const updateParams = {
           posts: { [key]: {
             active_votes: { $set: post.active_votes },
             payout_value: { $set: post.payout_value },
             children: { $set: post.children },
           }},
-        });
+        };
+        if (updateDraft) {
+          updateParams['draft'] = { $set: post };
+        }
+
+        return update(state, updateParams);
       } else {
-        return update(state, {
+        const updateParams = {
           posts: { [key]: { $set: post } },
-        });
+        };
+        if (updateDraft) {
+          updateParams['draft'] = { $set: post };
+        }
+
+        return update(state, updateParams);
       }
     case SET_CURRENT_POST_KEY:
       return update(state, {
@@ -58,7 +68,7 @@ export function getPostReducer(state, action) {
 }
 
 /*--------- SAGAS ---------*/
-function* getPost({ author, permlink }) {
+function* getPost({ author, permlink, updateDraft }) {
   try {
     // Try retrieving from state first
     const key = generatePostKey(author, permlink);
@@ -68,7 +78,7 @@ function* getPost({ author, permlink }) {
       post = yield api.get(`/posts/@${key}.json`);
     }
 
-    yield put(getPostSuccess(post));
+    yield put(getPostSuccess(post, updateDraft));
     yield put(setCurrentPostKey(key)); // Set current page
   } catch(e) {
     yield put(getPostFailure(e.message));

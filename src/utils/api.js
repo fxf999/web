@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+import { getEncryptedToken } from 'utils/token';
 
 const API_ROOT = process.env.REACT_APP_API_ROOT;
 
@@ -28,13 +29,17 @@ function getQueryString(params) {
     .join('&');
 }
 
-function request(method, path, params) {
+function request(method, path, params, shouldAuthenticate) {
   var qs = '';
   var body;
   var headers = (params && params.headers) || {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
+
+  if (shouldAuthenticate) {
+    headers['Authorization'] = 'Token token=' + getEncryptedToken();
+  }
 
   if (['GET', 'DELETE'].indexOf(method) > -1) {
     qs = '?' + getQueryString(params || {});
@@ -50,15 +55,15 @@ function request(method, path, params) {
 }
 
 export default {
-  get: (path, params) => request('GET', path, params),
-  post: (path, params) => request('POST', path, params),
-  put: (path, params) => request('PUT', path, params),
-  delete: (path, params) => request('DELETE', path, params),
-  updatePost: (content) => request('PATCH', `/posts/@${content.author}/${content.permlink}.json`, {
+  get: (path, params, shouldAuthenticate = false) => request('GET', path, params, shouldAuthenticate),
+  post: (path, params, shouldAuthenticate = false) => request('POST', path, params, shouldAuthenticate),
+  put: (path, params, shouldAuthenticate = false) => request('PUT', path, params, shouldAuthenticate),
+  delete: (path, params, shouldAuthenticate = false) => request('DELETE', path, params, shouldAuthenticate),
+  refreshPost: (content) => request('PATCH', `/posts/refresh/@${content.author}/${content.permlink}.json`, {
     post: {
       active_votes: content.active_votes,
       payout_value: content.payout_value,
       children: content.children,
     }
-  }),
+  }, true),
 };

@@ -111,7 +111,6 @@ function* reply({ parent, body }) {
       yield put(addCommentsFromPosts(parent, tempId));
     }
 
-    // TODO: Update cache using `api.updatePost`
     yield steemConnectAPI.comment(
       parent.author,
       parent.permlink,
@@ -122,6 +121,9 @@ function* reply({ parent, body }) {
       { tags: [ parent.category || (parent.tags && parent.tags[0]) ] },
     );
     yield put(replySuccess());
+
+    // TODO: Update cache using `api.refreshPost`
+    // TODO: Update children counter on posts
   } catch (e) {
     yield notification['error']({ message: e.message });
     yield put(replyFailure(e.message));

@@ -6,11 +6,13 @@ import { Form, Row, Col, Input, InputNumber, Tooltip, Icon, Button, Upload, Moda
 import { selectDraft, selectIsPublishing } from './selectors';
 import { selectMe } from 'features/User/selectors';
 import { publishContentBegin } from './actions/publishContent';
-import { updateDraft } from './actions/updateDraft';
+import { updateDraft, resetDraft } from './actions/updateDraft';
 import { initialState } from './actions';
 import { splitTags } from 'utils/sanitizer';
 import { timeUntilMidnightSeoul } from 'utils/date';
 import api from 'utils/api';
+import { selectCurrentPost } from 'features/Post/selectors';
+import { getPostBegin, setCurrentPostKey } from 'features/Post/actions/getPost';
 
 const FormItem = Form.Item;
 let currentBeneficiaryId = 0;
@@ -22,6 +24,7 @@ class PostForm extends Component {
     me: PropTypes.string.isRequired,
     draft: PropTypes.object.isRequired,
     updateDraft: PropTypes.func.isRequired,
+    resetDraft: PropTypes.func.isRequired,
     publishContent: PropTypes.func.isRequired,
     isPublishing: PropTypes.bool.isRequired,
   };
@@ -39,11 +42,79 @@ class PostForm extends Component {
     this.beneficiaryInput = {};
   }
 
+  componentDidMount() {
+    if (this.props.me) {
+      this.props.updateDraft('author', this.props.me);
+    }
+
+    const { match: { params : { author, permlink }} } = this.props;
+    if (author && permlink) {
+      this.props.getPost(author, permlink);
+    } else {
+      this.props.setCurrentPostKey(null);
+      this.props.resetDraft();
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.setCurrentPostKey(null);
+    this.props.resetDraft();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.me !== nextProps.me) {
+      this.props.updateDraft('author', nextProps.me);
+    }
+
+    const { match: { params : { author, permlink }} } = this.props;
+    const nextAuthor = nextProps.match.params.author;
+    const nextPermlink = nextProps.match.params.permlink;
+
+    if (nextAuthor && nextPermlink) {
+      if (author !== nextAuthor || permlink !== nextPermlink) {
+        this.props.getPost(nextAuthor, nextPermlink);
+      }
+    } else {
+      this.props.setCurrentPostKey(null);
+      this.props.resetDraft();
+    }
+
+    if (this.props.draft.title !== nextProps.draft.title) {
+      this.prepareForEdit(nextProps.draft);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.shouldRecalculateBeneficiary) {
+      this.onBeneficiariesChanged();
+    }
+  }
+
+  prepareForEdit = (draft) => {
+    this.props.updateDraft('permlink', draft.permlink);
+    this.setState({
+      fileList: draft.images.map((f, i) => f &&
+        {
+          uid: i,
+          name: f.name,
+          url:  f.link,
+          status: 'done',
+          id: f.id,
+          type: f.type,
+          link: f.link,
+          deletehash: f.deletehash,
+          width: f.width,
+          height: f.height,
+        }
+      ),
+    });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
 
     this.props.publishContent();
-  }
+  };
 
   // MARK: - Beneficiaries
   // TODO: Refactor into a component
@@ -65,7 +136,7 @@ class PostForm extends Component {
       }
       this.props.updateDraft('beneficiaries', beneficiaries);
 
-      if (weightSum > 90 || weightSum <= 0) {
+      if (weightSum > 90 || weightSum < 0) {
         this.setState({ beneficiariesValid: false });
       } else {
         this.setState({ beneficiariesValid: true });
@@ -73,7 +144,7 @@ class PostForm extends Component {
     }, 50);
 
     this.setState({ shouldRecalculateBeneficiary: false });
-  }
+  };
 
   removeBeneficiary = (k) => {
     const { form } = this.props;
@@ -86,7 +157,7 @@ class PostForm extends Component {
     });
 
     this.setState({ shouldRecalculateBeneficiary: true });
-  }
+  };
 
   addBeneficiary = () => {
     currentBeneficiaryId++;
@@ -101,25 +172,7 @@ class PostForm extends Component {
     });
 
     this.setState({ shouldRecalculateBeneficiary: true });
-  }
-
-  componentDidUpdate() {
-    if (this.state.shouldRecalculateBeneficiary) {
-      this.onBeneficiariesChanged();
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.me) {
-      this.props.updateDraft('author', this.props.me);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.me !== nextProps.me) {
-      this.props.updateDraft('author', nextProps.me);
-    }
-  }
+  };
 
   // MARK: - Custom Validators
 
@@ -133,7 +186,7 @@ class PostForm extends Component {
       this.handleTagsChange(tags);
       callback();
     }
-  }
+  };
 
   checkUrl = (_, value, callback) => {
     if (value.length === 0) {
@@ -152,49 +205,65 @@ class PostForm extends Component {
     }).catch(msg => {
       callback('Service is temporarily unavailbe, Please try again later.');
     });
-  }
+  };
 
   // MARK: - Handle uploads
 
-  handleImagePreviewCancel = () => this.setState({ previewVisible: false })
+  handleImagePreviewCancel = () => this.setState({ previewVisible: false });
   handleImagePreview = (file) => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
     });
-  }
+  };
 
   // MARK: - Handle live updates
 
-  handleTitleChange = (e) => this.props.updateDraft('title', e.target.value || initialState.draft.title)
-  handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline)
-  handleDescriptionChange = (e) => this.props.updateDraft('description', e.target.value || initialState.draft.description)
+  handleTitleChange = (e) => this.props.updateDraft('title', e.target.value || initialState.draft.title);
+  handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline);
+  handleDescriptionChange = (e) => this.props.updateDraft('description', e.target.value || initialState.draft.description);
   handleImageChange = ({ fileList }) => {
-    const images = fileList.map(f => f.response && f.response.data && f.response.data.link &&
-      {
-        name: f.name,
-        link: f.response.data.link,
-        width: f.response.data.width,
-        height: f.response.data.height,
-        type: f.response.data.type,
-        id: f.response.data.id,
-        deletehash: f.response.data.deletehash,
+    const images = fileList.map(function(f) {
+      if (f.response && f.response.data && f.response.data.link) {
+        return {
+          name: f.name,
+          link: f.response.data.link,
+          width: f.response.data.width,
+          height: f.response.data.height,
+          type: f.response.data.type,
+          id: f.response.data.id,
+          deletehash: f.response.data.deletehash,
+        }
+      } else if (f.name && f.link) { // Handle Edit
+        return {
+          name: f.name,
+          link: f.link,
+          width: f.width,
+          height: f.height,
+          type: f.type,
+          id: f.id,
+          deletehash: f.deletehash,
+        }
       }
-    );
+      return null;
+    });
     this.setState({ fileList });
     this.props.updateDraft('images', images.filter(x => !!x));
-  }
-  handleTagsChange = (tags) => this.props.updateDraft('tags', tags)
+  };
+  handleTagsChange = (tags) => this.props.updateDraft('tags', tags);
 
   isReadyToSubmit = () => {
     const { me, draft } = this.props;
     const initial = initialState.draft;
 
+    console.log(draft, initial);
+
     return me && me === draft.author &&
       draft.title !== initial.title && draft.url !== initial.url &&
       draft.tagline !== initial.tagline && draft.images.length > 0;
-  }
+  };
 
+  initialValue = (field, defaultValue = null) => initialState.draft[field] === this.props.draft[field] ? defaultValue : this.props.draft[field];
 
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -214,7 +283,12 @@ class PostForm extends Component {
         xl: { span: 19, offset: 5 },
       },
     };
-    getFieldDecorator('beneficiaryIds', { initialValue: [] });
+
+    let ids = [];
+    for (let i = 0; i < this.props.draft.beneficiaries.length; i++) { // For edit
+      ids.push(i + 1);
+    }
+    getFieldDecorator('beneficiaryIds', { initialValue: ids });
     const beneficiaryIds = getFieldValue('beneficiaryIds');
     const beneficiaries = beneficiaryIds.map((k, index) => {
       this.beneficiaryInput[k] = { accountInput: null, weightInput: null };
@@ -242,17 +316,18 @@ class PostForm extends Component {
                 ref={node => this.beneficiaryInput[k]['accountInput'] = node}
                 onChange={this.onBeneficiariesChanged}
                 maxLength="16"
+                defaultValue={(this.props.draft.beneficiaries[index] || {})['account']}
               />
             </Col>
             <Col span={10}>
               <InputNumber
-                defaultValue={20}
                 min={1}
                 max={90}
                 formatter={value => `${value}%`}
                 parser={value => value.replace('%', '')}
                 onChange={this.onBeneficiariesChanged}
                 ref={el => { this.beneficiaryInput[k]['weightInput'] = el; }}
+                defaultValue={((this.props.draft.beneficiaries[index] || {})['weight'] || 2000) / 100}
               />
               <Icon
                 className="delete-button"
@@ -274,6 +349,7 @@ class PostForm extends Component {
         >
           {getFieldDecorator('url', {
             validateTrigger: ['onBlur'],
+            initialValue: this.initialValue('url'),
             rules: [
               { required: true, message: 'Product link cannot be empty', whitespace: true },
               { validator: this.checkUrl },
@@ -288,6 +364,7 @@ class PostForm extends Component {
           label="Name of Product"
         >
           {getFieldDecorator('title', {
+            initialValue: this.initialValue('title'),
             rules: [{ required: true, message: 'Name cannot be empty', whitespace: true }],
           })(
             <Input
@@ -303,6 +380,7 @@ class PostForm extends Component {
           help="Describe what you’re posting in 60 characters or less."
         >
           {getFieldDecorator('tagline', {
+            initialValue: this.initialValue('tagline'),
             rules: [ { required: true, message: 'Short description cannot be empty', whitespace: true } ],
           })(
             <Input
@@ -351,7 +429,9 @@ class PostForm extends Component {
           {...formItemLayout}
           label="Description"
         >
-          {getFieldDecorator('description')(
+          {getFieldDecorator('description', {
+            initialValue: this.initialValue('description'),
+          })(
             <Input.TextArea
               placeholder="Extra information, if needed"
               rows={4}
@@ -365,6 +445,7 @@ class PostForm extends Component {
         >
           {getFieldDecorator('tags', {
             validateTrigger: ['onChange', 'onBlur'],
+            initialValue: this.initialValue('tags', []).join(' '),
             rules: [{ validator: this.checkTags }],
           })(
             <Input
@@ -410,11 +491,15 @@ const WrappedPostForm = Form.create()(PostForm);
 const mapStateToProps = () => createStructuredSelector({
   me: selectMe(),
   draft: selectDraft(),
+  post: selectCurrentPost(),
   isPublishing: selectIsPublishing(),
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
+  getPost: (author, permlink) => dispatch(getPostBegin(author, permlink, true)),
+  setCurrentPostKey: key => dispatch(setCurrentPostKey(key)),
   updateDraft: (field, value) => dispatch(updateDraft(field, value)),
+  resetDraft: () => dispatch(resetDraft()),
   publishContent: () => dispatch(publishContentBegin(props)),
 });
 

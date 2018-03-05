@@ -5,7 +5,7 @@ import { createPermlink } from 'utils/helpers/steemitHelpers';
 import {  selectMyAccount } from 'features/User/selectors';
 import { selectDraft } from '../selectors';
 import { notification } from 'antd';
-import { getPostKey } from 'features/Post/utils';
+import { getPostPath } from 'features/Post/utils';
 import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
@@ -88,11 +88,17 @@ function* publishContent({ props }) {
 
   try {
     const title = `${post.title} - ${post.tagline}`;
-    const permlink = yield createPermlink(title, post.author, '', '');
+    let permlink = post.permlink;
+    if (!permlink) {
+      permlink = yield createPermlink(title, post.author, '', '');
+    }
 
-    post.permlink = permlink;
-
-    const res = yield api.post('/posts.json', { post: post });
+    let res;
+    if (post.permlink) { // Edit
+      res = yield api.put(`/posts${getPostPath(post)}.json`, { post: post }, true);
+    } else { // Create
+      res = yield api.post('/posts.json', { post: post }, true);
+    }
     console.log('2------', res);
 
     const myAccount = yield select(selectMyAccount());
@@ -140,11 +146,17 @@ function* publishContent({ props }) {
     ];
     console.log('3-------------', operations);
 
-    yield steemConnectAPI.broadcast(operations);
+    try {
+      yield steemConnectAPI.broadcast(operations);
+    } catch (e) {
+      // Delete post on Steemhunt as transaction failed
+      yield api.delete(`/posts${getPostPath(post)(post)}.json`, null, true);
+      throw e;
+    }
     yield put(publishContentSuccess());
     yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
 
-    yield props.history.push('/@' + getPostKey(post)); // Redirect to #show
+    yield props.history.push(getPostPath(post)); // Redirect to #show
   } catch (e) {
     yield notification['error']({ message: e.message });
     yield put(publishContentFailure(e.message));

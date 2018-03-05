@@ -43,6 +43,7 @@ export class RoutesLeft extends Component {
           <Route path="/" exact component={Home} />
           <Route path="/@:author/:permlink" exact component={Post} />
           <Route path="/post" exact component={Draft} />
+          <Route path="/@:author/:permlink/edit" exact component={Draft} />
           <Route path="/@:author" component={Profile} />
           <Route path="/:tag" exact component={Home} />
         </Switch>
@@ -74,6 +75,7 @@ class Right extends Component {
         <Switch>
           <Route path="/" exact component={HuntedList} />
           <Route path="/post" exact component={PostForm} />
+          <Route path="/@:author/:permlink/edit" exact component={PostForm} />
           <Route path="/@:author" component={HuntedList} />
           <Route path="/@:author/:permlink" exact component={HuntedList} />
           <Route path="/:tag" exact component={HuntedList} />

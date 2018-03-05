@@ -4,7 +4,8 @@ import { setToken, removeToken } from 'utils/token';
 import format from '../utils/format';
 import { selectAppProps } from 'features/App/selectors';
 import steemConnectAPI from 'utils/steemConnectAPI';
-import { getToken } from 'utils/token';
+import { getToken, getEncryptedToken } from 'utils/token';
+import api from 'utils/api';
 
 /*--------- CONSTANTS ---------*/
 const GET_ME_BEGIN = 'GET_ME_BEGIN';
@@ -50,11 +51,13 @@ function* getMe({ token }) {
     const me = yield steemConnectAPI.me();
     const appProps = yield select(selectAppProps());
 
+    setToken(token);
+    yield api.post('/users.json', { user: { username: me.account.name, encrypted_token: getEncryptedToken() } });
+
     yield put(getMeSuccess({
       ...me,
       account: format(me.account, appProps),
     }));
-    setToken(token);
   } catch(e) {
     removeToken();
     console.error(e);

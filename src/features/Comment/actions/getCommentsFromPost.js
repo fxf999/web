@@ -71,7 +71,7 @@ function* getCommentsFromPost({ category, author, permlink }) {
 
       if (posts && posts[postKey] && hasUpdated(posts[postKey], content)) {
         // Update posts cache with the fresh blockchain data
-        yield api.updatePost(content);
+        yield api.refreshPost(content);
 
         // Update local posts cache
         yield put(getPostSuccess(content));

@@ -40,7 +40,7 @@ function* vote({ content, weight, contentType }) {
     const updatedContent = yield steem.api.getContentAsync(author, permlink);
 
     if (contentType === 'post') {
-      yield api.updatePost(updatedContent);
+      yield api.refreshPost(updatedContent);
     }
 
     yield put(updatePayout(updatedContent, contentType));

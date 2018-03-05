@@ -14,6 +14,7 @@ export const initialState = {
     url: '#',
     title: 'Title',
     tagline: 'Short Description',
+    permlink: null,
     description: 'Long Description',
     tags: [],
     images: [],
