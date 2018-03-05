@@ -27,6 +27,7 @@ class CommentReplyForm extends Component {
       this.form.textAreaRef.value = '';
       this.form.resizeTextarea();
 
+      // Scroll to the bottom
       const leftPanel = document.getElementById('panel-left');
       scrollTo(leftPanel, leftPanel.offsetHeight, 800);
     }

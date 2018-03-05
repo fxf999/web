@@ -1,12 +1,10 @@
 import update from 'immutability-helper';
 import {
-  UPDATE_PAYOUT,
   VOTE_FAILURE,
   VOTE_OPTIMISTIC,
 } from 'features/Vote/actions/vote';
 import { manageContentVote } from 'features/Vote/utils';
 import { getPostKey } from './utils';
-import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 /*--------- REDUCER ---------*/
 export default function postsReducer(state, action) {
@@ -40,21 +38,6 @@ export default function postsReducer(state, action) {
                 });
               }
             },
-            isUpdating: { $set: false },
-          }},
-        });
-      } else {
-        return state;
-      }
-    }
-    case UPDATE_PAYOUT: {
-      const { content, contentType } = action;
-      if (contentType === 'post') {
-        return update(state, {
-          posts: { [getPostKey(content)]: {
-            payout_value: { $set: calculateContentPayout(content) },
-            active_votes: { $set: content.active_votes },
-            children: { $set: content.children },
             isUpdating: { $set: false },
           }},
         });

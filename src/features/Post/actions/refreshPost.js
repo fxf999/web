@@ -2,6 +2,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import { getPostKey } from '../utils';
 import api from 'utils/api';
+import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 /*--------- CONSTANTS ---------*/
 const POST_REFRESH_BEGIN = 'POST_REFRESH_BEGIN';
@@ -25,19 +26,20 @@ export function postRefreshFailure(message) {
 export function postRefreshReducer(state, action) {
   switch (action.type) {
     case POST_REFRESH_SUCCESS: {
+      const { post } = action;
+      let children = post.children;
       if (action.increaseCounter) {
-        return update(state, {
-          posts: {
-            [getPostKey(action.post)]: { $merge: { ...action.post, children: action.post.children + 1 } }
-          },
-        });
-      } else {
-        return update(state, {
-          posts: {
-            [getPostKey(action.post)]: { $merge: action.post }
-          },
-        });
+        children++;
       }
+
+      return update(state, {
+        posts: { [getPostKey(post)]: {
+          payout_value: { $set: post.payout_value || calculateContentPayout(post) },
+          active_votes: { $set: post.active_votes },
+          children: { $set: children },
+          isUpdating: { $set: false },
+        }},
+      });
     }
     default:
       return state;
