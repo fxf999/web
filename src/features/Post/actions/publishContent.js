@@ -2,10 +2,10 @@ import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
 import api from 'utils/api';
 import { createPermlink } from 'utils/helpers/steemitHelpers';
-import {  selectMyAccount } from 'features/User/selectors';
+import { selectMyAccount } from 'features/User/selectors';
 import { selectDraft } from '../selectors';
 import { notification } from 'antd';
-import { getPostPath } from 'features/Post/utils';
+import { getPostKey, getPostPath } from 'features/Post/utils';
 import steemConnectAPI from 'utils/steemConnectAPI';
 
 /*--------- CONSTANTS ---------*/
@@ -23,8 +23,8 @@ export function publishContentBegin(props) {
   return { type: PUBLISH_CONTENT_BEGIN, props };
 }
 
-export function publishContentSuccess() {
-  return { type: PUBLISH_CONTENT_SUCCESS };
+export function publishContentSuccess(post) {
+  return { type: PUBLISH_CONTENT_SUCCESS, post };
 }
 
 export function publishContentFailure(message) {
@@ -39,7 +39,12 @@ export function publishContentReducer(state, action) {
         isPublishing: { $set: true },
       });
     }
-    case PUBLISH_CONTENT_SUCCESS:
+    case PUBLISH_CONTENT_SUCCESS: {
+      return update(state, {
+        posts: { [getPostKey(action.post)]: { $set: action.post } },
+        isPublishing: { $set: false },
+      });
+    }
     case PUBLISH_CONTENT_FAILURE: {
       return update(state, {
         isPublishing: { $set: false },
@@ -84,22 +89,23 @@ function getBody(post, permlink) {
 /*--------- SAGAS ---------*/
 function* publishContent({ props }) {
   const post = yield select(selectDraft());
-  console.log('1------', post);
+  // console.log('1------', post);
 
   try {
     const title = `${post.title} - ${post.tagline}`;
     let permlink = post.permlink;
+    let editMode = true;
     if (!permlink) {
+      editMode = false;
       permlink = yield createPermlink(title, post.author, '', '');
     }
 
-    let res;
-    if (post.permlink) { // Edit
-      res = yield api.put(`/posts${getPostPath(post)}.json`, { post: post }, true);
+    if (editMode) { // Edit
+      yield api.put(`/posts${getPostPath(post)}.json`, { post: post }, true);
     } else { // Create
-      res = yield api.post('/posts.json', { post: post }, true);
+      yield api.post('/posts.json', { post: post }, true);
     }
-    console.log('2------', res);
+    // console.log('2------', res);
 
     const myAccount = yield select(selectMyAccount());
     if (myAccount.name !== post.author) {
@@ -118,7 +124,7 @@ function* publishContent({ props }) {
       app: APP_NAME,
     };
 
-    var operations = [
+    let operations = [
       ['comment',
         {
           parent_author: '',
@@ -129,8 +135,11 @@ function* publishContent({ props }) {
           body: getBody(post, permlink),
           json_metadata: JSON.stringify(metadata),
         },
-      ],
-      ['comment_options', {
+      ]
+    ];
+
+    if (!editMode) { // only on create
+      operations.push(['comment_options', {
         author: post.author,
         permlink,
         max_accepted_payout: '1000000.000 SBD',
@@ -142,9 +151,9 @@ function* publishContent({ props }) {
             beneficiaries: [DEFAULT_BENEFICIARY].concat(post.beneficiaries || [])
           }]
         ]
-      }]
-    ];
-    console.log('3-------------', operations);
+      }]);
+    }
+    // console.log('3-------------', operations);
 
     try {
       yield steemConnectAPI.broadcast(operations);
@@ -153,8 +162,12 @@ function* publishContent({ props }) {
       yield api.delete(`/posts${getPostPath(post)(post)}.json`, null, true);
       throw e;
     }
-    yield put(publishContentSuccess());
-    yield notification['success']({ message: 'Congratulations! Your post has been successfully published!' });
+    yield put(publishContentSuccess(post));
+    if (editMode) {
+      yield notification['success']({ message: 'Your post has been successfully updated!' });
+    } else {
+      yield notification['success']({ message: 'Your post has been successfully published!' });
+    }
 
     yield props.history.push(getPostPath(post)); // Redirect to #show
   } catch (e) {

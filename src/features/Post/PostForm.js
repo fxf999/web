@@ -33,6 +33,7 @@ class PostForm extends Component {
     super(props);
 
     this.state = {
+      editMode: false,
       previewImageVisible: false,
       previewImage: '',
       fileList: [],
@@ -50,6 +51,7 @@ class PostForm extends Component {
     const { match: { params : { author, permlink }} } = this.props;
     if (author && permlink) {
       this.props.getPost(author, permlink);
+      this.setState({ editMode: true });
     } else {
       this.props.setCurrentPostKey(null);
       this.props.resetDraft();
@@ -74,6 +76,7 @@ class PostForm extends Component {
       if (author !== nextAuthor || permlink !== nextPermlink) {
         this.props.getPost(nextAuthor, nextPermlink);
       }
+      this.setState({ editMode: true });
     } else {
       this.props.setCurrentPostKey(null);
       this.props.resetDraft();
@@ -256,8 +259,6 @@ class PostForm extends Component {
     const { me, draft } = this.props;
     const initial = initialState.draft;
 
-    console.log(draft, initial);
-
     return me && me === draft.author &&
       draft.title !== initial.title && draft.url !== initial.url &&
       draft.tagline !== initial.tagline && draft.images.length > 0;
@@ -284,11 +285,7 @@ class PostForm extends Component {
       },
     };
 
-    let ids = [];
-    for (let i = 0; i < this.props.draft.beneficiaries.length; i++) { // For edit
-      ids.push(i + 1);
-    }
-    getFieldDecorator('beneficiaryIds', { initialValue: ids });
+    getFieldDecorator('beneficiaryIds', { initialValue: [] });
     const beneficiaryIds = getFieldValue('beneficiaryIds');
     const beneficiaries = beneficiaryIds.map((k, index) => {
       this.beneficiaryInput[k] = { accountInput: null, weightInput: null };
@@ -316,7 +313,6 @@ class PostForm extends Component {
                 ref={node => this.beneficiaryInput[k]['accountInput'] = node}
                 onChange={this.onBeneficiariesChanged}
                 maxLength="16"
-                defaultValue={(this.props.draft.beneficiaries[index] || {})['account']}
               />
             </Col>
             <Col span={10}>
@@ -327,7 +323,7 @@ class PostForm extends Component {
                 parser={value => value.replace('%', '')}
                 onChange={this.onBeneficiariesChanged}
                 ref={el => { this.beneficiaryInput[k]['weightInput'] = el; }}
-                defaultValue={((this.props.draft.beneficiaries[index] || {})['weight'] || 2000) / 100}
+                defaultValue={20}
               />
               <Icon
                 className="delete-button"
@@ -454,23 +450,25 @@ class PostForm extends Component {
           )}
         </FormItem>
 
-        {beneficiaries}
+        {!this.state.editMode && beneficiaries}
 
-        <FormItem {...formItemLayoutWithOutLabel}>
-          {!this.state.beneficiariesValid && (
-              <div className="ant-form-item-control has-error">
-                <p className="ant-form-explain">Sum of reward values must be less than or equal to 90%</p>
-              </div>
-            )
-          }
-          <Button type="dashed" onClick={this.addBeneficiary}>
-            <Icon type="plus" /> Add makers or contributors
-          </Button>
-          <p className="text-small top-margin">
-            10% of the rewards will be used to pay for the operation of Steemhunt.<br/>
-            {timeUntilMidnightSeoul()}
-          </p>
-        </FormItem>
+        {!this.state.editMode &&
+          <FormItem {...formItemLayoutWithOutLabel}>
+            {!this.state.beneficiariesValid && (
+                <div className="ant-form-item-control has-error">
+                  <p className="ant-form-explain">Sum of reward values must be less than or equal to 90%</p>
+                </div>
+              )
+            }
+            <Button type="dashed" onClick={this.addBeneficiary}>
+              <Icon type="plus" /> Add makers or contributors
+            </Button>
+            <p className="text-small top-margin">
+              10% of the rewards will be used to pay for the operation of Steemhunt.<br/>
+              {timeUntilMidnightSeoul()}
+            </p>
+          </FormItem>
+        }
 
         <FormItem {...formItemLayoutWithOutLabel}>
           <Button
@@ -479,7 +477,9 @@ class PostForm extends Component {
             className="submit-button pull-right round-border padded-button"
             loading={this.props.isPublishing}
             disabled={!this.isReadyToSubmit()}
-          >POST NOW</Button>
+          >
+            {this.state.editMode ? 'UPDATE POST' : 'POST NOW'}
+          </Button>
         </FormItem>
       </Form>
     );
