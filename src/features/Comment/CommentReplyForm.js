@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Button, Input } from 'antd';
 import { replyBegin } from './actions/reply';
 import { selectIsCommentPublishing, selectHasCommentSucceeded } from './selectors';
+import { scrollTo } from 'utils/scroller';
 
 class CommentReplyForm extends Component {
   static propTypes = {
@@ -25,6 +26,9 @@ class CommentReplyForm extends Component {
       this.props.hasCommentSucceeded !== nextProps.hasCommentSucceeded) {
       this.form.textAreaRef.value = '';
       this.form.resizeTextarea();
+
+      const leftPanel = document.getElementById('panel-left');
+      scrollTo(leftPanel, leftPanel.offsetHeight, 800);
     }
   }
 

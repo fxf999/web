@@ -14,7 +14,6 @@ import {
   selectCommentsIsLoading
 } from 'features/Comment/selectors';
 import { getLoginURL } from 'utils/token';
-import { getCommentsCount } from './utils';
 import { selectIsConnected } from 'features/User/selectors';
 import { selectCurrentComments, selectCurrentPost } from './selectors';
 import { getPostBegin, setCurrentPostKey } from './actions/getPost';
@@ -71,7 +70,7 @@ class Post extends Component {
           <title>{post.title} - Steemhunt</title>
         </Helmet>
 
-        <PostView post={post} />
+        { post && <PostView post={post} /> }
 
         <div className="comments">
           <hr />
@@ -79,7 +78,7 @@ class Post extends Component {
           <h3>
             {currentComments && (
               <span>
-                {getCommentsCount(post, currentComments.list, commentsChild)} comments
+                {post.children} comments
                 <span className="separator">&middot;</span>
               </span>
             )}

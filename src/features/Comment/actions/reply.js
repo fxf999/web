@@ -5,6 +5,7 @@ import { createCommentPermlink } from 'utils/helpers/steemitHelpers';
 import { selectMyAccount } from 'features/User/selectors';
 import { toCustomISOString } from'utils/date';
 import steemConnectAPI from 'utils/steemConnectAPI';
+import { postRefreshBegin } from 'features/Post/actions/refreshPost';
 
 /*--------- CONSTANTS ---------*/
 const REPLY_BEGIN = 'REPLY_BEGIN';
@@ -120,10 +121,10 @@ function* reply({ parent, body }) {
       body,
       { tags: [ parent.category || (parent.tags && parent.tags[0]) ] },
     );
-    yield put(replySuccess());
 
-    // TODO: Update cache using `api.refreshPost`
-    // TODO: Update children counter on posts
+    yield put(postRefreshBegin(parent, true)); // Update store & DB (for children count)
+
+    yield put(replySuccess());
   } catch (e) {
     yield notification['error']({ message: e.message });
     yield put(replyFailure(e.message));

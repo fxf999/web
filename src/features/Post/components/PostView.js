@@ -37,8 +37,6 @@ class PostView extends Component {
     me: PropTypes.string.isRequired,
   };
 
-  // TODO: Handle share icon evnets
-
   render() {
     const { me, post } = this.props;
     const images = post.images.map((image, index) => {

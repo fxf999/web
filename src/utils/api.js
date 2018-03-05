@@ -59,11 +59,11 @@ export default {
   post: (path, params, shouldAuthenticate = false) => request('POST', path, params, shouldAuthenticate),
   put: (path, params, shouldAuthenticate = false) => request('PUT', path, params, shouldAuthenticate),
   delete: (path, params, shouldAuthenticate = false) => request('DELETE', path, params, shouldAuthenticate),
-  refreshPost: (content) => request('PATCH', `/posts/refresh/@${content.author}/${content.permlink}.json`, {
+  refreshPost: (post) => request('PATCH', `/posts/refresh/@${post.author}/${post.permlink}.json`, {
     post: {
-      active_votes: content.active_votes,
-      payout_value: content.payout_value,
-      children: content.children,
+      active_votes: post.active_votes,
+      payout_value: post.payout_value,
+      children: post.children,
     }
   }, true),
 };

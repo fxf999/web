@@ -8,6 +8,7 @@ import publishContent, { publishContentReducer } from './actions/publishContent'
 import { updateDraftReducer } from './actions/updateDraft';
 import resteem, { resteemReducer } from './actions/resteem';
 import postReducer from 'features/Post/reducer';
+import postRefresh, { postRefreshReducer } from './actions/refreshPost';
 
 export const initialState = {
   draft: {
@@ -38,6 +39,7 @@ export const reducer = (state = initialState, action) => combine(
     publishContentReducer,
     postReducer,
     resteemReducer,
+    postRefreshReducer,
   ],
   state,
   action,
@@ -49,4 +51,5 @@ export default [
   getPost,
   publishContent,
   resteem,
+  postRefresh,
 ];

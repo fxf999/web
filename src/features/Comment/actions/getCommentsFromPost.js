@@ -7,7 +7,7 @@ import { selectPosts } from 'features/Post/selectors';
 import { getPostKey, hasUpdated } from 'features/Post/utils';
 import { getPostSuccess } from 'features/Post/actions/getPost';
 import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
-import api from 'utils/api';
+import { postRefreshBegin } from 'features/Post/actions/refreshPost';
 
 /*--------- CONSTANTS ---------*/
 const GET_COMMENTS_FROM_POST_BEGIN = 'GET_COMMENTS_FROM_POST_BEGIN';
@@ -71,7 +71,7 @@ function* getCommentsFromPost({ category, author, permlink }) {
 
       if (posts && posts[postKey] && hasUpdated(posts[postKey], content)) {
         // Update posts cache with the fresh blockchain data
-        yield api.refreshPost(content);
+        yield put(postRefreshBegin(content));
 
         // Update local posts cache
         yield put(getPostSuccess(content));

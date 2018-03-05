@@ -1,6 +1,5 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
 import update from 'immutability-helper';
-import isEmpty from 'lodash/isEmpty';
 import steemConnectAPI from 'utils/steemConnectAPI';
 import { getPostKey } from '../utils';
 import { selectMe } from 'features/User/selectors';

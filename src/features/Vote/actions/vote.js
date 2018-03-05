@@ -1,8 +1,8 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import { selectMe } from 'features/User/selectors';
-import api from 'utils/api';
 import steemConnectAPI from 'utils/steemConnectAPI';
+import { postRefreshBegin } from 'features/Post/actions/refreshPost';
 
 /*--------- CONSTANTS ---------*/
 const VOTE_BEGIN = 'VOTE_BEGIN';
@@ -40,7 +40,7 @@ function* vote({ content, weight, contentType }) {
     const updatedContent = yield steem.api.getContentAsync(author, permlink);
 
     if (contentType === 'post') {
-      yield api.refreshPost(updatedContent);
+      yield put(postRefreshBegin(content));
     }
 
     yield put(updatePayout(updatedContent, contentType));
