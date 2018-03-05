@@ -24,6 +24,11 @@ export const selectDailyRanking = () => createSelector(
   state => state.dailyRanking,
 );
 
+export const selectIsLoading = () => createSelector(
+  selectPostDomain(),
+  state => state.isLoading,
+);
+
 export const selectCurrentPost = () => createSelector(
   selectPostDomain(),
   state => state.posts[state.currentPostKey],

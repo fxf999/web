@@ -24,6 +24,11 @@ export function getPostsFailure(message) {
 /*--------- REDUCER ---------*/
 export function getPostsReducer(state, action) {
   switch (action.type) {
+    case GET_POSTS_BEGIN: {
+      return update(state, {
+        isLoading: { $set: true },
+      });
+    }
     case GET_POSTS_SUCCESS: {
       const { daysAgo, posts } = action;
 
@@ -40,6 +45,12 @@ export function getPostsReducer(state, action) {
       return update(state, {
         posts: { $merge: newPosts },
         dailyRanking: { [daysAgo]: { $set: dailyRanking } },
+        isLoading: { $set: false },
+      });
+    }
+    case GET_POSTS_FAILURE: {
+      return update(state, {
+        isLoading: { $set: false },
       });
     }
     default:

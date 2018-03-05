@@ -27,6 +27,7 @@ export const initialState = {
   },
   posts: {},
   dailyRanking: {},
+  isLoading: false,
   isPublishing: false,
   currentPostKey: null,
 };

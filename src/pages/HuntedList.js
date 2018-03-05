@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 import last from 'lodash/last';
-
 import PostList from 'features/Post/PostList';
 import InfiniteList from 'components/InfiniteList';
+import { selectIsLoading } from 'features/Post/selectors';
 
-export default class HuntedList extends Component {
+class HuntedList extends Component {
   constructor() {
     super();
     this.state = {
-      daysAgoArray: [0, 1], // TODO: Start from currentPost day bucket?
-      isLoading: false,
+      daysAgoArray: [0, 1],
     };
   }
 
@@ -17,17 +18,13 @@ export default class HuntedList extends Component {
     const maxPage = Math.max(...this.state.daysAgoArray);
     this.setState({
       daysAgoArray: this.state.daysAgoArray.concat([maxPage + 1]),
-      isLoading: true,
-    }, () => {
-      // console.log(`----------> Load page: ${maxPage + 1}`);
-      this.setState({ isLoading: false });
     });
   };
 
   render() {
-    const { daysAgoArray, isLoading } = this.state;
+    const { daysAgoArray } = this.state;
 
-    const genesis = (new Date('2018-02-08')).getTime();
+    const genesis = (new Date('2018-02-16')).getTime();
     const oldest = Date.now() - last(daysAgoArray) * 86400000;
     const hasMore = oldest > genesis;
 
@@ -35,10 +32,16 @@ export default class HuntedList extends Component {
       <InfiniteList
         list={daysAgoArray}
         hasMore={hasMore}
-        isLoading={isLoading}
+        isLoading={this.props.isLoading}
         loadMoreCb={this.addMorePostList}
         itemMappingCb={daysAgo => <PostList key={daysAgo} daysAgo={daysAgo} />}
       />
     );
   }
 }
+
+const mapStateToProps = () => createStructuredSelector({
+  isLoading: selectIsLoading(),
+});
+
+export default connect(mapStateToProps, null)(HuntedList);
