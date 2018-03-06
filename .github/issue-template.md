@@ -16,3 +16,4 @@ Thanks for opening an issue! To help the team to understand your needs, please c
 
 * Browser: 
 * Operating system: 
+* Steps to reproduce:
