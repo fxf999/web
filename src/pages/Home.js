@@ -75,7 +75,7 @@ export default class Home extends Component {
             </div>
             <h4>COMPETE AND EARN STEEM</h4>
             <p>
-              Whenever people make actions on your post such as upvotes and comments, the rewards will be accumulated by STEEM, and pay out in 14 days in the proportion of you assigned. More the post earn Steem value, the rank of the day will be arisen.
+              Whenever people make actions on your post such as upvotes and comments, the rewards will be accumulated by STEEM, and pay out in 7 days in the proportion of you assigned. More the post earn Steem value, the rank of the day will be arisen.
             </p>
           </div>
           <a href="https://steem.io" target="_blank" rel="noopener noreferrer" className="bottom-link">What is STEEM? <Icon type="right-circle-o" /></a>
@@ -105,7 +105,7 @@ export default class Home extends Component {
               Product-Enthusiasts
             </h2>
 
-            <Link to="/post" className="post-button round-border padded-button">
+            <Link to="/post" className="post-button round-border padded-button pink-filled">
               MAKE NEW POST
             </Link>
           </div>
