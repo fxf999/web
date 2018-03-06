@@ -12,6 +12,7 @@ export default class PostItem extends Component {
 
   render() {
     const { rank, post } = this.props;
+    const activeVotes = post.active_votes.filter(v => v.percent !== 0);
 
     return (
       <div className="post">
@@ -20,7 +21,7 @@ export default class PostItem extends Component {
         <div className="summary">
           <div className="title"><Link to={'/@' + getPostKey(post)}>{post.title}</Link></div>
           <div className="tagline">{post.tagline}</div>
-          <div className="stats"><b>{post.active_votes.length}</b> votes and <b>{post.children}</b> comments</div>
+          <div className="stats"><b>{activeVotes.length}</b> votes and <b>{post.children}</b> comments</div>
         </div>
         <div className="vote-section">
           <VoteButton post={post} type="post" layout="list" />
