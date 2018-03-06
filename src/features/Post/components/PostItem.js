@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getPostKey } from '../utils';
 import VoteButton from 'features/Vote/VoteButton';
+import Author from 'components/Author';
 
 export default class PostItem extends Component {
   static propTypes = {
@@ -21,7 +22,11 @@ export default class PostItem extends Component {
         <div className="summary">
           <div className="title"><Link to={'/@' + getPostKey(post)}>{post.title}</Link></div>
           <div className="tagline">{post.tagline}</div>
-          <div className="stats"><b>{activeVotes.length}</b> votes and <b>{post.children}</b> comments</div>
+          <div className="stats">
+            <Author name={post.author} />
+            <span class="spacer">&middot;</span>
+            <b>{activeVotes.length}</b> votes and <b>{post.children}</b> comments
+          </div>
         </div>
         <div className="vote-section">
           <VoteButton post={post} type="post" layout="list" />
