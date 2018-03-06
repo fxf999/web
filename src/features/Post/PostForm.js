@@ -423,7 +423,7 @@ class PostForm extends Component {
             )}
           </div>
           <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleImagePreviewCancel}>
-            <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+            <img alt="Image Preview" style={{ width: '100%' }} src={this.state.previewImage} />
           </Modal>
         </FormItem>
 

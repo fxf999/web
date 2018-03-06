@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Button, Carousel, Icon, Timeline, Tag, Tooltip } from 'antd';
+import { Button, Carousel, Icon, Timeline, Tag, Tooltip, Modal } from 'antd';
 import IconFacebook from 'react-icons/lib/fa/facebook-square';
 import IconTwitter from 'react-icons/lib/fa/twitter-square';
 import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
@@ -37,11 +37,32 @@ class PostView extends Component {
     me: PropTypes.string.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      previewImageVisible: false,
+      previewVisible: '',
+    };
+  }
+
+  // MARK: - Handle image preview
+
+  hideModal = () => this.setState({ previewVisible: false });
+  showModal = (e) => {
+    this.setState({
+      previewImage: e.target.src,
+      previewVisible: true,
+    });
+  };
+
   render() {
     const { me, post } = this.props;
     const images = post.images.map((image, index) => {
       return (
-        <div key={index}><img src={image.link} alt={image.name} /></div>
+        <div key={index}>
+          <img alt={image.name} src={image.link} onClick={this.showModal} />
+        </div>
       );
     });
     const tags = post.tags.map((tag, index) => {
@@ -172,6 +193,9 @@ class PostView extends Component {
             {tags}
           </div>
         </div>
+        <Modal visible={this.state.previewVisible} footer={null} onCancel={this.hideModal} width="50%">
+          <img alt="Image Preview" src={this.state.previewImage} width="100%" />
+        </Modal>
       </div>
     )
   }
