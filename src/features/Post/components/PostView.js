@@ -194,7 +194,7 @@ class PostView extends Component {
           </div>
         </div>
         <Modal visible={this.state.previewVisible} footer={null} onCancel={this.hideModal} width="50%">
-          <img alt="Image Preview" src={this.state.previewImage} width="100%" />
+          <img alt="Preview" src={this.state.previewImage} width="100%" />
         </Modal>
       </div>
     )

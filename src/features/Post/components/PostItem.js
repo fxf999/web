@@ -24,7 +24,7 @@ export default class PostItem extends Component {
           <div className="tagline">{post.tagline}</div>
           <div className="stats">
             <Author name={post.author} />
-            <span class="spacer">&middot;</span>
+            <span className="spacer">&middot;</span>
             <b>{activeVotes.length}</b> votes and <b>{post.children}</b> comments
           </div>
         </div>
