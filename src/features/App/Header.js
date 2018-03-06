@@ -31,7 +31,9 @@ class Header extends Component {
       menu = (
         <Menu theme="dark">
           <Menu.Item key="0">
-            <Icon type="loading-3-quarters" /> VOTING POWER: {parseInt(myAccount.voting_power / 100)}%
+            <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
+              <Icon type="loading-3-quarters" /> VOTING POWER: {parseInt(myAccount.voting_power / 100)}%
+            </Link>
           </Menu.Item>
           <Menu.Item key="1">
             <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
