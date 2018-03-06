@@ -73,7 +73,7 @@ class PostForm extends Component {
       }
       this.setState({ editMode: true, resetted: false });
 
-      if (this.props.draft.title !== nextProps.draft.title) {
+      if (this.props.draft.permlink !== nextProps.draft.permlink) {
         this.prepareForEdit(nextProps.draft);
       }
     } else {
