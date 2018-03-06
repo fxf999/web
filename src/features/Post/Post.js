@@ -76,13 +76,13 @@ class Post extends Component {
           <hr />
 
           <h3>
+            <ContentPayoutAndVotes content={post} />
+            <span className="separator">&middot;</span>
             {currentComments && (
               <span>
                 {post.children} comments
-                <span className="separator">&middot;</span>
               </span>
             )}
-            <ContentPayoutAndVotes content={post} />
           </h3>
 
           {!isConnected && (
