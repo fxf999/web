@@ -46,6 +46,10 @@ export function getMeReducer(state, action) {
 function* getMe({ token }) {
   try {
     token = token || getToken();
+    if (!token) {
+      console.log('Not logged in');
+      return;
+    }
     steemConnectAPI.setAccessToken(token);
 
     const me = yield steemConnectAPI.me();

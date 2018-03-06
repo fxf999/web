@@ -41,8 +41,8 @@ class PostView extends Component {
     super(props);
 
     this.state = {
-      previewImageVisible: false,
-      previewVisible: '',
+      previewImage: '',
+      previewVisible: false,
     };
   }
 
