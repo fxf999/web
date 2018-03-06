@@ -175,7 +175,7 @@
     @media only screen and (max-width: 1023px) { @content; }
   }
   @else if $media == ipadpro {
-    @media only screen and (max-width: 1279px) { @content; }
+    @media only screen and (max-width: 1400px) { @content; }
   }
   @else {
     @media only screen and (max-width: $media) { @content; }
