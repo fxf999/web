@@ -72,12 +72,12 @@ class PostForm extends Component {
         this.props.getPost(nextAuthor, nextPermlink);
       }
       this.setState({ editMode: true, resetted: false });
+
+      if (this.props.draft.title !== nextProps.draft.title) {
+        this.prepareForEdit(nextProps.draft);
+      }
     } else {
       this.checkAndResetDraft();
-    }
-
-    if (this.props.draft.title !== nextProps.draft.title) {
-      this.prepareForEdit(nextProps.draft);
     }
 
     if (this.props.me !== nextProps.draft.author) {
@@ -277,17 +277,17 @@ class PostForm extends Component {
     const formItemLayout = {
       labelCol: {
         lg: { span: 24 },
-        xl: { span: 5 },
+        xl: { span: 6 },
       },
       wrapperCol: {
         lg: { span: 24 },
-        xl: { span: 19 },
+        xl: { span: 18 },
       },
     };
     const formItemLayoutWithOutLabel = {
       wrapperCol: {
         lg: { span: 24, offset: 0 },
-        xl: { span: 19, offset: 5 },
+        xl: { span: 18, offset: 6 },
       },
     };
 
