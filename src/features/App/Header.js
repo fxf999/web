@@ -31,11 +31,14 @@ class Header extends Component {
       menu = (
         <Menu theme="dark">
           <Menu.Item key="0">
+            <Icon type="loading-3-quarters" /> VOTING POWER: {parseInt(myAccount.voting_power / 100)}%
+          </Menu.Item>
+          <Menu.Item key="1">
             <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
               <Icon type="user" /> MY PROFILE
             </Link>
           </Menu.Item>
-          <Menu.Item key="1">
+          <Menu.Item key="31">
             <span onClick={this.props.logout}>
               <Icon type="poweroff" /> LOGOUT
             </span>

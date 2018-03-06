@@ -104,6 +104,7 @@ class Profile extends Component {
               <li>Followers</li>
               <li>Reputation Score</li>
               <li>Steem Power</li>
+              <li>Current Voting Power</li>
               <li>Estimated Value</li>
             </ul>
 
@@ -111,6 +112,7 @@ class Profile extends Component {
               <Timeline.Item><FollowerCount author={account.name} unit="followers" /></Timeline.Item>
               <Timeline.Item>{account.reputation}</Timeline.Item>
               <Timeline.Item><UserSteemPower account={account} /></Timeline.Item>
+              <Timeline.Item>{parseInt(account.voting_power / 100)}%</Timeline.Item>
               <Timeline.Item><UserEstimatedValue account={account} /></Timeline.Item>
             </Timeline>
           </div>
