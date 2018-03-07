@@ -83,7 +83,8 @@ class Header extends Component {
             <a href={getLoginURL()} className="header-button">
               <Icon type="plus-circle-o" style={{ fontSize: 24, color: '#666' }} />
             </a>
-            <Button type="primary" href={getLoginURL()}>Connect</Button>
+            <Button type="primary" href={getLoginURL()} ghost>Login</Button>
+            <Button type="primary" href="https://signup.steemit.com" target="_blank" rel="noopener noreferrer">Sign Up</Button>
           </div>
         )}
       </header>
