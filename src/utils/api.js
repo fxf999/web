@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import { getEncryptedToken } from 'utils/token';
+import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 const API_ROOT = process.env.REACT_APP_API_ROOT;
 
@@ -61,8 +62,8 @@ export default {
   delete: (path, params, shouldAuthenticate = false) => request('DELETE', path, params, shouldAuthenticate),
   refreshPost: (post) => request('PATCH', `/posts/refresh/@${post.author}/${post.permlink}.json`, {
     post: {
+      payout_value: calculateContentPayout(post),
       active_votes: post.active_votes,
-      payout_value: post.payout_value,
       children: post.children,
     }
   }, true),
