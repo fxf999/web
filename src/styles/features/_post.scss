@@ -135,6 +135,14 @@
         min-height: 80px;
       }
 
+      @include responsive(mobile) {
+        padding-right: 42px;
+
+        .author, .spacer {
+          display: none;
+        }
+      }
+
       .title {
         font-size: 1.125rem;
 
@@ -153,6 +161,7 @@
 
       .stats {
         color: $text_grey;
+        font-weight: 200;
       }
     }
 

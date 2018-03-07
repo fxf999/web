@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Icon } from 'antd';
 import { getPostPath } from '../utils';
 import VoteButton from 'features/Vote/VoteButton';
 import Author from 'components/Author';
@@ -13,7 +14,7 @@ export default class PostItem extends Component {
 
   render() {
     const { rank, post } = this.props;
-    const activeVotes = post.active_votes.filter(v => v.percent !== 0);
+    const activeVotes = post.active_votes.filter(v => v.percent !== 0).length;
 
     return (
       <div className="post">
@@ -27,7 +28,7 @@ export default class PostItem extends Component {
           <div className="stats">
             <Author name={post.author} />
             <span className="spacer">&middot;</span>
-            <b>{activeVotes.length}</b> votes and <b>{post.children}</b> comments
+            {activeVotes} votes and {post.children} comments
           </div>
         </div>
         <div className="vote-section">
