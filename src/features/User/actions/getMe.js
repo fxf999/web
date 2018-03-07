@@ -58,7 +58,7 @@ function* getMe({ token }) {
   try {
     token = token || getToken();
     if (!token) {
-      console.log('Not logged in');
+      yield put(getMeFailure('Not logged in'));
       return;
     }
     steemConnectAPI.setAccessToken(token);
