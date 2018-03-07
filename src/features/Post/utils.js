@@ -15,3 +15,28 @@ export const hasUpdated = function(oldPost, newPost) {
 export const sanitizeText = function(text) {
   return text.trim().replace(/(\.)$/, '')
 }
+
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  } else {
+    var hash =  '';
+    if( uri.indexOf('#') !== -1 ){
+        hash = uri.replace(/.*#/, '#');
+        uri = uri.replace(/#.*/, '');
+    }
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    return uri + separator + key + "=" + value + hash;
+  }
+}
+
+export const addReferral = function(url) {
+  url = updateQueryStringParameter(url, 'ref', 'steemhunt');
+
+  if (url.match(/^https?:\/\/(www\.)?amazon\.com/)) {
+    url = updateQueryStringParameter(url, 'tag', 'steemhunt-20');
+  }
+
+  return url;
+}

@@ -13,7 +13,7 @@ import { timeUntilMidnightSeoul } from 'utils/date';
 import api from 'utils/api';
 import { selectCurrentPost } from './selectors';
 import { getPostBegin, setCurrentPostKey } from './actions/getPost';
-import { sanitizeText } from './utils';
+import { sanitizeText, addReferral } from './utils';
 
 const FormItem = Form.Item;
 let currentBeneficiaryId = 0;
@@ -202,6 +202,7 @@ class PostForm extends Component {
     if (value.length === 0) {
       return callback();
     }
+    value = addReferral(value);
 
     api.get('/posts/exists.json', { url: value }).then((res) => {
       if (res.result === 'OK') {
