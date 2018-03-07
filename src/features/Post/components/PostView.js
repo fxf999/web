@@ -45,6 +45,7 @@ class PostView extends Component {
     this.state = {
       previewImage: '',
       previewVisible: false,
+      shouldShowHideButton: true,
     };
   }
 
@@ -60,7 +61,7 @@ class PostView extends Component {
 
   hidePost = (e) => {
     api.hidePost(this.props.post, true);
-    window.location.href = '/';
+    this.setState({ shouldShowHideButton: false });
   }
 
   render() {
@@ -95,7 +96,7 @@ class PostView extends Component {
               <Button icon="edit" size="small" className="edit-button" ghost>Edit</Button>
             </Link>
           }
-          {isAdmin(me) &&
+          {this.state.shouldShowHideButton && isAdmin(me) &&
             <Popconfirm title="Are you sure to hide this post?" onConfirm={this.hidePost} okText="Yes" cancelText="No">
               <Button icon="delete" size="small" className="edit-button" ghost>Hide</Button>
             </Popconfirm>
