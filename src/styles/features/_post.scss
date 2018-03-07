@@ -120,12 +120,12 @@
     }
 
     .summary {
-      padding-left: 170px;
+      padding-left: 176px;
       padding-right: 130px;
       min-height: 80px;
 
       @include responsive(ipadpro) {
-        padding-left: 130px;
+        padding-left: 136px;
         padding-right: 90px;
       }
 

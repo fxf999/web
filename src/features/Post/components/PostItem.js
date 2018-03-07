@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getPostKey } from '../utils';
+import { getPostPath } from '../utils';
 import VoteButton from 'features/Vote/VoteButton';
 import Author from 'components/Author';
 
@@ -18,9 +18,11 @@ export default class PostItem extends Component {
     return (
       <div className="post">
         <div className="rank">{rank}</div>
-        <img src={post.images && post.images[0].link} alt={post.title} className="thumbnail" />
+        <Link to={getPostPath(post)}>
+          <img src={post.images && post.images[0].link} alt={post.title} className="thumbnail"/>
+        </Link>
         <div className="summary">
-          <div className="title"><Link to={'/@' + getPostKey(post)}>{post.title}</Link></div>
+          <div className="title"><Link to={getPostPath(post)}>{post.title}</Link></div>
           <div className="tagline">{post.tagline}</div>
           <div className="stats">
             <Author name={post.author} />
