@@ -82,7 +82,7 @@ class PostView extends Component {
     return (
       <div className="post-view diagonal-split-view">
         <div className="top-container primary-gradient">
-          <span className="featured-date round-border">Featured on {shortFormat(post.created_at)}</span>
+          <span className="featured-date round-border" data-id={post.id}>Featured on {shortFormat(post.created_at)}</span>
           { shouldShowEdit &&
             <Link to={`${getPostPath(post)}/edit`}>
               <Button icon="edit" size="small" className="edit-button" ghost>Edit</Button>

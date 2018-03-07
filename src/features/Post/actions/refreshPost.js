@@ -34,7 +34,7 @@ export function postRefreshReducer(state, action) {
 
       return update(state, {
         posts: { [getPostKey(post)]: {
-          payout_value: { $set: post.payout_value || calculateContentPayout(post) },
+          payout_value: { $set: calculateContentPayout(post) },
           active_votes: { $set: post.active_votes },
           children: { $set: children },
           isUpdating: { $set: false },
