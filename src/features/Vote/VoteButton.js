@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
-
-import { Button, Slider, Popover } from 'antd';
-
+import { Button, Slider, Popover, notification } from 'antd';
 import { selectIsConnected, selectMyAccount } from 'features/User/selectors';
 import { selectAppProps, selectAppRate, selectAppRewardFund } from 'features/App/selectors';
 import { voteBegin } from './actions/vote';
 import { hasVoted } from 'utils/helpers/steemitHelpers';
 import { formatAmount } from 'utils/helpers/steemitHelpers';
+import { getLoginURL } from 'utils/token';
 
 class VoteButton extends Component {
   static propTypes = {
@@ -32,7 +31,15 @@ class VoteButton extends Component {
   }
 
   openSignin = () => {
-    console.log('TODO: Open sign in pop up');
+    notification.open({
+      message: 'Login Required',
+      description:
+        <div>
+          Please <a href={getLoginURL()}>Login</a>
+          &nbsp;or&nbsp;
+          <a href="https://signup.steemit.com" target="_blank" rel="noopener noreferrer">Sign Up</a> for participating in voting.
+        </div>,
+    });
   };
 
   onChangeVotingWeight = value => {
