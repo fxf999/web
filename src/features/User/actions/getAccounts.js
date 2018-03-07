@@ -2,7 +2,7 @@ import { put, select, takeEvery } from 'redux-saga/effects';
 import steem from 'steem';
 import update from 'immutability-helper';
 import isEmpty from 'lodash/isEmpty';
-import format from '../utils/format';
+import { format } from '../utils';
 import { selectAccounts } from '../selectors';
 import { selectAppProps } from 'features/App/selectors';
 

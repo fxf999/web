@@ -111,6 +111,7 @@ function* publishContent({ props }) {
     const myAccount = yield select(selectMyAccount());
     if (myAccount.name !== post.author) {
       yield put(publishContentFailure('UNAUTHORIZED'));
+      yield api.delete(`/posts${getPostPath(post)}.json`, null, true);
       return;
     }
 

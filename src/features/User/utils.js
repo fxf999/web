@@ -1,6 +1,6 @@
 import { formatter } from 'steem';
 
-export default function format(user, appProps) {
+export function format(user, appProps) {
   const metadata = user.json_metadata ? JSON.parse(user.json_metadata) : {};
   const steemPower = appProps ? formatter.vestToSteem(
     user.vesting_shares,
@@ -19,4 +19,8 @@ export default function format(user, appProps) {
     steemPower: steemPower,
     steemPowerReceived:steemPowerReceived
   };
+}
+
+export function isAdmin(username) {
+  return username === 'steemhunt' || username === 'tabris' || username === 'project7';
 }

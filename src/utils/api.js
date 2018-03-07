@@ -60,6 +60,9 @@ export default {
   post: (path, params, shouldAuthenticate = false) => request('POST', path, params, shouldAuthenticate),
   put: (path, params, shouldAuthenticate = false) => request('PUT', path, params, shouldAuthenticate),
   delete: (path, params, shouldAuthenticate = false) => request('DELETE', path, params, shouldAuthenticate),
+  hidePost: (post, hide) => request('PATCH', `/posts/hide/@${post.author}/${post.permlink}.json`, {
+    hide: hide,
+  }, true),
   refreshPost: (post) => request('PATCH', `/posts/refresh/@${post.author}/${post.permlink}.json`, {
     post: {
       payout_value: calculateContentPayout(post),

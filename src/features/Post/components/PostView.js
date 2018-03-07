@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Button, Carousel, Icon, Timeline, Tag, Tooltip, Modal } from 'antd';
+import { Button, Carousel, Icon, Timeline, Tag, Tooltip, Modal, Popconfirm } from 'antd';
 import IconFacebook from 'react-icons/lib/fa/facebook-square';
 import IconTwitter from 'react-icons/lib/fa/twitter-square';
 import IconLinkedIn from 'react-icons/lib/fa/linkedin-square';
@@ -14,6 +14,8 @@ import Author from 'components/Author';
 import { selectMe } from 'features/User/selectors';
 import { getHtml } from 'components/Body';
 import { shortFormat } from 'utils/date';
+import { isAdmin } from 'features/User/utils';
+import api from 'utils/api';
 
 class PostView extends Component {
   static propTypes = {
@@ -56,6 +58,11 @@ class PostView extends Component {
     });
   };
 
+  hidePost = (e) => {
+    api.hidePost(this.props.post, true);
+    window.location.href = '/';
+  }
+
   render() {
     const { me, post } = this.props;
     const images = post.images.map((image, index) => {
@@ -83,10 +90,15 @@ class PostView extends Component {
       <div className="post-view diagonal-split-view">
         <div className="top-container primary-gradient">
           <span className="featured-date round-border" data-id={post.id}>Featured on {shortFormat(post.created_at)}</span>
-          { shouldShowEdit &&
+          {shouldShowEdit &&
             <Link to={`${getPostPath(post)}/edit`}>
               <Button icon="edit" size="small" className="edit-button" ghost>Edit</Button>
             </Link>
+          }
+          {isAdmin(me) &&
+            <Popconfirm title="Are you sure to hide this post?" onConfirm={this.hidePost} okText="Yes" cancelText="No">
+              <Button icon="delete" size="small" className="edit-button" ghost>Hide</Button>
+            </Popconfirm>
           }
           <h1>{post.title}</h1>
           <h2>{post.tagline}</h2>
