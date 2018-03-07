@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import { Button } from 'antd';
 import { selectPosts, selectDailyRanking } from './selectors';
 import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
@@ -19,11 +20,19 @@ class PostList extends Component {
 
   constructor(props) {
     super();
+
+    if (props.daysAgo === 0) {
+      this.state = { showAll: true };
+    } else {
+      this.state = { showAll: false };
+    }
   }
 
   componentDidMount() {
     this.props.getPosts(this.props.daysAgo);
   }
+
+  showAll = () => this.setState({ showAll: true });
 
   render() {
     const { posts, dailyRanking, daysAgo } = this.props;
@@ -42,14 +51,23 @@ class PostList extends Component {
       );
     });
 
+    let buttonClass = 'show-all';
+    if (this.state.showAll) {
+      buttonClass += ' hide';
+    }
+
     return (
-      <div className="post-list">
+      <div className={`post-list day-ago-${daysAgo}`}>
         <div className="heading">
           <h3>{daysAgoToString(daysAgo)}</h3>
           <p><b>{ranking.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
         </div>
         <div className="daily-posts">
-          {rankingItems}
+          {rankingItems.slice(0,10)}
+          {rankingItems.length > 10 &&
+            <Button type="primary" size="default" className={buttonClass} ghost onClick={this.showAll}>Show All</Button>
+          }
+          {rankingItems.length > 10 && this.state.showAll && rankingItems.slice(10)}
         </div>
       </div>
     );

@@ -10,7 +10,7 @@ class HuntedList extends Component {
   constructor() {
     super();
     this.state = {
-      daysAgoArray: [0, 1],
+      daysAgoArray: [0],
     };
   }
 
