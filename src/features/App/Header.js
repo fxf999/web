@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getLoginURL } from 'utils/token';
-import { Menu, Popover, Icon, Button } from 'antd';
-import { selectMe, selectMyAccount } from 'features/User/selectors';
+import { Menu, Popover, Icon, Button, Spin } from 'antd';
+import { selectMe, selectMyAccount, selectIsLoading } from 'features/User/selectors';
 import { logoutBegin } from 'features/User/actions/logout';
 import logo from 'assets/images/logo-nav-pink@2x.png'
 import AvatarSteemit from 'components/AvatarSteemit';
@@ -15,6 +15,7 @@ class Header extends Component {
     me: PropTypes.string.isRequired,
     myAccount: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
   };
 
   state = {
@@ -24,7 +25,7 @@ class Header extends Component {
   handleVisibleChange = (visible) => this.setState({ menuVisible: visible });
 
   render() {
-    const { me, myAccount } = this.props;
+    const { me, myAccount, isLoading } = this.props;
 
     let menu;
     if(me) {
@@ -55,7 +56,13 @@ class Header extends Component {
           <img src={logo} alt="logo" className="nav-logo"/>
         </Link>
 
-        {me ? (
+        {isLoading &&
+          <div className="pull-right">
+            <Spin size="large" />
+          </div>
+        }
+
+        {!isLoading && me &&
           <div className="pull-right">
             <Link to="/about" className="header-button tablet-only">
               <Icon type="question-circle-o" />
@@ -75,7 +82,9 @@ class Header extends Component {
               </span>
             </Popover>
           </div>
-        ) : (
+        }
+
+        {!isLoading && !me &&
           <div className="pull-right">
             <Link to="/about" className="header-button tablet-only">
               <Icon type="question-circle-o" />
@@ -86,7 +95,7 @@ class Header extends Component {
             <Button type="primary" href={getLoginURL()} ghost>Login</Button>
             <Button type="primary" href="https://signup.steemit.com" target="_blank" rel="noopener noreferrer">Sign Up</Button>
           </div>
-        )}
+        }
       </header>
     )
   }
@@ -94,6 +103,7 @@ class Header extends Component {
 
 const mapStateToProps = createStructuredSelector({
   me: selectMe(),
+  isLoading: selectIsLoading(),
   myAccount: selectMyAccount(),
 });
 

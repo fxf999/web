@@ -28,13 +28,24 @@ export function getMeFailure(message) {
 /*--------- REDUCER ---------*/
 export function getMeReducer(state, action) {
   switch (action.type) {
+    case GET_ME_BEGIN: {
+      return update(state, {
+        isLoading: { $set: true },
+      });
+    }
     case GET_ME_SUCCESS: {
       const { account, user } = action.me;
       return update(state, {
+        isLoading: { $set: false },
         me: { $set: user },
         accounts: {
           [user]: {$auto: { $merge: account }},
         },
+      });
+    }
+    case GET_ME_FAILURE: {
+      return update(state, {
+        isLoading: { $set: false },
       });
     }
     default:

@@ -28,7 +28,7 @@ function UserEstimatedValue(props) {
 }
 
 UserEstimatedValue.propTypes = {
-  appProps: PropTypes.object.isRequired,
+  appProps: PropTypes.object,
   appRate: PropTypes.number.isRequired,
   account: PropTypes.object.isRequired,
 };

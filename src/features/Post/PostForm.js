@@ -11,8 +11,9 @@ import { initialState } from './actions';
 import { splitTags } from 'utils/sanitizer';
 import { timeUntilMidnightSeoul } from 'utils/date';
 import api from 'utils/api';
-import { selectCurrentPost } from 'features/Post/selectors';
-import { getPostBegin, setCurrentPostKey } from 'features/Post/actions/getPost';
+import { selectCurrentPost } from './selectors';
+import { getPostBegin, setCurrentPostKey } from './actions/getPost';
+import { sanitizeText } from './utils';
 
 const FormItem = Form.Item;
 let currentBeneficiaryId = 0;
@@ -228,8 +229,8 @@ class PostForm extends Component {
 
   // MARK: - Handle live updates
 
-  handleTitleChange = (e) => this.props.updateDraft('title', e.target.value || initialState.draft.title);
-  handleTaglineChange = (e) => this.props.updateDraft('tagline', e.target.value || initialState.draft.tagline);
+  handleTitleChange = (e) => this.props.updateDraft('title', sanitizeText(e.target.value) || initialState.draft.title);
+  handleTaglineChange = (e) => this.props.updateDraft('tagline', sanitizeText(e.target.value) || initialState.draft.tagline);
   handleDescriptionChange = (e) => this.props.updateDraft('description', e.target.value || initialState.draft.description);
   handleImageChange = ({ fileList }) => {
     const images = fileList.map(function(f) {

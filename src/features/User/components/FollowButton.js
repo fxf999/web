@@ -4,14 +4,14 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { getLoginURL } from 'utils/token';
-import { selectMe, selectMyFollowingsList, selectMyFollowingsLoadStatus } from '../selectors';
+import { selectMe, selectMyFollowingsList, selectMyFollowingsLoadStatus, selectIsLoading } from '../selectors';
 import { followBegin } from '../actions/follow';
 import { unfollowBegin } from '../actions/unfollow';
 
 function FollowButton(props) {
   const { followingsList, followingLoadStatus, accountName, me, unfollow, follow } = props;
   const isFollowing = followingsList.find(following => following.following === accountName);
-  const isLoading = followingLoadStatus[accountName];
+  const isLoading = props.isLoading || followingLoadStatus[accountName];
 
   return me ? (
     <Button
@@ -24,7 +24,14 @@ function FollowButton(props) {
       {isFollowing ? 'UNFOLLOW' : 'FOLLOW'}
     </Button>
   ) : (
-    <Button href={getLoginURL()} type="primary" className="round-border inversed-color padded-button">FOLLOW</Button>
+    <Button
+      href={getLoginURL()}
+      type="primary"
+      className="round-border inversed-color padded-button"
+      loading={isLoading}
+    >
+      {isLoading ? 'LOADING..' : 'FOLLOW'}
+    </Button>
   )
 }
 
@@ -35,9 +42,11 @@ FollowButton.propTypes = {
   followingLoadStatus: PropTypes.object.isRequired,
   follow: PropTypes.func.isRequired,
   unfollow: PropTypes.func.isRequired,
+  selectIsLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state, props) => createStructuredSelector({
+  isLoading: selectIsLoading(),
   followingLoadStatus: selectMyFollowingsLoadStatus(),
   followingsList: selectMyFollowingsList(),
   me: selectMe(),

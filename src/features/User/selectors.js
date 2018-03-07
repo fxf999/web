@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
-import { selectAppProps } from '../App/selectors';
-import { formatter } from 'steem';
 
 const selectUserDomain = () => state => state.user;
 
-/**
- * Other specific selectors
- */
+export const selectIsLoading = () => createSelector(
+  selectUserDomain(),
+  state => state.isLoading,
+);
+
 export const selectMe = () => createSelector(
   selectUserDomain(),
   state => state.me,
@@ -51,11 +51,6 @@ export const selectMyFollowingsLoadStatus = () => createSelector(
 export const selectIsConnected = () => createSelector(
   selectMe(),
   me => !!me,
-);
-
-export const selectVoteHistory = accountName => createSelector(
-  selectAccount(accountName),
-  account => account.votes,
 );
 
 // FOLLOWERS
@@ -124,103 +119,4 @@ export const selectFollowingsList = accountName => createSelector(
 export const selectLastFollowing = accountName => createSelector(
   selectFollowingsList(accountName),
   state => state && state[state.length - 1],
-);
-
-export const selectFollowingsAccounts = accountName => createSelector(
-  [selectAccounts(), selectFollowingsList(accountName)],
-  (accounts, followings) => {
-    if (!followings) {
-      return [];
-    }
-    const followingsAccounts = [];
-    followings.forEach(follow => {
-      if (accounts[follow.following]) {
-        followingsAccounts.push(accounts[follow.following]);
-      }
-    });
-    return followingsAccounts;
-  },
-);
-
-// HISTORY TRANSFER (REWARDS, VOTES)
-export const selectHistoryTransfer = accountName => createSelector(
-  selectAccount(accountName),
-  account => account.history_transfer || {},
-);
-
-export const selectHistoryTransferList = accountName => createSelector(
-  selectHistoryTransfer(accountName),
-  historyTransfer => historyTransfer.list || [],
-);
-
-export const selectRewardsCuration = accountName => createSelector(
-  [selectHistoryTransferList(accountName), selectAppProps()],
-  (transferHistory, appProps) => {
-    if (!appProps) {
-      return [];
-    }
-    return transferHistory
-      .filter(transfer => transfer.type === 'curation_reward').map(transfer => ({
-        ...transfer,
-        steemPower: formatter.vestToSteem(transfer.reward, appProps.total_vesting_shares, appProps.total_vesting_fund_steem),
-      }));
-  },
-);
-
-export const selectLastWeekRewardsCuration = accountName => createSelector(
-  selectRewardsCuration(accountName),
-  curation => {
-    const timestampOneWeekAgo = Date.now() - 604800000;
-    return curation
-      .filter(transfer => Date.parse(transfer.timestamp) > timestampOneWeekAgo)
-      .reduce((total, transfer) => total += transfer.steemPower, 0);
-  },
-);
-
-export const selectRewardsAuthor = accountName => createSelector(
-  [selectHistoryTransferList(accountName), selectAppProps()],
-  (transferHistory, appProps) => {
-    if (!appProps) {
-      return [];
-    }
-    return transferHistory
-      .filter(transfer => transfer.type === 'author_reward').map(transfer => ({
-        ...transfer,
-        steemPower: formatter.vestToSteem(transfer.vesting_payout, appProps.total_vesting_shares, appProps.total_vesting_fund_steem),
-      }));
-  },
-);
-
-export const selectLastWeekRewardsAuthor = accountName => createSelector(
-  selectRewardsAuthor(accountName),
-  curation => {
-    const timestampOneWeekAgo = Date.now() - 604800000;
-    return curation
-      .filter(transfer => Date.parse(transfer.timestamp) > timestampOneWeekAgo)
-      .reduce((total, transfer) => total += transfer.steemPower, 0);
-  },
-);
-
-export const selectVotes = accountName => createSelector(
-  selectHistoryTransferList(accountName),
-  transferHistory => {
-    return transferHistory
-      .filter(transfer => transfer.type === 'vote');
-  },
-);
-
-export const selectGivenVotes = accountName => createSelector(
-  selectVotes(accountName),
-  votes => {
-    return votes
-      .filter(vote => vote.voter === accountName);
-  },
-);
-
-export const selectReceivedVotes = accountName => createSelector(
-  selectVotes(accountName),
-  votes => {
-    return votes
-      .filter(vote => vote.author === accountName);
-  },
 );
