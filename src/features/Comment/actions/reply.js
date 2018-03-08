@@ -5,11 +5,12 @@ import { createCommentPermlink } from 'utils/helpers/steemitHelpers';
 import { selectMyAccount } from 'features/User/selectors';
 import { toCustomISOString } from'utils/date';
 import steemConnectAPI from 'utils/steemConnectAPI';
-import { postRefreshBegin } from 'features/Post/actions/refreshPost';
+import { postIncreaseCommentCount } from 'features/Post/actions/refreshPost';
+import { selectCurrentPost } from 'features/Post/selectors';
+import api from 'utils/api';
 
 /*--------- CONSTANTS ---------*/
 const REPLY_BEGIN = 'REPLY_BEGIN';
-const REPLY_OPTIMISTIC = 'REPLY_OPTIMISTIC';
 const REPLY_SUCCESS = 'REPLY_SUCCESS';
 const REPLY_FAILURE = 'REPLY_FAILURE';
 const ADD_COMMENTS_FROM_POST = 'ADD_COMMENTS_FROM_POST';
@@ -19,12 +20,8 @@ export function replyBegin(parent, body) {
   return { type: REPLY_BEGIN, parent, body };
 }
 
-function replyOptimistic(parent, tempId, replyObj) {
-  return { type: REPLY_OPTIMISTIC, parent, tempId, replyObj };
-}
-
-function replySuccess() {
-  return { type: REPLY_SUCCESS };
+function replySuccess(parent, tempId, replyObj) {
+  return { type: REPLY_SUCCESS, parent, tempId, replyObj };
 }
 
 function replyFailure(message) {
@@ -41,17 +38,7 @@ export function replyReducer(state, action) {
     case REPLY_BEGIN: {
       return update(state, {
         isPublishing: { $set: true },
-      });
-    }
-    case REPLY_OPTIMISTIC: {
-      const { parent, tempId, replyObj } = action;
-      return update(state, {
-        commentsData: {
-          [tempId]: { $set: replyObj },
-        },
-        commentsChild: {
-          [parent.id]: { $autoArray: { $push: [tempId] } },
-        },
+        hasSucceeded: { $set: false },
       });
     }
     case ADD_COMMENTS_FROM_POST: {
@@ -65,7 +52,15 @@ export function replyReducer(state, action) {
       });
     }
     case REPLY_SUCCESS: {
+      const { parent, tempId, replyObj } = action;
+
       return update(state, {
+        commentsData: {
+          [tempId]: { $set: replyObj },
+        },
+        commentsChild: {
+          [parent.id]: { $autoArray: { $push: [tempId] } },
+        },
         isPublishing: { $set: false },
         hasSucceeded: { $set: true },
       });
@@ -105,9 +100,7 @@ function* reply({ parent, body }) {
       author_reputation: myAccount.reputation,
     };
 
-    yield put(replyOptimistic(parent, tempId, replyObj));
-
-    // IF PARENT IS A POST
+    // If parent is a post
     if (!parent.parent_author) {
       yield put(addCommentsFromPosts(parent, tempId));
     }
@@ -122,11 +115,18 @@ function* reply({ parent, body }) {
       { tags: [ parent.category || (parent.tags && parent.tags[0]) ] },
     );
 
-    yield put(postRefreshBegin(parent, true)); // Update store & DB (for children count)
+    // Update children counter on local & DB
+    const post = yield select(selectCurrentPost());
+    yield api.increaseCommentCount(post);
+    yield put(postIncreaseCommentCount(post));
 
-    yield put(replySuccess());
+    yield put(replySuccess(parent, tempId, replyObj));
   } catch (e) {
-    yield notification['error']({ message: e.message });
+    if (e.error_description.indexOf('STEEMIT_MIN_REPLY_INTERVAL') >= 0) {
+      yield notification['error']({ message: 'You can only comment once every 20 seconds. Please try again later.' });
+    } else {
+      yield notification['error']({ message: 'Network error, please try again later' });
+    }
     yield put(replyFailure(e.message));
   }
 }

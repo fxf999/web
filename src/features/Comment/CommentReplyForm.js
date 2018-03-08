@@ -3,6 +3,7 @@ import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Input } from 'antd';
+import { isEmpty } from 'lodash';
 import { replyBegin } from './actions/reply';
 import { selectIsCommentPublishing, selectHasCommentSucceeded } from './selectors';
 import { scrollTo } from 'utils/scroller';
@@ -22,23 +23,26 @@ class CommentReplyForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.hasCommentSucceeded &&
+      this.props.hasCommentSucceeded !== nextProps.hasCommentSucceeded &&
       this.form &&
-      this.props.hasCommentSucceeded !== nextProps.hasCommentSucceeded) {
+      !isEmpty(this.form.textAreaRef.value)) {
       this.form.textAreaRef.value = '';
       this.form.resizeTextarea();
 
-      // Scroll to the bottom
-      const leftPanel = document.getElementById('panel-left');
-      scrollTo(leftPanel, leftPanel.offsetHeight, 800);
+      if (nextProps.closeForm) { // indented comment
+        nextProps.closeForm();
+      } else { // comment on parent article
+        // Scroll to the bottom
+        const leftPanel = document.getElementById('panel-left');
+        const postContainer = document.getElementById('post-container');
+        scrollTo(leftPanel, postContainer.offsetHeight, 800);
+      }
     }
   }
 
   onChange = e => this.setState({ body: e.target.value });
 
-  reply = () => {
-    this.props.reply(this.state.body);
-    this.props.closeForm && this.props.closeForm();
-  };
+  reply = () => this.props.reply(this.state.body);
 
   render() {
     const { closeForm } = this.props;

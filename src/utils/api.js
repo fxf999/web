@@ -65,9 +65,14 @@ export default {
   }, true),
   refreshPost: (post) => request('PATCH', `/posts/refresh/@${post.author}/${post.permlink}.json`, {
     post: {
-      payout_value: calculateContentPayout(post),
+      payout_value: calculateContentPayout(post) || post.payout_value,
       active_votes: post.active_votes,
       children: post.children,
+    }
+  }, true),
+  increaseCommentCount: (post) => request('PATCH', `/posts/refresh/@${post.author}/${post.permlink}.json`, {
+    post: {
+      children: post.children + 1,
     }
   }, true),
 };

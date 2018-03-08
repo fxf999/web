@@ -8,18 +8,23 @@ import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 const POST_REFRESH_BEGIN = 'POST_REFRESH_BEGIN';
 const POST_REFRESH_SUCCESS = 'POST_REFRESH_SUCCESS';
 const POST_REFRESH_FAILURE = 'POST_REFRESH_FAILURE';
+const POST_INCREASE_COMMENT_COUNT = 'POST_INCREASE_COMMENT_COUNT';
 
 /*--------- ACTIONS ---------*/
-export function postRefreshBegin(post, increaseCounter = false) {
-  return { type: POST_REFRESH_BEGIN, post, increaseCounter };
+export function postRefreshBegin(post) {
+  return { type: POST_REFRESH_BEGIN, post };
 }
 
-export function postRefreshSuccess(post, increaseCounter) {
-  return { type: POST_REFRESH_SUCCESS, post, increaseCounter };
+export function postRefreshSuccess(post) {
+  return { type: POST_REFRESH_SUCCESS, post };
 }
 
 export function postRefreshFailure(message) {
   return { type: POST_REFRESH_FAILURE, message };
+}
+
+export function postIncreaseCommentCount(post) {
+  return { type: POST_INCREASE_COMMENT_COUNT, post };
 }
 
 /*--------- REDUCER ---------*/
@@ -27,17 +32,19 @@ export function postRefreshReducer(state, action) {
   switch (action.type) {
     case POST_REFRESH_SUCCESS: {
       const { post } = action;
-      let children = post.children;
-      if (action.increaseCounter) {
-        children++;
-      }
-
       return update(state, {
         posts: { [getPostKey(post)]: {
-          payout_value: { $set: calculateContentPayout(post) },
+          payout_value: { $set: calculateContentPayout(post) || post.payout_value },
           active_votes: { $set: post.active_votes },
-          children: { $set: children },
           isUpdating: { $set: false },
+        }},
+      });
+    }
+    case POST_INCREASE_COMMENT_COUNT: {
+      const { post } = action;
+      return update(state, {
+        posts: { [getPostKey(post)]: {
+          children: { $set: post.children + 1 },
         }},
       });
     }
@@ -47,10 +54,10 @@ export function postRefreshReducer(state, action) {
 }
 
 /*--------- SAGAS ---------*/
-function* postRefresh({ post, increaseCounter }) {
+function* postRefresh({ post }) {
   try {
     yield api.refreshPost(post);
-    yield put(postRefreshSuccess(post, increaseCounter));
+    yield put(postRefreshSuccess(post));
   } catch (e) {
     yield put(postRefreshFailure(e.message));
   }

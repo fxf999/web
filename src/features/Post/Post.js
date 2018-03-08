@@ -65,7 +65,7 @@ class Post extends Component {
     }
 
     return (
-      <div className="post-container">
+      <div className="post-container" id="post-container">
         <Helmet>
           <title>{post.title} - Steemhunt</title>
         </Helmet>
