@@ -81,7 +81,7 @@ function getBody(post, permlink) {
     `\n---\n` +
     `<center>` +
     `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\n` +
-    `Posted on Steemhunt, Dig Products, Earn STEEMs\n` +
+    `This is posted on Steemhunt. A place where you can dig products and earn STEEM.\n` +
     `[View on Steemhunt.com](https://steemhunt.com/@${post.author}/${permlink})\n` +
     `</center>`;
 }
