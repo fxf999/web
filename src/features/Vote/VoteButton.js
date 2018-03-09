@@ -37,7 +37,14 @@ class VoteButton extends Component {
         <div>
           Please <a href={getLoginURL()}>Login</a>
           &nbsp;or&nbsp;
-          <a href="https://signup.steemit.com/?ref=steemhunt" target="_blank" rel="noopener noreferrer">Sign Up</a> for participating in voting.
+          <a
+            href="https://signup.steemit.com/?ref=steemhunt"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => window.gtag('event', 'signup_clicked', { 'event_category' : 'signup', 'event_label' : 'Voting Notification' })}
+          >
+            Sign Up
+          </a> for participating in voting.
         </div>,
     });
   };

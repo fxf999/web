@@ -88,7 +88,13 @@ class Post extends Component {
           {!isConnected && (
             <div className="post-signup">
               <p>You need a Steem account to join the discussion</p>
-              <Button type="primary" href="https://steemit.com/pick_account" target="_blank" rel="noopener noreferrer">
+              <Button
+                type="primary"
+                href="https://signup.steemit.com/?ref=steemhunt"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => window.gtag('event', 'signup_clicked', { 'event_category' : 'signup', 'event_label' : 'Post Footer' })}
+              >
                 Sign up now
               </Button>
               <a href={getLoginURL()} className="signin-link">
