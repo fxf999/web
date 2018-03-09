@@ -36,7 +36,7 @@ export default class CommentItem extends PureComponent {
     return (
       <List.Item>
         <List.Item.Meta
-          avatar={<Avatar src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${comment.author}?s=120`} />}
+          avatar={<Avatar src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${comment.author}?s=64`} />}
           title={
             <div className="comment-title">
               <Author name={comment.author} />

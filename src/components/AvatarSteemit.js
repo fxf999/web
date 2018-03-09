@@ -43,7 +43,7 @@ AvatarSteemit.propTypes = {
 };
 
 AvatarSteemit.defaultProps = {
-  size: 48,
+  size: 80,
   votingPower: undefined,
 };
 
