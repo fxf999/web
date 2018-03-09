@@ -23,7 +23,7 @@ const AvatarSteemit = ({ name, size, votingPower }) => {
       />}
 
       <Avatar
-        src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${name}?s=${size}`}
+        src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${name}?s=80`}
         size="large"
         style={{
           position: 'absolute',
@@ -43,7 +43,7 @@ AvatarSteemit.propTypes = {
 };
 
 AvatarSteemit.defaultProps = {
-  size: 80,
+  size: 48,
   votingPower: undefined,
 };
 

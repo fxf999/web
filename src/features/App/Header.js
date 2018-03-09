@@ -78,7 +78,7 @@ class Header extends Component {
               onVisibleChange={this.handleVisibleChange}
             >
               <span className="ant-dropdown-link" role="button">
-                <AvatarSteemit name={me} votingPower={myAccount.voting_power} size={80} />
+                <AvatarSteemit name={me} votingPower={myAccount.voting_power} />
               </span>
             </Popover>
           </div>
