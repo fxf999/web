@@ -98,7 +98,7 @@ class PostView extends Component {
           }
           {this.state.shouldShowHideButton && isAdmin(me) &&
             <Popconfirm title="Are you sure to hide this post?" onConfirm={this.hidePost} okText="Yes" cancelText="No">
-              <Button icon="delete" size="small" className="edit-button" ghost>Hide</Button>
+              <Button icon="delete" size="small" className={shouldShowEdit ? 'hide-button' : 'edit-button'} ghost>Hide</Button>
             </Popconfirm>
           }
           <h1>{post.title}</h1>
@@ -107,7 +107,7 @@ class PostView extends Component {
             href={post.url}
             type="primary"
             htmlType="submit"
-            className="round-border inversed-color padded-button"
+              className="round-border inversed-color padded-button checkitout-button"
             target="_blank"
             rel="noopener noreferrer"
           >

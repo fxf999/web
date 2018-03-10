@@ -357,10 +357,29 @@
       padding: 0.125rem 0.9375rem;
     }
 
-    .edit-button {
+    .edit-button, .hide-button {
       position: absolute;
-      top: -10px;
+      top: 30px;
       right: 30px;
+
+      @media only screen and (max-width: 460px) {
+        right: 14px;
+        top: 12px;
+        border: 0;
+        font-size: 1.8rem;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .hide-button {
+      top: 70px;
+
+      @media only screen and (max-width: 460px) {
+        top: 60px;
+      }
     }
   }
 

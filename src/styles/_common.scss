@@ -199,7 +199,7 @@ hr {
     color: #fff;
 
     @include responsive(tablet) {
-      padding-top: 19px
+      padding-top: 23px
     }
 
     @include responsive(mobile) {
@@ -220,7 +220,7 @@ hr {
       color: #fff;
       font-weight: 300;
     }
-    .ant-btn {
+    .checkitout-button {
       margin-top: 40px;
       line-height: 1.2;
     }
