@@ -16,7 +16,7 @@ function FollowButton(props) {
   return me ? (
     <Button
       type="primary"
-      className="round-border inversed-color padded-button"
+      className="round-border inversed-color padded-button checkitout-button"
       onClick={isFollowing ? unfollow : follow}
       disabled={accountName === me || isLoading}
       loading={isLoading}
@@ -27,7 +27,7 @@ function FollowButton(props) {
     <Button
       href={getLoginURL()}
       type="primary"
-      className="round-border inversed-color padded-button"
+      className="round-border inversed-color padded-button checkitout-button"
       loading={isLoading}
     >
       {isLoading ? 'LOADING..' : 'FOLLOW'}
