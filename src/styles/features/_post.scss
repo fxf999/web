@@ -316,6 +316,10 @@
         margin-bottom: 0.5em;
       }
 
+      img {
+        max-width: 100%;
+      }
+
       .actions {
         margin-bottom: 0.375em;
         .vote-button, .vote-count {
@@ -445,6 +449,10 @@
       p {
         margin-top: 0;
         margin-bottom: 0.5em;
+      }
+
+      img {
+        max-width: 100%;
       }
 
       @include responsive(mobile) {
