@@ -7,6 +7,7 @@ import { selectDraft } from '../selectors';
 import { notification } from 'antd';
 import { getPostKey, getPostPath } from 'features/Post/utils';
 import steemConnectAPI from 'utils/steemConnectAPI';
+import { initialState } from '../actions';
 
 /*--------- CONSTANTS ---------*/
 const MAIN_CATEGORY = 'steemhunt';
@@ -19,8 +20,8 @@ const PUBLISH_CONTENT_FAILURE = 'PUBLISH_CONTENT_FAILURE';
 
 /*--------- ACTIONS ---------*/
 
-export function publishContentBegin(props) {
-  return { type: PUBLISH_CONTENT_BEGIN, props };
+export function publishContentBegin(props, editMode) {
+  return { type: PUBLISH_CONTENT_BEGIN, props, editMode };
 }
 
 export function publishContentSuccess(post) {
@@ -55,7 +56,7 @@ export function publishContentReducer(state, action) {
   }
 }
 
-function getBody(post, permlink) {
+function getBody(post) {
   const screenshots = post.images.map(i => `![${i.name}](${i.link})\n\n`).join('');
 
   let contributors = '';
@@ -82,28 +83,32 @@ function getBody(post, permlink) {
     `<center>` +
     `<br/>![Steemhunt.com](https://i.imgur.com/jB2axnW.png)<br/>\n` +
     `This is posted on Steemhunt - A place where you can dig products and earn STEEM.\n` +
-    `[View on Steemhunt.com](https://steemhunt.com/@${post.author}/${permlink})\n` +
+    `[View on Steemhunt.com](https://steemhunt.com/@${post.author}/${post.permlink})\n` +
     `</center>`;
 }
 
 /*--------- SAGAS ---------*/
-function* publishContent({ props }) {
+function* publishContent({ props, editMode }) {
   const post = yield select(selectDraft());
   // console.log('1------', post);
 
   try {
-    const title = `${post.title} - ${post.tagline}`;
-    let permlink = post.permlink;
-    let editMode = true;
-    if (!permlink) {
-      editMode = false;
-      permlink = yield createPermlink(title, post.author, '', '');
+    if (post.title === initialState.draft.title) {
+      throw { message: "Product name can't be empty" };
     }
+    if (post.tagline === initialState.draft.tagline) {
+      throw { message: "Short description can't be empty" };
+    }
+    if (post.images.length < 1) {
+      throw { message: "Please upload at least one image" };
+    }
+
+    const title = `${post.title} - ${post.tagline}`;
 
     if (editMode) { // Edit
       yield api.put(`/posts${getPostPath(post)}.json`, { post: post }, true);
     } else { // Create
-      post.permlink = permlink;
+      post.permlink = yield createPermlink(title, post.author, '', '');
       yield api.post('/posts.json', { post: post }, true);
     }
     // console.log('2------', res);
@@ -132,9 +137,9 @@ function* publishContent({ props }) {
           parent_author: '',
           parent_permlink: tags[0],
           author: post.author,
-          permlink,
+          permlink: post.permlink,
           title,
-          body: getBody(post, permlink),
+          body: getBody(post),
           json_metadata: JSON.stringify(metadata),
         },
       ]
@@ -143,7 +148,7 @@ function* publishContent({ props }) {
     if (!editMode) { // only on create
       operations.push(['comment_options', {
         author: post.author,
-        permlink,
+        permlink: post.permlink,
         max_accepted_payout: '1000000.000 SBD',
         percent_steem_dollars: 10000,
         allow_votes: true,

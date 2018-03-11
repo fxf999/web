@@ -123,7 +123,7 @@ class PostForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    this.props.publishContent();
+    this.props.publishContent(this.state.editMode);
   };
 
   // MARK: - Beneficiaries
@@ -262,15 +262,6 @@ class PostForm extends Component {
     this.props.updateDraft('images', images.filter(x => !!x));
   };
   handleTagsChange = (tags) => this.props.updateDraft('tags', tags);
-
-  isReadyToSubmit = () => {
-    const { me, draft } = this.props;
-    const initial = initialState.draft;
-
-    return me && me === draft.author &&
-      draft.title !== initial.title && draft.url !== initial.url &&
-      draft.tagline !== initial.tagline && draft.images.length > 0;
-  };
 
   initialValue = (field, defaultValue = null) => initialState.draft[field] === this.props.draft[field] ? defaultValue : this.props.draft[field];
 
@@ -484,7 +475,6 @@ class PostForm extends Component {
             htmlType="submit"
             className="submit-button pull-right round-border padded-button"
             loading={this.props.isPublishing}
-            disabled={!this.isReadyToSubmit()}
           >
             {this.state.editMode ? 'UPDATE POST' : 'POST NOW'}
           </Button>
@@ -508,7 +498,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   setCurrentPostKey: key => dispatch(setCurrentPostKey(key)),
   updateDraft: (field, value) => dispatch(updateDraft(field, value)),
   resetDraft: () => dispatch(resetDraft()),
-  publishContent: () => dispatch(publishContentBegin(props)),
+  publishContent: (editMode) => dispatch(publishContentBegin(props, editMode)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedPostForm);
