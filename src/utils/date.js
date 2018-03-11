@@ -38,13 +38,16 @@ export const timeUntilMidnightSeoul = function() {
   const minutesTillMidnight = (midnight.getTime() - now.getTime()) / 1000 / 60;
 
   const timeGapFromSeoul = now.getTimezoneOffset() + 540; // GMT + 9:00
-  const seoulTillMidnight = Math.floor(minutesTillMidnight - timeGapFromSeoul);
+  let seoulTillMidnight = Math.floor(minutesTillMidnight - timeGapFromSeoul);
+  if (seoulTillMidnight < 0) {
+    seoulTillMidnight = 24 * 60 - seoulTillMidnight;
+  }
 
   let hours   = Math.floor(seoulTillMidnight / 60);
   let minutes = Math.floor(seoulTillMidnight - (hours * 60));
 
   return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} left for today's ranking, based on KST midnight (GMT + 9)`;
-}
+};
 
 export const shortFormat = function(dateString) {
   return moment(dateString).format('MMM Mo, YYYY');
