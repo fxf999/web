@@ -70,8 +70,8 @@ class Profile extends Component {
       return <div></div>;
     }
 
-    const { profile } = account.json_metadata;
-    let coverStyle, profileStyle;
+    let profile = account.json_metadata.profile || {};
+    let coverStyle;
     if (profile.cover_image) {
       coverStyle = {
         backgroundColor: COLOR_PRIMARY,
@@ -79,11 +79,12 @@ class Profile extends Component {
         backgroundSize: 'cover',
       };
     }
+    const profileStyle = {
+      backgroundColor: COLOR_LIGHT_GREY,
+      backgroundImage: `url(https://i.imgur.com/NpAquFa.png)`,
+    };
     if (profile.profile_image) {
-      profileStyle = {
-        backgroundColor: COLOR_LIGHT_GREY,
-        backgroundImage: `url(${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${account.name}?s=280)`,
-      }
+      profileStyle['backgroundImage'] = `url(${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${account.name}?s=280)`;
     }
 
     return (
