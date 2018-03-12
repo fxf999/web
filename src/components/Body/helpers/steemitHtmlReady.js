@@ -16,7 +16,7 @@ const DOMParser = new xmldom.DOMParser({
   errorHandler: { warning: noop, error: noop }
 });
 const XMLSerializer = new xmldom.XMLSerializer();
-const IMG_PROXY_PREFIX = 'https://steemitimages.com/800x600/';
+const IMG_PROXY_PREFIX = '';
 
 /**
  * Functions performed by HTMLReady
