@@ -19,7 +19,7 @@ export default class PostFeedEmbed extends Component {
     return (
       <a className="postFeedEmbed" onClick={this.handleThumbClick}>
         <div className="postFeedEmbed-icon">
-          <Icon type="play-circle-o" style={{ width: 60, height: 60 }}/>
+          <Icon type="play-circle-o" style={{ fontSize: '60px' }}/>
         </div>
         <img src={thumb} alt="" />
       </a>
