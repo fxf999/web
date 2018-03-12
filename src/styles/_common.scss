@@ -178,11 +178,38 @@ hr {
   }
 }
 
+// MARK: - AndDesign override
+
 .ant-btn {
   &:active {
     text-decoration: none;
   }
 }
+
+.ant-carousel .slick-dots {
+  bottom: 14px;
+
+  li {
+    border-radius: 9999px;
+    overflow: hidden;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+    button {
+      opacity: 0.5;
+      height: 4px;
+      border-radius: 9999px;
+      width: 24px;
+      overflow: hidden;
+    }
+
+    &.slick-active {
+      button {
+        width: 36px;
+      }
+    }
+  }
+}
+
 
 .center-loading {
   font-size: 40px;
