@@ -41,6 +41,7 @@ class PostForm extends Component {
       fileList: [],
       beneficiariesValid: true,
       shouldRecalculateBeneficiary: false,
+      guidelineVisible: false,
     };
     this.beneficiaryInput = {};
   }
@@ -90,6 +91,10 @@ class PostForm extends Component {
     if (this.state.shouldRecalculateBeneficiary) {
       this.onBeneficiariesChanged();
     }
+  }
+
+  setGuidelineVisible(guidelineVisible) {
+    this.setState({ guidelineVisible });
   }
 
   checkAndResetDraft = () => {
@@ -338,6 +343,33 @@ class PostForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} className="post-form">
+        <div className="guideline"><a onClick={() => this.setGuidelineVisible(true)}>Posting Guidelines</a></div>
+        <Modal
+          title="Posting Guidelines"
+          visible={this.state.guidelineVisible}
+          width={800}
+          footer={null}
+          onOk={() => this.setGuidelineVisible(false)}
+          onCancel={() => this.setGuidelineVisible(false)}
+        >
+          <p>These are the areas of products Steemhunt welcomes:</p>
+          <ul>
+            <li>Web services</li>
+            <li>Mobile apps</li>
+            <li>Games</li>
+            <li>API, IT solutions, bots, open sources or other types of software</li>
+            <li>Tech gadgets</li>
+            <li>Unique items</li>
+          </ul>
+          <p>Steemhunt WON’T like if you post:</p>
+          <ul>
+            <li>A business instead of a product. A business is larger and more vague than a product. For example, you may post a new Samsung Galaxy S9 phone - this is a product. You can’t post “Samsung” itself - this is a business.</li>
+            <li>Something launched a while ago that many people already know about.</li>
+            <li>Something that does not have any valid website, so users can’t make purchases or see information clearly.</li>
+            <li>Using an upvoting bot service that may disrupt our daily ranking.</li>
+          </ul>
+          <p>Please make sure you “hunt” cool new products in the areas we mentioned above, so that we can make Steemhunt a cool ranking community. Thanks again for your support.</p>
+        </Modal>
         <FormItem
           {...formItemLayout}
           label="Product Link"
