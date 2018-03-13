@@ -81,7 +81,7 @@ class Profile extends Component {
     }
     const profileStyle = {
       backgroundColor: COLOR_LIGHT_GREY,
-      backgroundImage: `url(https://i.imgur.com/NpAquFa.png)`,
+      backgroundImage: `url(https://i.imgur.com/OUdHb2P.png)`,
     };
     if (profile.profile_image) {
       profileStyle['backgroundImage'] = `url(${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${account.name}?s=280)`;
