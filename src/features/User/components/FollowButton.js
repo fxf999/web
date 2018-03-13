@@ -42,7 +42,7 @@ FollowButton.propTypes = {
   followingLoadStatus: PropTypes.object.isRequired,
   follow: PropTypes.func.isRequired,
   unfollow: PropTypes.func.isRequired,
-  selectIsLoading: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = (state, props) => createStructuredSelector({

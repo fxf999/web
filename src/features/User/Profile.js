@@ -4,20 +4,21 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
-import { Icon, Timeline } from 'antd';
+import { Icon, Timeline, Spin } from 'antd';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
-import { selectMe, selectCurrentAccount, selectFollowingsList } from 'features/User/selectors';
+import { selectMe, selectCurrentUser, selectCurrentAccount, selectMyFollowingsList } from 'features/User/selectors';
 import { COLOR_PRIMARY, COLOR_LIGHT_GREY } from 'styles/constants';
 import UserSteemPower from './components/UserSteemPower';
 import UserEstimatedValue from './components/UserEstimatedValue';
 import FollowerCount from './components/FollowerCount';
 import FollowButton from './components/FollowButton';
-import { getFollowingsBegin } from './actions/getFollowings';
 import { toTimeAgo } from 'utils/date';
+import CircularProgress from 'components/CircularProgress';
 
 class Profile extends Component {
   static propTypes = {
     me: PropTypes.string.isRequired,
+    currentUser: PropTypes.string,
     account: PropTypes.shape({
       name: PropTypes.string,
       reputation: PropTypes.oneOfType([
@@ -33,6 +34,7 @@ class Profile extends Component {
 
   static defaultProps = {
     me: undefined,
+    currentUser: undefined,
     account: {
       name: undefined,
       reputation: 0,
@@ -45,29 +47,21 @@ class Profile extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    if (match.params.author !== this.props.account.name) {
+    if (match.params.author !== this.props.currentUser) {
       this.props.setCurrentUser(match.params.author);
-    }
-
-    if (this.props.myFollowings === undefined && this.props.me) {
-      this.props.getFollowings(this.props.me);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.author !== this.props.account.name) {
+    if (nextProps.match.params.author !== nextProps.currentUser) {
       this.props.setCurrentUser(nextProps.match.params.author);
-    }
-
-    if (nextProps.myFollowings === undefined && nextProps.me) {
-      this.props.getFollowings(nextProps.me);
     }
   }
 
   render() {
     const { account } = this.props;
     if (isEmpty(account)) {
-      return <div></div>;
+      return <CircularProgress />;
     }
 
     let profile = account.json_metadata.profile || {};
@@ -134,12 +128,12 @@ class Profile extends Component {
 const mapStateToProps = (state, props) => createStructuredSelector({
   me: selectMe(),
   account: selectCurrentAccount(),
-  myFollowings: selectFollowingsList(state.me),
+  currentUser: selectCurrentUser(),
+  myFollowings: selectMyFollowingsList(),
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   setCurrentUser: user => dispatch(setCurrentUserBegin(user)),
-  getFollowings: me => dispatch(getFollowingsBegin(me)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

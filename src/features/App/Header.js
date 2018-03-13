@@ -5,7 +5,16 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getLoginURL } from 'utils/token';
 import { Menu, Popover, Icon, Button, Spin } from 'antd';
-import { selectMe, selectMyAccount, selectIsLoading } from 'features/User/selectors';
+import {
+  selectMe,
+  selectMyAccount,
+  selectIsLoading,
+  selectMyFollowingsLoadStatus,
+  selectMyFollowingsList,
+  selectMyFollowingsListLoaded
+} from 'features/User/selectors';
+import { getFollowingsBegin } from 'features/User/actions/getFollowings';
+import { followBegin } from 'features/User/actions/follow';
 import { logoutBegin } from 'features/User/actions/logout';
 import logo from 'assets/images/logo-nav-pink@2x.png'
 import AvatarSteemit from 'components/AvatarSteemit';
@@ -16,32 +25,52 @@ class Header extends Component {
     myAccount: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
+    myFollowingsLoadStatus: PropTypes.object.isRequired,
+    myFollowingsList: PropTypes.array.isRequired,
+    myFollowingsListLoaded: PropTypes.bool.isRequired,
+    follow: PropTypes.func.isRequired,
   };
 
   state = {
     menuVisible: false,
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.me !== nextProps.me) {
+      this.props.getFollowings(nextProps.me);
+    }
+  }
+
   handleVisibleChange = (visible) => this.setState({ menuVisible: visible });
 
   render() {
-    const { me, myAccount, isLoading } = this.props;
+    const { me, myAccount, myFollowingsList, myFollowingsLoadStatus, isLoading, follow } = this.props;
+    const isFollowing = myFollowingsList.find(following => following.following === 'steemhunt');
+    const isFollowLoading = isLoading || myFollowingsLoadStatus['steemhunt'];
 
     let menu;
     if(me) {
       menu = (
         <Menu theme="dark">
-          <Menu.Item key="0">
+          {!isFollowing && me !== 'steemhunt' &&
+            <Menu.Item key="0">
+               <span onClick={follow}>
+                <Icon type={isFollowLoading ? 'loading' : 'star-o'} />
+                FOLLOW @STEEMHUNT
+              </span>
+            </Menu.Item>
+          }
+          <Menu.Item key="1">
             <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
               <Icon type="loading-3-quarters" /> VOTING POWER: {parseInt(myAccount.voting_power / 100, 10)}%
             </Link>
           </Menu.Item>
-          <Menu.Item key="1">
+          <Menu.Item key="2">
             <Link to={`/@${me}`} onClick={() => this.handleVisibleChange(false)}>
               <Icon type="user" /> MY PROFILE
             </Link>
           </Menu.Item>
-          <Menu.Item key="31">
+          <Menu.Item key="3">
             <span onClick={this.props.logout}>
               <Icon type="poweroff" /> LOGOUT
             </span>
@@ -113,10 +142,15 @@ const mapStateToProps = createStructuredSelector({
   me: selectMe(),
   isLoading: selectIsLoading(),
   myAccount: selectMyAccount(),
+  myFollowingsLoadStatus: selectMyFollowingsLoadStatus(),
+  myFollowingsList: selectMyFollowingsList(),
+  myFollowingsListLoaded: selectMyFollowingsListLoaded(),
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
+  follow: () => dispatch(followBegin('steemhunt')),
   logout: () => dispatch(logoutBegin()),
+  getFollowings: me => dispatch(getFollowingsBegin(me)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

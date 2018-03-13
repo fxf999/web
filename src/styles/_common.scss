@@ -211,10 +211,16 @@ hr {
 }
 
 .center-loading {
-  font-size: 40px;
+  text-align: center;
   display: block;
-  margin: 40px auto;
+  margin: 40px 0;
   color: $primary;
+
+  &.full-page {
+    margin: 0;
+    height: 100vh;
+    line-height: 100vh;
+  }
 }
 
 .diagonal-split-view {

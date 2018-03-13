@@ -43,6 +43,11 @@ export const selectMyFollowingsList = () => createSelector(
   (me, state) => (state[me] && state[me].list) || [],
 );
 
+export const selectMyFollowingsListLoaded = () => createSelector(
+  [selectMe(), selectFollowings()],
+  (me, state) => !!state[me],
+);
+
 export const selectMyFollowingsLoadStatus = () => createSelector(
   [selectMe(), selectFollowings()],
   (me, state) => (state[me] && state[me].loadStatus) || {},
@@ -54,12 +59,12 @@ export const selectIsConnected = () => createSelector(
 );
 
 // FOLLOWERS
-export const selectFollowers = () => createSelector(
+const selectFollowers = () => createSelector(
   selectUserDomain(),
   state => state.followers,
 );
 
-export const selectFollowersFromUser = accountName => createSelector(
+const selectFollowersFromUser = accountName => createSelector(
   selectFollowers(),
   state => state[accountName] || {},
 );
@@ -69,39 +74,13 @@ export const selectFollowersCount = accountName => createSelector(
   state => state.count,
 );
 
-export const selectFollowersList = accountName => createSelector(
-  selectFollowersFromUser(accountName),
-  state =>  state.list,
-);
-
-export const selectLastFollower = accountName => createSelector(
-  selectFollowersList(accountName),
-  state => state && state[state.length - 1],
-);
-
-export const selectFollowersAccounts = accountName => createSelector(
-  [selectAccounts(), selectFollowersList(accountName)],
-  (accounts, followers) => {
-    if (!followers) {
-      return [];
-    }
-    const followersAccounts = [];
-    followers.forEach(follow => {
-      if (accounts[follow.follower]) {
-        followersAccounts.push(accounts[follow.follower]);
-      }
-    });
-    return followersAccounts;
-  },
-);
-
 // FOLLOWING
-export const selectFollowings = () => createSelector(
+const selectFollowings = () => createSelector(
   selectUserDomain(),
   state => state.followings,
 );
 
-export const selectFollowingsFromUser = accountName => createSelector(
+const selectFollowingsFromUser = accountName => createSelector(
   selectFollowings(),
   state => state[accountName] || {},
 );
@@ -109,14 +88,4 @@ export const selectFollowingsFromUser = accountName => createSelector(
 export const selectFollowingsCount = accountName => createSelector(
   selectFollowingsFromUser(accountName),
   state => state.count,
-);
-
-export const selectFollowingsList = accountName => createSelector(
-  selectFollowingsFromUser(accountName),
-  state =>  state.list,
-);
-
-export const selectLastFollowing = accountName => createSelector(
-  selectFollowingsList(accountName),
-  state => state && state[state.length - 1],
 );
