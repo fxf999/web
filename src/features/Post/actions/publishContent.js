@@ -94,13 +94,13 @@ function* publishContent({ props, editMode }) {
 
   try {
     if (post.title === initialState.draft.title) {
-      throw { message: "Product name can't be empty" };
+      throw new Error("Product name can't be empty");
     }
     if (post.tagline === initialState.draft.tagline) {
-      throw { message: "Short description can't be empty" };
+      throw new Error("Short description can't be empty");
     }
     if (post.images.length < 1) {
-      throw { message: "Please upload at least one image" };
+      throw new Error("Please upload at least one image");
     }
 
     const title = `${post.title} - ${post.tagline}`;

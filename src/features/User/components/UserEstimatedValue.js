@@ -9,7 +9,7 @@ import { selectAppProps, selectAppRate } from 'features/App/selectors';
 
 function UserEstimatedValue(props) {
   const { appProps, appRate, account } = props;
-  if (!appProps) {
+  if (!appProps || !appRate) {
     return null;
   }
   const power = formatter.vestToSteem(
@@ -29,7 +29,7 @@ function UserEstimatedValue(props) {
 
 UserEstimatedValue.propTypes = {
   appProps: PropTypes.object,
-  appRate: PropTypes.number.isRequired,
+  appRate: PropTypes.number,
   account: PropTypes.object.isRequired,
 };
 
