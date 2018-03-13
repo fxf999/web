@@ -50,5 +50,9 @@ export const timeUntilMidnightSeoul = function() {
 };
 
 export const shortFormat = function(dateString) {
-  return moment(dateString).format('MMM Mo, YYYY');
+  const date = moment(dateString);
+  if ((Date.now() - date.valueOf()) / 1000 < 86400) {
+    return date.fromNow();
+  }
+  return date.format('MMM Do, YYYY');
 }
