@@ -216,7 +216,7 @@ class PostForm extends Component {
       } else if (res.result === 'ALREADY_EXISTS') { // TODO: Go to the product page link
         callback('The product link already exists.');
       } else {
-        callback('The input is not valid URL.');
+        callback('Invalid URL. Please include http or https at the beginning.');
       }
     }).catch(msg => {
       callback('Service is temporarily unavailbe, Please try again later.');
