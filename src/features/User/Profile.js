@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { Helmet } from 'react-helmet';
-import { Icon, Timeline, Spin } from 'antd';
+import { Icon, Timeline } from 'antd';
 import { setCurrentUserBegin } from './actions/setCurrentUser';
 import { selectMe, selectCurrentUser, selectCurrentAccount, selectMyFollowingsList } from 'features/User/selectors';
 import { COLOR_PRIMARY, COLOR_LIGHT_GREY } from 'styles/constants';

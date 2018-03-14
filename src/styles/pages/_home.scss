@@ -7,7 +7,7 @@
   height: 119px;
 }
 
-.home-page {
+.home-page, .not-found-page {
   position: relative;
 
   .center-content {
@@ -42,6 +42,14 @@
         color: rgba(255, 255, 255, 0.8);
         border-color: rgba(255, 255, 255, 0.8);
       }
+    }
+  }
+}
+
+.not-found-page {
+  .center-content {
+    h1 {
+      font-size: 1.6875rem;
     }
   }
 }

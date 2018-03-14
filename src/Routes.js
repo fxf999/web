@@ -12,6 +12,7 @@ import Header from './features/App/Header';
 import Post from './features/Post/Post';
 import PostForm from './features/Post/PostForm';
 import Draft from './features/Post/Draft';
+import NotFound from 'components/NotFound';
 
 const Home = asyncComponent(() => import('./pages/Home'));
 const HuntedList = asyncComponent(() => import('./pages/HuntedList'));
@@ -46,7 +47,7 @@ export class RoutesLeft extends Component {
           <Route path="/post" exact component={Draft} />
           <Route path="/@:author/:permlink/edit" exact component={Draft} />
           <Route path="/@:author" component={Profile} />
-          <Route path="/:tag" exact component={Home} />
+          <Route path='*' component={NotFound} />
         </Switch>
       </div>
     );
@@ -80,7 +81,7 @@ class Right extends Component {
           <Route path="/@:author/:permlink/edit" exact component={PostForm} />
           <Route path="/@:author" component={HuntedList} />
           <Route path="/@:author/:permlink" exact component={HuntedList} />
-          <Route path="/:tag" exact component={HuntedList} />
+          <Route path='*' component={HuntedList} />
         </Switch>
       </div>
     );
