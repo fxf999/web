@@ -40,3 +40,11 @@ export const addReferral = function(url) {
 
   return url;
 }
+
+export const getThumbnail = function(url, width, height) {
+  if (/\.gif$/.test(url)) {
+    return url;
+  }
+
+  return `https://steemitimages.com/${width}x${height}/${url}`;
+}
