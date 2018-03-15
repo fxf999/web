@@ -28,7 +28,7 @@ class PostList extends Component {
     }
 
     if (props.daysAgo === 0) {
-      this.setState({ showAll: true });
+      this.state['showAll'] = true;
     }
   }
 
