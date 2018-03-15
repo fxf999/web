@@ -42,7 +42,8 @@ export default function commentsReducer(state, action) {
                   return vote.percent <= 0;
                 });
               }},
-              net_votes: {$apply: count => count - 1}
+              net_votes: {$apply: count => count - 1},
+              isUpdating: {$set: false},
             }
           },
         });
