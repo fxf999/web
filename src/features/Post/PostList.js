@@ -71,12 +71,12 @@ class PostList extends Component {
       <div className={`post-list day-ago-${daysAgo}`}>
         <div className="heading">
           <h3>{daysAgoToString(daysAgo)}</h3>
-          <p>
+          <div className="heading-sub">
             <b>{ranking.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.
             {daysAgo === 0 &&
               <div><b>{timeUntilMidnightSeoul(true)}</b> left till midnight (KST)</div>
             }
-          </p>
+          </div>
         </div>
         <div className="daily-posts">
           {rankingItems.slice(0,10)}
