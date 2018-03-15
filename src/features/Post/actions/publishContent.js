@@ -57,7 +57,7 @@ export function publishContentReducer(state, action) {
 }
 
 function getBody(post) {
-  const screenshots = post.images.map(i => `![${i.name}](${i.link})\n\n`).join('');
+  const screenshots = post.images.map(i => `<center>![${i.name}](${i.link})</center>\n\n`).join('');
 
   let contributors = '';
   if (post.beneficiaries && post.beneficiaries.length > 0) {
