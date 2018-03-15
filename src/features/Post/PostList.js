@@ -9,6 +9,7 @@ import { getPostsBegin } from './actions/getPosts';
 import { daysAgoToString } from 'utils/date';
 import PostItem from './components/PostItem';
 import { formatAmount } from "utils/helpers/steemitHelpers";
+import { timeUntilMidnightSeoul } from 'utils/date';
 
 class PostList extends Component {
   static propTypes = {
@@ -21,16 +22,26 @@ class PostList extends Component {
   constructor(props) {
     super();
 
+    this.state = {
+      timer: timeUntilMidnightSeoul(true),
+      showAll: false,
+    }
+
     if (props.daysAgo === 0) {
-      this.state = { showAll: true };
-    } else {
-      this.state = { showAll: false };
+      this.setState({ showAll: true });
     }
   }
 
   componentDidMount() {
     this.props.getPosts(this.props.daysAgo);
+    this.interval = setInterval(this.tick, 1000);
   }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  tick = () => this.setState({ timer: timeUntilMidnightSeoul(true) });
 
   showAll = () => this.setState({ showAll: true });
 
@@ -60,7 +71,12 @@ class PostList extends Component {
       <div className={`post-list day-ago-${daysAgo}`}>
         <div className="heading">
           <h3>{daysAgoToString(daysAgo)}</h3>
-          <p><b>{ranking.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.</p>
+          <p>
+            <b>{ranking.length}</b> products, <b>{formatAmount(dailyTotalReward)}</b> hunter’s rewards were generated.
+            {daysAgo === 0 &&
+              <div><b>{timeUntilMidnightSeoul(true)}</b> left till midnight (KST)</div>
+            }
+          </p>
         </div>
         <div className="daily-posts">
           {rankingItems.slice(0,10)}

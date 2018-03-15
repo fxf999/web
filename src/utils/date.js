@@ -28,24 +28,36 @@ export const toTimeAgo = function(dateString) {
   return moment(dateString + 'Z').fromNow();
 }
 
-export const timeUntilMidnightSeoul = function() {
+const prependZero = function(num) {
+  if (num < 10) {
+    return `0${num}`;
+  }
+
+  return `${num}`;
+}
+
+export const timeUntilMidnightSeoul = function(shortFormat = false) {
   const now = new Date();
   const midnight = new Date();
   midnight.setHours(24);
   midnight.setMinutes(0);
   midnight.setSeconds(0);
   midnight.setMilliseconds(0);
-  const minutesTillMidnight = (midnight.getTime() - now.getTime()) / 1000 / 60;
+  const secondsTillMidnight = Math.floor((midnight.getTime() - now.getTime()) / 1000);
 
   const timeGapFromSeoul = now.getTimezoneOffset() + 540; // GMT + 9:00
-  let seoulTillMidnight = Math.floor(minutesTillMidnight - timeGapFromSeoul);
+  let seoulTillMidnight = secondsTillMidnight - timeGapFromSeoul * 60;
   if (seoulTillMidnight < 0) {
-    seoulTillMidnight = 24 * 60 - seoulTillMidnight;
+    seoulTillMidnight = 86400 - seoulTillMidnight;
   }
 
-  let hours   = Math.floor(seoulTillMidnight / 60);
-  let minutes = Math.floor(seoulTillMidnight - (hours * 60));
+  const hours   = Math.floor(seoulTillMidnight / 3600);
+  const minutes = Math.floor((seoulTillMidnight - (hours * 3600)) / 60);
+  const seconds = Math.floor(seoulTillMidnight - (hours * 3600) - (minutes * 60));
 
+  if (shortFormat) {
+    return `${prependZero(hours)}:${prependZero(minutes)}:${prependZero(seconds)}`;
+  }
   return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} left for today's ranking, based on KST midnight (GMT + 9)`;
 };
 
