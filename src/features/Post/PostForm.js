@@ -209,6 +209,11 @@ class PostForm extends Component {
     }
     value = addReferral(value);
 
+    if (this.state.editMode) {
+      this.props.updateDraft('url', value);
+      return callback();
+    }
+
     api.get('/posts/exists.json', { url: value }).then((res) => {
       if (res.result === 'OK') {
         this.props.updateDraft('url', value);
