@@ -219,11 +219,14 @@ class PostForm extends Component {
         this.props.updateDraft('url', value);
         callback();
       } else if (res.result === 'ALREADY_EXISTS') { // TODO: Go to the product page link
+        this.props.updateDraft('url', '#');
         callback('The product link already exists.');
       } else {
+        this.props.updateDraft('url', '#');
         callback('Invalid URL. Please include http or https at the beginning.');
       }
     }).catch(msg => {
+      this.props.updateDraft('url', '#');
       callback('Service is temporarily unavailbe, Please try again later.');
     });
   };

@@ -122,10 +122,14 @@ function* reply({ parent, body }) {
 
     yield put(replySuccess(parent, tempId, replyObj));
   } catch (e) {
-    if (e.error_description.indexOf('STEEMIT_MIN_REPLY_INTERVAL') >= 0) {
-      yield notification['error']({ message: 'You can only comment once every 20 seconds. Please try again later.' });
+    if (e.error_description) {
+      if (e.error_description.indexOf('STEEMIT_MIN_REPLY_INTERVAL') >= 0) {
+        yield notification['error']({ message: 'You can only comment once every 20 seconds. Please try again later.' });
+      } else {
+        yield notification['error']({ message: e.error_description });
+      }
     } else {
-      yield notification['error']({ message: 'Network error, please try again later' });
+      yield notification['error']({ message: e.message });
     }
     yield put(replyFailure(e.message));
   }

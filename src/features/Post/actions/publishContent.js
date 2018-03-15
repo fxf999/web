@@ -93,14 +93,17 @@ function* publishContent({ props, editMode }) {
   // console.log('1------', post);
 
   try {
+    if (post.url === initialState.draft.url) {
+      throw new Error("Please check errors on product link field.");
+    }
     if (post.title === initialState.draft.title) {
-      throw new Error("Product name can't be empty");
+      throw new Error("Product name can't be empty.");
     }
     if (post.tagline === initialState.draft.tagline) {
-      throw new Error("Short description can't be empty");
+      throw new Error("Short description can't be empty.");
     }
     if (post.images.length < 1) {
-      throw new Error("Please upload at least one image");
+      throw new Error("Please upload at least one image.");
     }
 
     const title = `${post.title} - ${post.tagline}`;
@@ -178,7 +181,15 @@ function* publishContent({ props, editMode }) {
 
     yield props.history.push(getPostPath(post)); // Redirect to #show
   } catch (e) {
-    yield notification['error']({ message: e.message });
+    if (e.error_description) {
+      if (e.error_description.indexOf('STEEMIT_MIN_ROOT_COMMENT_INTERVAL') >= 0) {
+        yield notification['error']({ message: 'You may only post once every 5 minutes.' });
+      } else {
+        yield notification['error']({ message: e.error_description });
+      }
+    } else {
+      yield notification['error']({ message: e.message });
+    }
     yield put(publishContentFailure(e.message));
   }
 }
