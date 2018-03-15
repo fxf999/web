@@ -14,6 +14,7 @@ import FollowerCount from './components/FollowerCount';
 import FollowButton from './components/FollowButton';
 import { toTimeAgo } from 'utils/date';
 import CircularProgress from 'components/CircularProgress';
+import { scrollTo } from 'utils/scroller';
 
 class Profile extends Component {
   static propTypes = {
@@ -50,12 +51,20 @@ class Profile extends Component {
     if (match.params.author !== this.props.currentUser) {
       this.props.setCurrentUser(match.params.author);
     }
+    this.scrollTop();
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params.author !== nextProps.currentUser) {
       this.props.setCurrentUser(nextProps.match.params.author);
+      this.scrollTop();
     }
+  }
+
+  scrollTop() {
+    // Scroll to the top
+    const leftPanel = document.getElementById('panel-left');
+    scrollTo(leftPanel, 0, 0);
   }
 
   render() {
