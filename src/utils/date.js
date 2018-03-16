@@ -48,7 +48,7 @@ export const timeUntilMidnightSeoul = function(shortFormat = false) {
   const timeGapFromSeoul = now.getTimezoneOffset() + 540; // GMT + 9:00
   let seoulTillMidnight = secondsTillMidnight - timeGapFromSeoul * 60;
   if (seoulTillMidnight < 0) {
-    seoulTillMidnight = 86400 - seoulTillMidnight;
+    seoulTillMidnight = 86400 + seoulTillMidnight;
   }
 
   const hours   = Math.floor(seoulTillMidnight / 3600);
