@@ -376,6 +376,7 @@ class PostForm extends Component {
             <li>Something that does not have any valid website, so users can’t make purchases or see information clearly.</li>
             <li>Using an upvoting bot service that may disrupt our daily ranking.</li>
           </ul>
+          <p>Steemhunt runs a single ranking board globally, so <b>please post and comment in English</b>. For fairness, other languages may be excluded from the ranking.</p>
           <p>Please make sure you “hunt” cool new products in the areas we mentioned above, so that we can make Steemhunt a cool ranking community. Thanks again for your support.</p>
         </Modal>
         <FormItem
@@ -451,7 +452,7 @@ class PostForm extends Component {
                 <p className="ant-upload-drag-icon">
                   <Icon type="inbox" />
                 </p>
-                <p className="ant-upload-hint">Click or drag image(s) to this area to upload</p>
+                <p className="ant-upload-hint">Click or drag image(s) to this area to upload (10MB Max)</p>
               </Upload.Dragger>
             )}
           </div>
