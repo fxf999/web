@@ -378,6 +378,7 @@ class PostForm extends Component {
           </ul>
           <p>Steemhunt runs a single ranking board globally, so <b>please post and comment in English</b>. For fairness, other languages may be excluded from the ranking.</p>
           <p>Please make sure you “hunt” cool new products in the areas we mentioned above, so that we can make Steemhunt a cool ranking community. Thanks again for your support.</p>
+          <p>Also, please make a sentence and description with your own words. If you just simply copy and paste whatever is written on the product’s website or other sites, we won’t upvote your post.</p>
         </Modal>
         <FormItem
           {...formItemLayout}
