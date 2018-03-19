@@ -11,7 +11,7 @@ export default class Privacy extends Component {
     return (
       <div className="padded-container">
         <h1>Privacy Policy</h1>
-          <span>Effective September 19th, 2018</span>
+          <span>Effective March 19th, 2018</span>
           <p>This Privacy Policy describes how Steemhunt collectively referred to as &quot;Steemhunt.com&quot; (or &quot;we&quot; or &quot;us&quot; or &quot;our&quot;) collects, uses, and handles your data when you use our website, products and services (&quot;Services&quot;). Please take the time to carefully read through this policy. As you use our Services, we want to be clear how Steemhunt.com uses your information and how your privacy is protected. By using the Services, you consent to the data practices detailed in this policy.</p>
         <h2>1. Information You Provide to Us</h2>
           <p>We collect information you provide directly to us when you use our Services. Depending on which Service you use, we may collect different information about you. <br/>This includes:</p>
