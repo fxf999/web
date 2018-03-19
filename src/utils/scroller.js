@@ -27,3 +27,8 @@ export const scrollTo = function (element, to, duration) {
   };
   animateScroll();
 };
+
+export const scrollTop = function() {
+  const leftPanel = document.getElementById('panel-left');
+  scrollTo(leftPanel, 0, 0);
+}

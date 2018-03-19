@@ -19,7 +19,7 @@ import { selectCurrentComments, selectCurrentPost } from './selectors';
 import { getPostBegin, setCurrentPostKey } from './actions/getPost';
 import PostView from './components/PostView';
 import CommentReplyForm from 'features/Comment/CommentReplyForm';
-import { scrollTo } from 'utils/scroller';
+import { scrollTop } from 'utils/scroller';
 
 class Post extends Component {
   static propTypes = {
@@ -39,7 +39,7 @@ class Post extends Component {
     this.props.getPost(author, permlink);
     this.props.getCommentsFromPost('steemhunt', author, permlink);
 
-    this.scrollTop();
+    scrollTop();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,7 +49,7 @@ class Post extends Component {
 
     if (author !== nextAuthor || permlink !== nextPermlink) {
       this.props.getPost(nextAuthor, nextPermlink);
-      this.scrollTop();
+      scrollTop();
 
       if (nextProps.commentsIsLoading === false) {
         this.props.getCommentsFromPost('steemhunt', nextAuthor, nextPermlink);
@@ -59,12 +59,6 @@ class Post extends Component {
 
   componentWillUnmount() {
     this.props.setCurrentPostKey(null);
-  }
-
-  scrollTop() {
-    // Scroll to the top
-    const leftPanel = document.getElementById('panel-left');
-    scrollTo(leftPanel, 0, 0);
   }
 
   render() {

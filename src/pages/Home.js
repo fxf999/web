@@ -6,9 +6,13 @@ import imgCat from 'assets/images/img-about-cat@2x.png';
 import imgSteemLogo from 'assets/images/logo-steem-white@2x.png';
 import imgProductHunt from 'assets/images/img-producthunt@2x.png';
 import imgBackground from 'assets/images/img-front-bg@2x.png';
-import { scrollTo } from 'utils/scroller';
+import { scrollTo, scrollTop } from 'utils/scroller';
 
 export default class Home extends Component {
+  componentDidMount() {
+    scrollTop();
+  }
+
   scrollNext = (e) => {
     e.stopPropagation();
     const vh = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;

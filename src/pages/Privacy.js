@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { scrollTop } from 'utils/scroller';
 
 export default class Privacy extends Component {
+  componentDidMount() {
+    scrollTop();
+  }
+
   render() {
     return (
       <div className="padded-container">
