@@ -62,6 +62,14 @@ hr {
   border-radius: 999999px !important;
 }
 
+.padded-container {
+  padding: 60px 40px;
+
+  @include responsive(mobile) {
+    padding: 60px 1.5rem;
+  }
+}
+
 .primary-gradient {
   color: #fff;
   background-color: $primary; /* For browsers that do not support gradients */
@@ -144,6 +152,7 @@ hr {
         color: #fff;
         font-size: 2rem;
         z-index: 150;
+        text-shadow: rgba(0, 0, 0, 0.3) 0px 0px 5px;
       }
     }
   }

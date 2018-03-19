@@ -369,6 +369,7 @@
       position: absolute;
       top: 30px;
       right: 30px;
+      overflow: visible;
 
       @media only screen and (max-width: 460px) {
         right: 14px;

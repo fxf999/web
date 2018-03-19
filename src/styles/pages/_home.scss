@@ -170,6 +170,16 @@
     z-index: 110;
     text-align: left;
 
+    @include responsive(ipadpro) {
+      top: 60px;
+      left: 60px;
+    }
+
+    @include responsive(mobile) {
+      top: 40px;
+      left: 40px;
+    }
+
     h2 {
       line-height: 1.2;
       margin: 2.5rem 0;
@@ -184,10 +194,29 @@
 
   .bg-image {
     z-index: 101;
-    height: 110vh;
+    height: 96vh;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 170px;
+
+    @include responsive(ipadpro) {
+      height: 90vh;
+    }
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    z-index: 110;
+    width: 100%;
+    text-align: center;
+
+    a {
+      font-size: 0.75rem;
+      color: #fff !important;
+    }
   }
 }
+

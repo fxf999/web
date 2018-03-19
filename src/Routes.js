@@ -6,29 +6,32 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import asyncComponent from 'asyncComponent';
 import { Icon } from 'antd';
-import { getMeBegin } from './features/User/actions/getMe';
-import { selectMe } from './features/User/selectors';
-import Header from './features/App/Header';
-import Post from './features/Post/Post';
-import PostForm from './features/Post/PostForm';
-import Draft from './features/Post/Draft';
+import { getMeBegin } from 'features/User/actions/getMe';
+import { selectMe } from 'features/User/selectors';
+import Header from 'features/App/Header';
+import Post from 'features/Post/Post';
+import PostForm from 'features/Post/PostForm';
+import Draft from 'features/Post/Draft';
 import NotFound from 'components/NotFound';
 
-const Home = asyncComponent(() => import('./pages/Home'));
-const HuntedList = asyncComponent(() => import('./pages/HuntedList'));
-const Profile = asyncComponent(() => import('./features/User/Profile'));
+const Home = asyncComponent(() => import('pages/Home'));
+const Terms = asyncComponent(() => import('pages/Terms'));
+const Privacy = asyncComponent(() => import('pages/Privacy'));
+const Cookies = asyncComponent(() => import('pages/Cookies'));
+const HuntedList = asyncComponent(() => import('pages/HuntedList'));
+const Profile = asyncComponent(() => import('features/User/Profile'));
 
 const BackButton = withRouter(({ history }) => (
   <Icon
     type="left"
     className="back-button"
-    onClick={() => { history.push('/') }}/>
+    onClick={() => { history.go(-1) }}/>
 ));
 
 export class RoutesLeft extends Component {
   shouldLeftBeActive() {
     const path = window.location.pathname;
-    return ((/^\/@.+/).test(path) && !(/.+\/edit$/).test(path)) || /^\/about/.test(path);
+    return ((/^\/@.+/).test(path) && !(/.+\/edit$/).test(path)) || /^\/(about|terms|privacy|cookies)/.test(path);
   }
 
   render() {
@@ -47,6 +50,9 @@ export class RoutesLeft extends Component {
           <Route path="/post" exact component={Draft} />
           <Route path="/@:author/:permlink/edit" exact component={Draft} />
           <Route path="/@:author" component={Profile} />
+          <Route path='/terms' component={Terms} />
+          <Route path='/privacy' component={Privacy} />
+          <Route path='/cookies' component={Cookies} />
           <Route path='*' component={NotFound} />
         </Switch>
       </div>

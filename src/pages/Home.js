@@ -111,6 +111,14 @@ export default class Home extends Component {
           </div>
 
           <img src={imgBackground} alt="Steemhunt Preview" className="bg-image" />
+
+          <div className="footer">
+            <Link to="/terms">Terms of Service</Link>
+            <span className="spacer">&middot;</span>
+            <Link to="/privacy">Privacy Policy</Link>
+            <span className="spacer">&middot;</span>
+            <Link to="/cookies">Cookie Policy</Link>
+          </div>
         </div>
       </div>
     );
