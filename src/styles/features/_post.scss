@@ -292,7 +292,12 @@
       }
     }
 
-    .ant-list-item-meta-title { // override
+    // MARK: Override Antd
+    .ant-list {
+      overflow-x: scroll;
+    }
+
+    .ant-list-item-meta-title {
       margin-bottom: 0.375em;
       font-weight: 400;
     }
